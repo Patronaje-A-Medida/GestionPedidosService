@@ -6,6 +6,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GestionPedidosService.Busin
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GestionPedidosService.Domain", "GestionPedidosService.Domain\GestionPedidosService.Domain.csproj", "{E6ADF42E-2CE7-4906-AA10-213043CC8CD3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GestionPedidosService.Persistence", "GestionPedidosService.Persistence\GestionPedidosService.Persistence.csproj", "{D4B528A6-FA02-4D4C-B8E1-DD45C49D581C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,5 +26,9 @@ Global
 		{E6ADF42E-2CE7-4906-AA10-213043CC8CD3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E6ADF42E-2CE7-4906-AA10-213043CC8CD3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E6ADF42E-2CE7-4906-AA10-213043CC8CD3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D4B528A6-FA02-4D4C-B8E1-DD45C49D581C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D4B528A6-FA02-4D4C-B8E1-DD45C49D581C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D4B528A6-FA02-4D4C-B8E1-DD45C49D581C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D4B528A6-FA02-4D4C-B8E1-DD45C49D581C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
