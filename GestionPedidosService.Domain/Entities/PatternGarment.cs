@@ -1,0 +1,17 @@
+﻿using System.Collections.Generic;
+
+namespace GestionPedidosService.Domain.Entities
+{
+    public class PatternGarment
+    {
+        public int Id { get; set; }
+        public string TypePattern { get; set; }
+        public string ImagePattern { get; set; }
+        public string ScaledStatus { get; set; }
+        
+        public int GarmentId { get; set; }
+        public Garment Garment { get; set; }
+        
+        public List<PatternDimension> PatternDimensions { get; set; }
+    }
+}

@@ -12,4 +12,8 @@
       <Folder Include="Controllers" />
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\GestionPedidosService.Business\GestionPedidosService.Business.csproj" />
+    </ItemGroup>
+
 </Project>
