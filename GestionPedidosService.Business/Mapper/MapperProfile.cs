@@ -31,6 +31,17 @@ namespace GestionPedidosService.Business.Mapper
                 .ForMember(dest => dest.State, opt => opt.MapFrom(src => src.Order.OrderStatus))
                 .ForMember(dest => dest.Price, opt => opt.MapFrom(src => (src.Garment.FirstRangePrice + src.Garment.SecondRangePrice) / 2))
                 .ForMember(dest => dest.Features, opt => opt.MapFrom(src => src.Garment.FeatureGarments));
+
+            CreateMap<PatternDimension, PatternDimensionRead>()
+                .ForMember(dest => dest.Label, opt => opt.MapFrom(src => src.Label))
+                .ForMember(dest => dest.Value, opt => opt.MapFrom(src => src.Value))
+                .ForMember(dest => dest.Units, opt => opt.MapFrom(src => src.Units));
+
+            CreateMap<PatternGarment, PatternGarmentRead>()
+                .ForMember(dest => dest.Type, opt => opt.MapFrom(src => src.TypePattern))
+                .ForMember(dest => dest.Image, opt => opt.MapFrom(src => src.ImagePattern))
+                .ForMember(dest => dest.ScaledStatus, opt => opt.MapFrom(src => src.ScaledStatus))
+                .ForMember(dest => dest.Dimensions, opt => opt.MapFrom(src => src.PatternDimensions));
         }
     }
 }
