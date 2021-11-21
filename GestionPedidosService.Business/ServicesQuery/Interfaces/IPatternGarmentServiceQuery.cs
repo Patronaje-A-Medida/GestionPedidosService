@@ -1,14 +1,11 @@
 ﻿using GestionPedidosService.Domain.Models;
-using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace GestionPedidosService.Business.ServicesQuery.Interfaces
 {
-    public interface IOrderServiceQuery
+    public interface IPatternGarmentServiceQuery
     {
-        Task<ICollection<OrderRead>> GetAll();
-        Task<OrderDetailRead> GetById(int id);
+        Task<ICollection<PatternGarmentRead>> GetAllByGarmentId(int id);
     }
 }

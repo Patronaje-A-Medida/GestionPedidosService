@@ -23,5 +23,11 @@ namespace GestionPedidosService.Business.ServicesQuery.Implements
             var orders = await _orderDetailRepository.GetAll();
             return _mapper.Map<ICollection<OrderRead>>(orders);
         }
+
+        public async Task<OrderDetailRead> GetById(int id)
+        {
+            var order = await _orderDetailRepository.GetById(id);
+            return _mapper.Map<OrderDetailRead>(order);
+        }
     }
 }
