@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GestionPedidosService.Api", "GestionPedidosService.Api\GestionPedidosService.Api.csproj", "{865A0A9E-3177-43A3-89B5-E8DC67D396DF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GestionPedidosService.Business", "GestionPedidosService.Business\GestionPedidosService.Business.csproj", "{42C66BFD-506E-4C86-9D0F-6A8D4808B2A9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GestionPedidosService.Domain", "GestionPedidosService.Domain\GestionPedidosService.Domain.csproj", "{E6ADF42E-2CE7-4906-AA10-213043CC8CD3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GestionPedidosService.Persistence", "GestionPedidosService.Persistence\GestionPedidosService.Persistence.csproj", "{D4B528A6-FA02-4D4C-B8E1-DD45C49D581C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{865A0A9E-3177-43A3-89B5-E8DC67D396DF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{865A0A9E-3177-43A3-89B5-E8DC67D396DF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{865A0A9E-3177-43A3-89B5-E8DC67D396DF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{865A0A9E-3177-43A3-89B5-E8DC67D396DF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{42C66BFD-506E-4C86-9D0F-6A8D4808B2A9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{42C66BFD-506E-4C86-9D0F-6A8D4808B2A9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{42C66BFD-506E-4C86-9D0F-6A8D4808B2A9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{42C66BFD-506E-4C86-9D0F-6A8D4808B2A9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E6ADF42E-2CE7-4906-AA10-213043CC8CD3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E6ADF42E-2CE7-4906-AA10-213043CC8CD3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E6ADF42E-2CE7-4906-AA10-213043CC8CD3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E6ADF42E-2CE7-4906-AA10-213043CC8CD3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D4B528A6-FA02-4D4C-B8E1-DD45C49D581C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D4B528A6-FA02-4D4C-B8E1-DD45C49D581C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D4B528A6-FA02-4D4C-B8E1-DD45C49D581C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D4B528A6-FA02-4D4C-B8E1-DD45C49D581C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
