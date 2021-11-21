@@ -24,5 +24,21 @@ namespace GestionPedidosService.Api.Controllers.v1
         {
             return await _orderServiceQuery.GetAll();
         }
+
+        [HttpGet("{id}")]
+        [ProducesResponseType(typeof(OrderDetailRead), 200)]
+        [ProducesResponseType(typeof(string), 404)]
+        public async Task<ActionResult<OrderDetailRead>> GetById(int id)
+        {
+            var result = await _orderServiceQuery.GetById(id);
+
+            if (result == null)
+            {
+                var errorMessage = $"There is no order detail with id '{id}'";
+                return NotFound(new { StatusCode = 404, ErroMessage = errorMessage });
+            }
+
+            return Ok(result);
+        }
     }
 }

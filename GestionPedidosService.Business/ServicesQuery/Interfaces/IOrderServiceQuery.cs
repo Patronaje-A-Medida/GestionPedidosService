@@ -9,5 +9,6 @@ namespace GestionPedidosService.Business.ServicesQuery.Interfaces
     public interface IOrderServiceQuery
     {
         Task<ICollection<OrderRead>> GetAll();
+        Task<OrderDetailRead> GetById(int id);
     }
 }

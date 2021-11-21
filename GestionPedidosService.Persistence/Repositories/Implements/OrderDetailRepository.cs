@@ -15,5 +15,14 @@ namespace GestionPedidosService.Persistence.Repositories.Implements
         {
             return await _context.Set<OrderDetail>().Include(e => e.Garment).Include(e => e.Order).ToListAsync();
         }
+
+        public override async Task<OrderDetail> GetById(int id)
+        {
+            return await _context.Set<OrderDetail>()
+                .Include(e => e.Garment)
+                .Include(e => e.Order)
+                .Include(e => e.Garment.FeatureGarments)
+                .FirstOrDefaultAsync(e => e.Id == id);
+        }
     }
 }
