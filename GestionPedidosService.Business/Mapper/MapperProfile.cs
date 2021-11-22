@@ -13,6 +13,8 @@ namespace GestionPedidosService.Business.Mapper
                 .ForMember(dest => dest.Type, opt => opt.MapFrom(src => src.TypeFeature));
 
             CreateMap<OrderDetail, OrderRead>()
+                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
+                .ForMember(dest => dest.GarmentId, opt => opt.MapFrom(src => src.Garment.Id))
                 .ForMember(dest => dest.GarmentCode, opt => opt.MapFrom(src => src.Garment.CodeGarment))
                 .ForMember(dest => dest.Client, opt => opt.MapFrom(src => src.Order.UserClientId))
                 .ForMember(dest => dest.Code, opt => opt.MapFrom(src => src.Order.CodeOrder))
