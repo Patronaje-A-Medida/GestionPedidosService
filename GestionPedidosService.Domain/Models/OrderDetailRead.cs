@@ -7,7 +7,7 @@ namespace GestionPedidosService.Domain.Models
     {
         public string Code { get; set; }
         public int Client { get; set; }
-        public DateTime Date { get; set; }
+        public string Date { get; set; }
         public string GarmentCode { get; set; }
         public string Atelier { get; set; }
         public string GarmentName { get; set; }
