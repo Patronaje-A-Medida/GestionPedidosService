@@ -12,7 +12,7 @@ namespace GestionPedidosService.Domain.Models
         public string Atelier { get; set; }
         public string GarmentName { get; set; }
         public string SelectedColor { get; set; }
-        public int State { get; set; }
+        public string State { get; set; }
         public double Price { get; set; }
         public List<FeatureRead> Features { get; set; }
     }

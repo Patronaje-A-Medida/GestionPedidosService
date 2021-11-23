@@ -8,7 +8,7 @@ namespace GestionPedidosService.Domain.Entities
     {
         public int Id { get; set; }
         public string CodeOrder { get; set; }
-        public int OrderStatus { get; set; }
+        public EOrderStatus OrderStatus { get; set; }
         public DateTime OrderDate { get; set; }
         
         public ICollection<Garment> Garments { get; set; }
