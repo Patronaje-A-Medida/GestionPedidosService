@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
 using GestionPedidosService.Business.ServicesQuery.Interfaces;
+using GestionPedidosService.Domain.Entities;
 using GestionPedidosService.Domain.Models;
 using GestionPedidosService.Persistence.Interfaces;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace GestionPedidosService.Business.ServicesQuery.Implements
@@ -18,16 +20,30 @@ namespace GestionPedidosService.Business.ServicesQuery.Implements
             _orderDetailRepository = orderDetailRepository;
         }
 
-        public async Task<ICollection<OrderRead>> GetAll()
+        public async Task<ICollection<OrderRead>> GetAll(OrderQuery query)
         {
             var orders = await _orderDetailRepository.GetAll();
-            return _mapper.Map<ICollection<OrderRead>>(orders);
+            var sortedByDate = orders.OrderBy(e => e.Order.OrderDate).ToList();
+            var filtered = ApplyFilters(sortedByDate, query);
+
+            return _mapper.Map<ICollection<OrderRead>>(filtered);
         }
 
         public async Task<OrderDetailRead> GetById(int id)
         {
             var order = await _orderDetailRepository.GetById(id);
             return _mapper.Map<OrderDetailRead>(order);
+        }
+
+        private ICollection<OrderDetail> ApplyFilters(ICollection<OrderDetail> orders, OrderQuery query)
+        {
+            bool hasGarmentCode = !query.GarmentCode.Equals("");
+            bool hasOrderStatus = query.OrderStatus > -1;
+
+            return orders
+                .Where(e => !hasGarmentCode || e.Garment.CodeGarment.Contains(query.GarmentCode))
+                .Where(e => !hasOrderStatus || e.Order.OrderStatus.Equals(query.OrderStatus))
+                .ToList();
         }
     }
 }

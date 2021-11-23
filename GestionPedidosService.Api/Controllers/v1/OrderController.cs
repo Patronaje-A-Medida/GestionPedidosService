@@ -18,11 +18,11 @@ namespace GestionPedidosService.Api.Controllers.v1
             _orderServiceQuery = orderServiceQuery;
         }
 
-        [HttpGet]
+        [HttpPost]
         [ProducesResponseType(typeof(ICollection<OrderRead>), 200)]
-        public async Task<ICollection<OrderRead>> GetAll()
+        public async Task<ICollection<OrderRead>> GetAll([FromBody] OrderQuery query)
         {
-            return await _orderServiceQuery.GetAll();
+            return await _orderServiceQuery.GetAll(query);
         }
 
         [HttpGet("{orderDetailId}")]
