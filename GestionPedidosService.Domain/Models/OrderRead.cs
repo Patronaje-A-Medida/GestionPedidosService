@@ -11,7 +11,7 @@ namespace GestionPedidosService.Domain.Models
         public int Client { get; set; }
         public string Code { get; set; }
         public double Price { get; set; }
-        public DateTime Date { get; set; }
-        public int State { get; set; }
+        public string Date { get; set; }
+        public string State { get; set; }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using GestionPedidosService.Business.Extension;
 using GestionPedidosService.Domain.Entities;
 using GestionPedidosService.Domain.Models;
 
@@ -19,18 +20,18 @@ namespace GestionPedidosService.Business.Mapper
                 .ForMember(dest => dest.Client, opt => opt.MapFrom(src => src.Order.UserClientId))
                 .ForMember(dest => dest.Code, opt => opt.MapFrom(src => src.Order.CodeOrder))
                 .ForMember(dest => dest.Price, opt => opt.MapFrom(src => (src.Garment.FirstRangePrice + src.Garment.SecondRangePrice) / 2))
-                .ForMember(dest => dest.Date, opt => opt.MapFrom(src => src.Order.OrderDate))
-                .ForMember(dest => dest.State, opt => opt.MapFrom(src => src.Order.OrderStatus));
+                .ForMember(dest => dest.Date, opt => opt.MapFrom(src => src.Order.OrderDate.ToString("dd/MM/yyyy")))
+                .ForMember(dest => dest.State, opt => opt.MapFrom(src => src.Order.OrderStatus.ToDescriptionString()));
 
             CreateMap<OrderDetail, OrderDetailRead>()
                 .ForMember(dest => dest.Code, opt => opt.MapFrom(src => src.Order.CodeOrder))
                 .ForMember(dest => dest.Client, opt => opt.MapFrom(src => src.Order.UserClientId))
-                .ForMember(dest => dest.Date, opt => opt.MapFrom(src => src.Order.OrderDate))
+                .ForMember(dest => dest.Date, opt => opt.MapFrom(src => src.Order.OrderDate.ToString("dd/MM/yyyy")))
                 .ForMember(dest => dest.GarmentCode, opt => opt.MapFrom(src => src.Garment.CodeGarment))
                 .ForMember(dest => dest.Atelier, opt => opt.MapFrom(src => src.Order.AtelierId))
                 .ForMember(dest => dest.GarmentName, opt => opt.MapFrom(src => src.Garment.NameGarment))
                 .ForMember(dest => dest.SelectedColor, opt => opt.MapFrom(src => src.Color))
-                .ForMember(dest => dest.State, opt => opt.MapFrom(src => src.Order.OrderStatus))
+                .ForMember(dest => dest.State, opt => opt.MapFrom(src => src.Order.OrderStatus.ToDescriptionString()))
                 .ForMember(dest => dest.Price, opt => opt.MapFrom(src => (src.Garment.FirstRangePrice + src.Garment.SecondRangePrice) / 2))
                 .ForMember(dest => dest.Features, opt => opt.MapFrom(src => src.Garment.FeatureGarments));
 
