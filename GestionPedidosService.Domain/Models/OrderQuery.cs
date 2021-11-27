@@ -1,12 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.ComponentModel;
 
 namespace GestionPedidosService.Domain.Models
 {
     public class OrderQuery
     {
-        public int OrderStatus { get; set; }
-        public string GarmentCode { get; set; }
+#nullable enable
+        [DefaultValue(null)]
+        public int? OrderStatus { get; set; }
+        [DefaultValue(null)]
+        public string? GarmentCode { get; set; }
+        [DefaultValue(null)]
+        public int? PageNumber { get; set; }
+        [DefaultValue(null)]
+        public int? PageSize { get; set; }
     }
 }
