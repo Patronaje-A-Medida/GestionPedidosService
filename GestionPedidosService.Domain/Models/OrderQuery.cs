@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using GestionPedidosService.Domain.Entities;
+using System.ComponentModel;
 
 namespace GestionPedidosService.Domain.Models
 {
@@ -6,7 +7,7 @@ namespace GestionPedidosService.Domain.Models
     {
 #nullable enable
         [DefaultValue(null)]
-        public int? OrderStatus { get; set; }
+        public string? OrderStatus { get; set; }
         [DefaultValue(null)]
         public string? GarmentCode { get; set; }
         [DefaultValue(null)]

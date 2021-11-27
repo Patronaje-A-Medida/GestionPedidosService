@@ -6,7 +6,7 @@ namespace GestionPedidosService.Domain.Models
     public class OrderDetailRead
     {
         public string Code { get; set; }
-        public int Client { get; set; }
+        public int ClientId { get; set; }
         public string Date { get; set; }
         public string GarmentCode { get; set; }
         public string Atelier { get; set; }
