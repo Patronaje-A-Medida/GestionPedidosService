@@ -39,8 +39,8 @@ namespace GestionPedidosService.Business.ServicesQuery.Implements
 
         private ICollection<OrderDetail> ApplyFilters(ICollection<OrderDetail> orders, OrderQuery query)
         {
-            bool hasGarmentCode = !query.GarmentCode.Equals("");
-            bool hasOrderStatus = query.OrderStatus > -1;
+            bool hasGarmentCode = query.GarmentCode != null;
+            bool hasOrderStatus = query.OrderStatus != null;
 
             return orders
                 .Where(e => !hasGarmentCode || e.Garment.CodeGarment.Contains(query.GarmentCode))
