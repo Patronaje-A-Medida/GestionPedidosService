@@ -20,7 +20,7 @@ namespace GestionPedidosService.Api.Controllers.v1
 
         [HttpPost]
         [ProducesResponseType(typeof(ICollection<OrderRead>), 200)]
-        public async Task<ICollection<OrderRead>> GetAll([FromBody] OrderQuery query)
+        public async Task<PagedList<OrderRead>> GetAll([FromBody] OrderQuery query)
         {
             return await _orderServiceQuery.GetAll(query);
         }
