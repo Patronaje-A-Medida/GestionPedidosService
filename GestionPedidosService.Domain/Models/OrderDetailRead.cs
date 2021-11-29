@@ -9,7 +9,7 @@ namespace GestionPedidosService.Domain.Models
         public int Client { get; set; }
         public string Date { get; set; }
         public string GarmentCode { get; set; }
-        public string Atelier { get; set; }
+        public int AtelierId { get; set; }
         public string GarmentName { get; set; }
         public string SelectedColor { get; set; }
         public string State { get; set; }
