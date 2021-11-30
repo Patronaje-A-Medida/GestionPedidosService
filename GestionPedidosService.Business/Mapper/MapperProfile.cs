@@ -28,7 +28,7 @@ namespace GestionPedidosService.Business.Mapper
                 .ForMember(dest => dest.ClientId, opt => opt.MapFrom(src => src.Order.UserClientId))
                 .ForMember(dest => dest.Date, opt => opt.MapFrom(src => src.Order.OrderDate.ToString("dd/MM/yyyy")))
                 .ForMember(dest => dest.GarmentCode, opt => opt.MapFrom(src => src.Garment.CodeGarment))
-                .ForMember(dest => dest.Atelier, opt => opt.MapFrom(src => src.Order.AtelierId))
+                .ForMember(dest => dest.AtelierId, opt => opt.MapFrom(src => src.Order.AtelierId))
                 .ForMember(dest => dest.GarmentName, opt => opt.MapFrom(src => src.Garment.NameGarment))
                 .ForMember(dest => dest.SelectedColor, opt => opt.MapFrom(src => src.Color))
                 .ForMember(dest => dest.State, opt => opt.MapFrom(src => src.Order.OrderStatus.ToDescriptionString()))
