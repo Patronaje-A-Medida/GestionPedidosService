@@ -2,6 +2,7 @@
 using GestionPedidosService.Business.Extension;
 using GestionPedidosService.Domain.Entities;
 using GestionPedidosService.Domain.Models;
+using System.Linq;
 
 namespace GestionPedidosService.Business.Mapper
 {
@@ -13,7 +14,7 @@ namespace GestionPedidosService.Business.Mapper
                 .ForMember(dest => dest.Value, opt => opt.MapFrom(src => src.Value))
                 .ForMember(dest => dest.Type, opt => opt.MapFrom(src => src.TypeFeature));
 
-            CreateMap<OrderDetail, OrderRead>()
+            /*CreateMap<OrderDetail, OrderRead>()
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
                 .ForMember(dest => dest.GarmentId, opt => opt.MapFrom(src => src.Garment.Id))
                 .ForMember(dest => dest.GarmentCode, opt => opt.MapFrom(src => src.Garment.CodeGarment))
@@ -21,7 +22,19 @@ namespace GestionPedidosService.Business.Mapper
                 .ForMember(dest => dest.Code, opt => opt.MapFrom(src => src.Order.CodeOrder))
                 .ForMember(dest => dest.Price, opt => opt.MapFrom(src => (src.Garment.FirstRangePrice + src.Garment.SecondRangePrice) / 2))
                 .ForMember(dest => dest.Date, opt => opt.MapFrom(src => src.Order.OrderDate.ToString("dd/MM/yyyy")))
-                .ForMember(dest => dest.State, opt => opt.MapFrom(src => src.Order.OrderStatus.ToDescriptionString()));
+                .ForMember(dest => dest.State, opt => opt.MapFrom(src => src.Order.OrderStatus.ToDescriptionString()));*/
+
+            CreateMap<Order, OrderRead>()
+                .ForMember(dest => dest.ClientId, opt => opt.MapFrom(src => src.UserClientId))
+                .ForMember(dest => dest.Price, opt => opt.MapFrom(src => src.OrderDetails.Aggregate(0.0, (sum, current) => sum + ((current.Garment.FirstRangePrice + current.Garment.SecondRangePrice) / 2))))
+                .ForMember(dest => dest.OrderStatus, opt => opt.MapFrom(src => src.OrderStatus.ToDescriptionString()))
+                .ForMember(dest => dest.Details, opt => opt.MapFrom(src => src.OrderDetails));
+                
+
+            CreateMap<OrderDetail, OrderDetailMin>()
+                .ForMember(dest => dest.CodeGarment, opt => opt.MapFrom(src => src.Garment.CodeGarment))
+                .ForMember(dest => dest.OrderDetailStatus, opt => opt.MapFrom(src => src.OrderDetailStatus.ToDescriptionString()))
+                .ForMember(dest => dest.Price, opt => opt.MapFrom(src => (src.Garment.FirstRangePrice + src.Garment.SecondRangePrice) / 2));
 
             CreateMap<OrderDetail, OrderDetailRead>()
                 .ForMember(dest => dest.Code, opt => opt.MapFrom(src => src.Order.CodeOrder))

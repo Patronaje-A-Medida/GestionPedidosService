@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using GestionPedidosService.Domain.Base;
+using GestionPedidosService.Domain.Utils;
 
 namespace GestionPedidosService.Domain.Entities
 {
@@ -12,10 +13,10 @@ namespace GestionPedidosService.Domain.Entities
         public DateTime OrderDate { get; set; }
         
         public ICollection<Garment> Garments { get; set; }
-        public List<OrderDetail> OrderDetails { get; set; }
+        public IEnumerable<OrderDetail> OrderDetails { get; set; }
         
         public int AtelierId { get; set; }
         public int UserClientId { get; set; }
-        public int UserAtelierId { get; set; }
+        public int? UserAtelierId { get; set; }
     }
 }

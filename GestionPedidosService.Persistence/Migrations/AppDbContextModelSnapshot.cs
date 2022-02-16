@@ -41,6 +41,9 @@ namespace GestionPedidosService.Persistence.Migrations
                     b.Property<DateTimeOffset?>("ModifiedDate")
                         .HasColumnType("datetimeoffset(7)");
 
+                    b.Property<bool>("Status")
+                        .HasColumnType("bit");
+
                     b.Property<string>("TypeFeature")
                         .IsRequired()
                         .HasColumnType("nvarchar(20)");
@@ -53,7 +56,7 @@ namespace GestionPedidosService.Persistence.Migrations
 
                     b.HasIndex("GarmentId");
 
-                    b.ToTable("FeatureGarment");
+                    b.ToTable("FeatureGarments");
                 });
 
             modelBuilder.Entity("GestionPedidosService.Domain.Entities.Garment", b =>
@@ -66,8 +69,8 @@ namespace GestionPedidosService.Persistence.Migrations
                     b.Property<int>("AtelierId")
                         .HasColumnType("int");
 
-                    b.Property<byte>("Available")
-                        .HasColumnType("tinyint");
+                    b.Property<bool>("Available")
+                        .HasColumnType("bit");
 
                     b.Property<string>("CodeGarment")
                         .IsRequired()
@@ -95,9 +98,12 @@ namespace GestionPedidosService.Persistence.Migrations
                     b.Property<decimal>("SecondRangePrice")
                         .HasColumnType("decimal(10,2)");
 
+                    b.Property<bool>("Status")
+                        .HasColumnType("bit");
+
                     b.HasKey("Id");
 
-                    b.ToTable("Garment");
+                    b.ToTable("Garments");
                 });
 
             modelBuilder.Entity("GestionPedidosService.Domain.Entities.Order", b =>
@@ -127,12 +133,15 @@ namespace GestionPedidosService.Persistence.Migrations
                         .HasColumnType("datetimeoffset(7)");
 
                     b.Property<DateTime>("OrderDate")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime");
 
-                    b.Property<int>("OrderStatus")
-                        .HasColumnType("int");
+                    b.Property<byte>("OrderStatus")
+                        .HasColumnType("tinyint");
 
-                    b.Property<int>("UserAtelierId")
+                    b.Property<bool>("Status")
+                        .HasColumnType("bit");
+
+                    b.Property<int?>("UserAtelierId")
                         .HasColumnType("int");
 
                     b.Property<int>("UserClientId")
@@ -140,7 +149,7 @@ namespace GestionPedidosService.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Order");
+                    b.ToTable("Orders");
                 });
 
             modelBuilder.Entity("GestionPedidosService.Domain.Entities.OrderDetail", b =>
@@ -169,8 +178,17 @@ namespace GestionPedidosService.Persistence.Migrations
                     b.Property<DateTimeOffset?>("ModifiedDate")
                         .HasColumnType("datetimeoffset(7)");
 
+                    b.Property<byte>("OrderDetailStatus")
+                        .HasColumnType("tinyint");
+
                     b.Property<int>("OrderId")
                         .HasColumnType("int");
+
+                    b.Property<byte>("Quantity")
+                        .HasColumnType("tinyint");
+
+                    b.Property<bool>("Status")
+                        .HasColumnType("bit");
 
                     b.HasKey("Id");
 
@@ -178,7 +196,7 @@ namespace GestionPedidosService.Persistence.Migrations
 
                     b.HasIndex("OrderId");
 
-                    b.ToTable("OrderDetail");
+                    b.ToTable("OrderDetails");
                 });
 
             modelBuilder.Entity("GestionPedidosService.Domain.Entities.PatternDimension", b =>
@@ -206,7 +224,7 @@ namespace GestionPedidosService.Persistence.Migrations
 
                     b.HasIndex("PatternGarmentId");
 
-                    b.ToTable("PatternDimension");
+                    b.ToTable("PatternDimensions");
                 });
 
             modelBuilder.Entity("GestionPedidosService.Domain.Entities.PatternGarment", b =>
@@ -235,7 +253,7 @@ namespace GestionPedidosService.Persistence.Migrations
 
                     b.HasIndex("GarmentId");
 
-                    b.ToTable("PatternGarment");
+                    b.ToTable("PatternGarments");
                 });
 
             modelBuilder.Entity("GestionPedidosService.Domain.Entities.FeatureGarment", b =>

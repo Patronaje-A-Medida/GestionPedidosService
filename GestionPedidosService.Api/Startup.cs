@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using AutoMapper;
 using GestionPedidosService.Api.ApiConventions;
 using GestionPedidosService.Business.Mapper;
@@ -98,9 +97,14 @@ namespace GestionPedidosService.Api
         {
             if (env.IsDevelopment())
             {
-                app.UseDeveloperExceptionPage();
+                //app.UseDeveloperExceptionPage();
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Api Gestión de Pedidos v1"));
+                app.UseExceptionHandler("/error-development");
+            }
+            else
+            {
+                app.UseExceptionHandler("/error");
             }
 
             app.UseCors("All");

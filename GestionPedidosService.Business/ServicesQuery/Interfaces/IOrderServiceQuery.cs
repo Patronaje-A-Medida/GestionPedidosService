@@ -8,7 +8,8 @@ namespace GestionPedidosService.Business.ServicesQuery.Interfaces
 {
     public interface IOrderServiceQuery
     {
-        Task<PagedList<OrderRead>> GetAll(OrderQuery query);
+        Task<PagedList<OrderRead>> GetAllByQuery(OrderQuery query);
+        //Task<PagedList<OrderRead>> GetAll(OrderQuery query);
         Task<OrderDetailRead> GetById(int id);
     }
 }

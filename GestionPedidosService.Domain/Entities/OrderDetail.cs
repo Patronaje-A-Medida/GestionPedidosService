@@ -1,4 +1,5 @@
 ﻿using GestionPedidosService.Domain.Base;
+using GestionPedidosService.Domain.Utils;
 
 namespace GestionPedidosService.Domain.Entities
 {
@@ -6,7 +7,9 @@ namespace GestionPedidosService.Domain.Entities
     {
         public int Id { get; set; }
         public string Color { get; set; }
-        
+        public int Quantity { get; set; }
+        public EOrderStatus OrderDetailStatus { get; set; }
+
         public int GarmentId { get; set; }
         public Garment Garment { get; set; }
         

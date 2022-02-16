@@ -1,8 +1,16 @@
-﻿using GestionPedidosService.Business.ServicesQuery.Interfaces;
+﻿using GestionPedidosService.Api.Extensions;
+using GestionPedidosService.Api.Utils;
+using GestionPedidosService.Business.Handlers;
+using GestionPedidosService.Business.ServicesQuery.Interfaces;
 using GestionPedidosService.Domain.Models;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
+using static GestionPedidosService.Domain.Utils.ErrorsUtil;
 
 namespace GestionPedidosService.Api.Controllers.v1
 {
@@ -18,11 +26,43 @@ namespace GestionPedidosService.Api.Controllers.v1
             _orderServiceQuery = orderServiceQuery;
         }
 
-        [HttpPost]
+        [HttpPost("by-query")]
         [ProducesResponseType(typeof(ICollection<OrderRead>), 200)]
-        public async Task<PagedList<OrderRead>> GetAll([FromBody] OrderQuery query)
+        [ProducesResponseType(typeof(ErrorDevDetail), 400)]
+        [ProducesResponseType(typeof(ErrorDevDetail), 500)]
+        public async Task<ActionResult<PagedList<OrderRead>>> GetAllByQuery([FromBody] OrderQuery query)
         {
-            return await _orderServiceQuery.GetAll(query);
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    string err = string.Join(
+                        "; ",
+                        ModelState.Values
+                            .SelectMany(x => x.Errors)
+                            .Select(x => x.ErrorMessage));
+
+                    return BadRequest(new ErrorDetail
+                    {
+                        statusCode = (int)HttpStatusCode.BadRequest,
+                        errorCode = ErrorsCode.INVALID_MODEL_ERROR,
+                        message = err
+                    });
+                }
+
+                var result = await _orderServiceQuery.GetAllByQuery(query);
+                return Ok(result);
+
+            }
+            catch (ServiceException ex)
+            {
+                throw ex;
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
         [HttpGet("{orderDetailId}")]

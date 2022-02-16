@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 
-namespace GestionPedidosService.Domain.Entities
+namespace GestionPedidosService.Domain.Utils
 {
     public enum EOrderStatus
     {

@@ -3,12 +3,12 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace GestionPedidosService.Persistence.Migrations
 {
-    public partial class InitialCreate : Migration
+    public partial class InitialGestionDemo : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Garment",
+                name: "Garments",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -17,42 +17,44 @@ namespace GestionPedidosService.Persistence.Migrations
                     NameGarment = table.Column<string>(type: "nvarchar(100)", nullable: false),
                     FirstRangePrice = table.Column<decimal>(type: "decimal(10,2)", nullable: false),
                     SecondRangePrice = table.Column<decimal>(type: "decimal(10,2)", nullable: false),
-                    Available = table.Column<byte>(type: "tinyint", nullable: false),
+                    Available = table.Column<bool>(type: "bit", nullable: false),
                     AtelierId = table.Column<int>(type: "int", nullable: false),
                     CreatedDate = table.Column<DateTimeOffset>(type: "datetimeoffset(7)", nullable: false),
                     CreatedBy = table.Column<string>(type: "nvarchar(100)", nullable: true),
                     ModifiedDate = table.Column<DateTimeOffset>(type: "datetimeoffset(7)", nullable: true),
-                    ModifiedBy = table.Column<string>(type: "nvarchar(100)", nullable: true)
+                    ModifiedBy = table.Column<string>(type: "nvarchar(100)", nullable: true),
+                    Status = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Garment", x => x.Id);
+                    table.PrimaryKey("PK_Garments", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Order",
+                name: "Orders",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     CodeOrder = table.Column<string>(type: "nvarchar(20)", nullable: false),
-                    OrderStatus = table.Column<int>(type: "int", nullable: false),
-                    OrderDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    OrderStatus = table.Column<byte>(type: "tinyint", nullable: false),
+                    OrderDate = table.Column<DateTime>(type: "datetime", nullable: false),
                     AtelierId = table.Column<int>(type: "int", nullable: false),
                     UserClientId = table.Column<int>(type: "int", nullable: false),
-                    UserAtelierId = table.Column<int>(type: "int", nullable: false),
+                    UserAtelierId = table.Column<int>(type: "int", nullable: true),
                     CreatedDate = table.Column<DateTimeOffset>(type: "datetimeoffset(7)", nullable: false),
                     CreatedBy = table.Column<string>(type: "nvarchar(100)", nullable: true),
                     ModifiedDate = table.Column<DateTimeOffset>(type: "datetimeoffset(7)", nullable: true),
-                    ModifiedBy = table.Column<string>(type: "nvarchar(100)", nullable: true)
+                    ModifiedBy = table.Column<string>(type: "nvarchar(100)", nullable: true),
+                    Status = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Order", x => x.Id);
+                    table.PrimaryKey("PK_Orders", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "FeatureGarment",
+                name: "FeatureGarments",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -63,21 +65,22 @@ namespace GestionPedidosService.Persistence.Migrations
                     CreatedDate = table.Column<DateTimeOffset>(type: "datetimeoffset(7)", nullable: false),
                     CreatedBy = table.Column<string>(type: "nvarchar(100)", nullable: true),
                     ModifiedDate = table.Column<DateTimeOffset>(type: "datetimeoffset(7)", nullable: true),
-                    ModifiedBy = table.Column<string>(type: "nvarchar(100)", nullable: true)
+                    ModifiedBy = table.Column<string>(type: "nvarchar(100)", nullable: true),
+                    Status = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_FeatureGarment", x => x.Id);
+                    table.PrimaryKey("PK_FeatureGarments", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_FeatureGarment_Garment_GarmentId",
+                        name: "FK_FeatureGarments_Garments_GarmentId",
                         column: x => x.GarmentId,
-                        principalTable: "Garment",
+                        principalTable: "Garments",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "PatternGarment",
+                name: "PatternGarments",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -89,48 +92,51 @@ namespace GestionPedidosService.Persistence.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_PatternGarment", x => x.Id);
+                    table.PrimaryKey("PK_PatternGarments", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_PatternGarment_Garment_GarmentId",
+                        name: "FK_PatternGarments_Garments_GarmentId",
                         column: x => x.GarmentId,
-                        principalTable: "Garment",
+                        principalTable: "Garments",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "OrderDetail",
+                name: "OrderDetails",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Color = table.Column<string>(type: "nvarchar(7)", nullable: false),
+                    Quantity = table.Column<byte>(type: "tinyint", nullable: false),
+                    OrderDetailStatus = table.Column<byte>(type: "tinyint", nullable: false),
                     GarmentId = table.Column<int>(type: "int", nullable: false),
                     OrderId = table.Column<int>(type: "int", nullable: false),
                     CreatedDate = table.Column<DateTimeOffset>(type: "datetimeoffset(7)", nullable: false),
                     CreatedBy = table.Column<string>(type: "nvarchar(100)", nullable: true),
                     ModifiedDate = table.Column<DateTimeOffset>(type: "datetimeoffset(7)", nullable: true),
-                    ModifiedBy = table.Column<string>(type: "nvarchar(100)", nullable: true)
+                    ModifiedBy = table.Column<string>(type: "nvarchar(100)", nullable: true),
+                    Status = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_OrderDetail", x => x.Id);
+                    table.PrimaryKey("PK_OrderDetails", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_OrderDetail_Garment_GarmentId",
+                        name: "FK_OrderDetails_Garments_GarmentId",
                         column: x => x.GarmentId,
-                        principalTable: "Garment",
+                        principalTable: "Garments",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_OrderDetail_Order_OrderId",
+                        name: "FK_OrderDetails_Orders_OrderId",
                         column: x => x.OrderId,
-                        principalTable: "Order",
+                        principalTable: "Orders",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "PatternDimension",
+                name: "PatternDimensions",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -142,60 +148,60 @@ namespace GestionPedidosService.Persistence.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_PatternDimension", x => x.Id);
+                    table.PrimaryKey("PK_PatternDimensions", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_PatternDimension_PatternGarment_PatternGarmentId",
+                        name: "FK_PatternDimensions_PatternGarments_PatternGarmentId",
                         column: x => x.PatternGarmentId,
-                        principalTable: "PatternGarment",
+                        principalTable: "PatternGarments",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_FeatureGarment_GarmentId",
-                table: "FeatureGarment",
+                name: "IX_FeatureGarments_GarmentId",
+                table: "FeatureGarments",
                 column: "GarmentId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_OrderDetail_GarmentId",
-                table: "OrderDetail",
+                name: "IX_OrderDetails_GarmentId",
+                table: "OrderDetails",
                 column: "GarmentId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_OrderDetail_OrderId",
-                table: "OrderDetail",
+                name: "IX_OrderDetails_OrderId",
+                table: "OrderDetails",
                 column: "OrderId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_PatternDimension_PatternGarmentId",
-                table: "PatternDimension",
+                name: "IX_PatternDimensions_PatternGarmentId",
+                table: "PatternDimensions",
                 column: "PatternGarmentId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_PatternGarment_GarmentId",
-                table: "PatternGarment",
+                name: "IX_PatternGarments_GarmentId",
+                table: "PatternGarments",
                 column: "GarmentId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "FeatureGarment");
+                name: "FeatureGarments");
 
             migrationBuilder.DropTable(
-                name: "OrderDetail");
+                name: "OrderDetails");
 
             migrationBuilder.DropTable(
-                name: "PatternDimension");
+                name: "PatternDimensions");
 
             migrationBuilder.DropTable(
-                name: "Order");
+                name: "Orders");
 
             migrationBuilder.DropTable(
-                name: "PatternGarment");
+                name: "PatternGarments");
 
             migrationBuilder.DropTable(
-                name: "Garment");
+                name: "Garments");
         }
     }
 }
