@@ -42,7 +42,7 @@ namespace GestionPedidosService.Business.ServicesQuery.Implements
         {
             try
             {
-                var ordersDetails = await _uof.orderRepository.GetAllByQuery(query.AtelierId, query.CodeGarment, query.OrderStatus);
+                var ordersDetails = await _uof.orderRepository.GetAllByQuery(query.AtelierId, query.OrderStatus, query.FilterString);
                 var ordersRead = _mapper.Map<ICollection<OrderRead>>(ordersDetails);
                 return ordersRead.ToPagedList(query.PageNumber, query.PageSize);
             }
@@ -58,6 +58,12 @@ namespace GestionPedidosService.Business.ServicesQuery.Implements
                     ErrorMessages.GET_ORDERS_FAILED, 
                     ex);
             }
+        }
+
+        public async Task<OrderDetailRead> GetByCodeOrder_CodeGarment(string codeOrder, string codeGarment)
+        {
+            var orderDetail = await _uof.orderDetailRepository.GetByCodeOrder_CodeGarment(codeOrder, codeGarment);
+            return null;
         }
 
         public async Task<OrderDetailRead> GetById(int id)
