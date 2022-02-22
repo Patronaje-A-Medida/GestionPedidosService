@@ -6,6 +6,7 @@ namespace GestionPedidosService.Domain.Models
 {
     public class FeatureRead
     {
+        public string Id { get; set; }
         public string Value { get; set; }
         public string Type { get; set; }
     }

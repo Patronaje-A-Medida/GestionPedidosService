@@ -10,7 +10,7 @@ namespace GestionPedidosService.Domain.Models
         [DefaultValue(null)]
         public string? OrderStatus { get; set; }
         [DefaultValue(null)]
-        public string? CodeGarment { get; set; }
+        public string? FilterString { get; set; }
         [DefaultValue(null)]
         public int? PageNumber { get; set; }
         [DefaultValue(null)]
