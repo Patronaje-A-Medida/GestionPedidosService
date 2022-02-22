@@ -17,7 +17,6 @@ namespace GestionPedidosService.Domain.Utils
             public static readonly int REGISTER_USER_FAILED = 10010;
 
             public static readonly int GET_ORDERS_FAILED = 10020;
-            
         }
 
         public struct ErrorMessages

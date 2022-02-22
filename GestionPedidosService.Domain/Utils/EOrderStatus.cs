@@ -4,11 +4,11 @@ namespace GestionPedidosService.Domain.Utils
 {
     public enum EOrderStatus
     {
-        [Description("Unattended")]
+        [Description("Sin Atender")]
         Unattended = 0,
-        [Description("In Progress")]
+        [Description("En Progreso")]
         InProgress = 1,
-        [Description("Attended")]
+        [Description("Atendido")]
         Attended = 2
     }
 }
