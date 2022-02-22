@@ -32,7 +32,7 @@ namespace GestionPedidosService.Api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<AppDbContext>(
-                opts => opts.UseSqlServer(Configuration.GetConnectionString("LocalConnection"))
+                opts => opts.UseSqlServer(Configuration.GetConnectionString("LocalConnection")).LogTo(Console.WriteLine)
             );
 
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));

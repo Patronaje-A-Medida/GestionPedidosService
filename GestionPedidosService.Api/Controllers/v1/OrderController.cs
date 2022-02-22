@@ -80,5 +80,12 @@ namespace GestionPedidosService.Api.Controllers.v1
 
             return Ok(result);
         }
+
+        [HttpGet("details")]
+        public async Task<IActionResult> GetByCodeOrder_CodeGarment([FromQuery] string codeOrder, [FromQuery] string codeGarment)
+        {
+            var result = await _orderServiceQuery.GetByCodeOrder_CodeGarment(codeOrder, codeGarment);
+            return Ok();
+        }
     }
 }
