@@ -18,7 +18,7 @@ namespace GestionPedidosService.Persistence.Repositories.Implements
     {
         public OrderRepository(AppDbContext context) : base(context) { }
 
-        public async Task<IEnumerable<Order>> GetAllByQuery(int atelierId, string codeGarment, string orderStatus)
+        public async Task<IEnumerable<Order>> GetAllByQuery(int atelierId, string orderStatus, string filterString)
         {
             try
             {
@@ -28,8 +28,17 @@ namespace GestionPedidosService.Persistence.Repositories.Implements
 
                 var orderDetails = await _context.Orders
                     .Include(o => o.OrderDetails).ThenInclude(od => od.Garment)
+                    .Include(o => o.UserClient).ThenInclude(u => u.User)
+                    .Include(o => o.UserAtelier).ThenInclude(u => u.User)
                     .Where(o => o.AtelierId == atelierId)
-                    .Where(o => codeGarment == null || o.OrderDetails.Any(od => od.Garment.CodeGarment.ToUpper().Contains(codeGarment.ToUpper())))
+                    .Where(
+                        o => filterString == null || 
+                        (
+                            o.OrderDetails.Any(od => od.Garment.CodeGarment.ToUpper().Contains(filterString.ToUpper())) ||
+                            o.CodeOrder.ToUpper().Contains(filterString.ToUpper()) ||
+                            (o.UserClient.User.NameUser.ToUpper() + " " + o.UserClient.User.LastNameUser.ToUpper()).Contains(filterString.ToUpper())
+                        )
+                    )
                     .Where(o => orderStatus == null || o.OrderStatus.Equals(status))
                     .OrderBy(o => o.OrderDate)
                     .AsSplitQuery()

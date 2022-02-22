@@ -6,6 +6,6 @@ namespace GestionPedidosService.Persistence.Interfaces
 {
     public interface IOrderDetailRepository : IRepository<OrderDetail>
     {
-        Task<IEnumerable<OrderDetail>> GetAllByQuery(int atelierId, string codeGarment, string orderStatus);
+        Task<OrderDetail> GetByCodeOrder_CodeGarment(string codeOrder, string codeGarment);
     }
 }
