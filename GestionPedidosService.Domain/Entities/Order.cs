@@ -17,6 +17,8 @@ namespace GestionPedidosService.Domain.Entities
         
         public int AtelierId { get; set; }
         public int UserClientId { get; set; }
+        public UserClient UserClient { get; set; }
         public int? UserAtelierId { get; set; }
+        public UserAtelier UserAtelier { get; set; }
     }
 }
