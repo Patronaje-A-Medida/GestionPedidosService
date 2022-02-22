@@ -50,8 +50,7 @@ namespace GestionPedidosService.Persistence.Context
                 eb.HasKey(e => e.Id);
                 eb.Property(e => e.Value).HasColumnType("nvarchar(max)").IsRequired();
                 eb.Property(e => e.TypeFeature).HasColumnType("nvarchar(20)").IsRequired();
-                eb.HasOne(e => e.Garment)
-                    .WithMany(e => e.FeatureGarments);
+                eb.HasOne(e => e.Garment).WithMany(e => e.FeatureGarments);
             });
 
             builder.Entity<Garment>(eb =>
@@ -73,7 +72,8 @@ namespace GestionPedidosService.Persistence.Context
                 eb.Property(e => e.OrderDate).HasColumnType("datetime").IsRequired();
                 eb.Property(e => e.AtelierId).HasColumnType("int").IsRequired();
                 eb.Property(e => e.UserAtelierId).HasColumnType("int").IsRequired(false);
-                eb.Property(e => e.UserClientId).HasColumnType("int").IsRequired();
+                //eb.HasOne(e => e.UserAtelier).WithMany().HasForeignKey(e => e.UserAtelierId).IsRequired(false);
+                eb.HasOne(e => e.UserClient).WithMany(e => e.Orders).HasForeignKey(e => e.UserClientId).IsRequired();
                 eb.HasMany(e => e.Garments)
                     .WithMany(e => e.Orders)
                     .UsingEntity<OrderDetail>(
@@ -92,6 +92,11 @@ namespace GestionPedidosService.Persistence.Context
                         }
                     );
             });
+
+            //builder.Entity<UserClient>().Metadata.SetIsTableExcludedFromMigrations(true);
+            builder.Entity<UserClient>().ToTable(nameof(UserClients), t => t.ExcludeFromMigrations());
+            builder.Entity<UserAtelier>().ToTable(nameof(UserAteliers), t => t.ExcludeFromMigrations());
+            builder.Entity<UserBase>().ToTable(nameof(AspNetUsers), t => t.ExcludeFromMigrations());
         }
 
         private void ProcessAuditing()
@@ -120,11 +125,18 @@ namespace GestionPedidosService.Persistence.Context
             }
         }
 
+        // renombrado de tablas
         public DbSet<Garment> Garments { get; set; }
         public DbSet<FeatureGarment> FeatureGarments { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderDetail> OrderDetails { get; set; }
         public DbSet<PatternDimension> PatternDimensions { get; set; }
         public DbSet<PatternGarment> PatternGarments { get; set; }
+
+
+        // auxiliares para ignorar tablas de migración
+        private string UserAteliers { get; }
+        private string UserClients { get; }
+        private string AspNetUsers { get; }
     }
 }
