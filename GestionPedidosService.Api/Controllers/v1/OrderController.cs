@@ -82,10 +82,34 @@ namespace GestionPedidosService.Api.Controllers.v1
         }
 
         [HttpGet("details")]
-        public async Task<IActionResult> GetByCodeOrder_CodeGarment([FromQuery] string codeOrder, [FromQuery] string codeGarment)
+        [ProducesResponseType(typeof(OrderDetailRead), 200)]
+        [ProducesResponseType(typeof(ErrorDevDetail), 404)]
+        [ProducesResponseType(typeof(ErrorDevDetail), 400)]
+        [ProducesResponseType(typeof(ErrorDevDetail), 500)]
+        public async Task<ActionResult<OrderDetailRead>> GetByCodeOrder_CodeGarment([FromQuery] string codeOrder, [FromQuery] string codeGarment)
         {
-            var result = await _orderServiceQuery.GetByCodeOrder_CodeGarment(codeOrder, codeGarment);
-            return Ok();
+            try
+            {
+                var result = await _orderServiceQuery.GetByCodeOrder_CodeGarment(codeOrder, codeGarment);
+                if (result == null)
+                {
+                    return NotFound(new ErrorDetail 
+                    { 
+                        errorCode = ErrorsCode.NOT_FOUND_ORDER,
+                        message = ErrorMessages.NOT_FOUND_ORDER,
+                        statusCode = (int)HttpStatusCode.NotFound,
+                    });
+                }
+                return Ok(result);
+            }
+            catch (ServiceException ex)
+            {
+                throw ex;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
     }
 }

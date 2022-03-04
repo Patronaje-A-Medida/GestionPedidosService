@@ -8,6 +8,28 @@ namespace GestionPedidosService.Persistence.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "DictionaryTypes",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Value = table.Column<string>(type: "nvarchar(50)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(100)", nullable: false),
+                    Type = table.Column<string>(type: "nvarchar(50)", nullable: false),
+                    ParentType = table.Column<string>(type: "nvarchar(100)", nullable: true),
+                    AtelierId = table.Column<int>(type: "int", nullable: true),
+                    CreatedDate = table.Column<DateTimeOffset>(type: "datetimeoffset(7)", nullable: false),
+                    CreatedBy = table.Column<string>(type: "nvarchar(100)", nullable: true),
+                    ModifiedDate = table.Column<DateTimeOffset>(type: "datetimeoffset(7)", nullable: true),
+                    ModifiedBy = table.Column<string>(type: "nvarchar(100)", nullable: true),
+                    Status = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_DictionaryTypes", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Garments",
                 columns: table => new
                 {
@@ -73,6 +95,7 @@ namespace GestionPedidosService.Persistence.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Value = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     TypeFeature = table.Column<string>(type: "nvarchar(20)", nullable: false),
+                    CodeFeature = table.Column<int>(type: "int", nullable: false),
                     GarmentId = table.Column<int>(type: "int", nullable: false),
                     CreatedDate = table.Column<DateTimeOffset>(type: "datetimeoffset(7)", nullable: false),
                     CreatedBy = table.Column<string>(type: "nvarchar(100)", nullable: true),
@@ -170,6 +193,11 @@ namespace GestionPedidosService.Persistence.Migrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "IX_DictionaryTypes_AtelierId",
+                table: "DictionaryTypes",
+                column: "AtelierId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_FeatureGarments_GarmentId",
                 table: "FeatureGarments",
                 column: "GarmentId");
@@ -207,6 +235,9 @@ namespace GestionPedidosService.Persistence.Migrations
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "DictionaryTypes");
+
             migrationBuilder.DropTable(
                 name: "FeatureGarments");
 

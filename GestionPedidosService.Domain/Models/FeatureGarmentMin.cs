@@ -4,9 +4,9 @@ using System.Text;
 
 namespace GestionPedidosService.Domain.Models
 {
-    public class FeatureRead
+    public class FeatureGarmentMin
     {
-        public string Id { get; set; }
+        public int Id { get; set; }
         public string Value { get; set; }
         public string Type { get; set; }
     }

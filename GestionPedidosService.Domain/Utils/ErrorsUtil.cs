@@ -17,6 +17,9 @@ namespace GestionPedidosService.Domain.Utils
             public static readonly int REGISTER_USER_FAILED = 10010;
 
             public static readonly int GET_ORDERS_FAILED = 10020;
+            public static readonly int GET_ORDER_FAILED = 10021;
+            public static readonly int NOT_FOUND_ORDER = 10022;
+
         }
 
         public struct ErrorMessages
@@ -28,6 +31,8 @@ namespace GestionPedidosService.Domain.Utils
             public static readonly string GET_CONTEXT_ERROR = "No se pudo obtener la información requerida";
             public static readonly string REGISTER_USER_FAILED = "No se pudo registrar el usuario";
             public static readonly string GET_ORDERS_FAILED = "No se pudo obtener la información de las órdenes de pedidos del atelier";
+            public static readonly string GET_ORDER_FAILED = "No se pudo obtener la información del detalle de la orden requerida";
+            public static readonly string NOT_FOUND_ORDER = "El detalle de la orden solicitada no existe";
         }
     }
 }

@@ -28,22 +28,12 @@ namespace GestionPedidosService.Business.ServicesQuery.Implements
             _uof = uof;
         }
 
-        /*public async Task<PagedList<OrderRead>> GetAll(OrderQuery query)
-        {
-            var orderEntities = await _uof.orderDetailRepository.GetAll();
-            var sortedByDate = orderEntities.OrderBy(e => e.Order.OrderDate).ToList();
-            var filtered = ApplyFilters(sortedByDate, query);
-
-            var orders = _mapper.Map<ICollection<OrderRead>>(filtered);
-            return orders.ToPagedList(query.PageNumber, query.PageSize);
-        }*/
-
         public async Task<PagedList<OrderRead>> GetAllByQuery(OrderQuery query)
         {
             try
             {
-                var ordersDetails = await _uof.orderRepository.GetAllByQuery(query.AtelierId, query.OrderStatus, query.FilterString);
-                var ordersRead = _mapper.Map<ICollection<OrderRead>>(ordersDetails);
+                var orders = await _uof.orderRepository.GetAllByQuery(query.AtelierId, query.OrderStatus, query.FilterString);
+                var ordersRead = _mapper.Map<ICollection<OrderRead>>(orders);
                 return ordersRead.ToPagedList(query.PageNumber, query.PageSize);
             }
             catch (RepositoryException ex)
@@ -54,16 +44,33 @@ namespace GestionPedidosService.Business.ServicesQuery.Implements
             {
                 throw new ServiceException(
                     HttpStatusCode.InternalServerError, 
-                    ErrorsCode.GET_ORDERS_FAILED, 
-                    ErrorMessages.GET_ORDERS_FAILED, 
+                    ErrorsCode.GET_ORDER_FAILED, 
+                    ErrorMessages.GET_ORDER_FAILED, 
                     ex);
             }
         }
 
         public async Task<OrderDetailRead> GetByCodeOrder_CodeGarment(string codeOrder, string codeGarment)
         {
-            var orderDetail = await _uof.orderDetailRepository.GetByCodeOrder_CodeGarment(codeOrder, codeGarment);
-            return null;
+            try
+            {
+                var orderDetail = await _uof.orderDetailRepository.GetByCodeOrder_CodeGarment(codeOrder, codeGarment);
+                var orderDetailRead = _mapper.Map<OrderDetailRead>(orderDetail);
+                                    
+                return orderDetailRead;
+            }
+            catch (RepositoryException ex)
+            {
+                throw new ServiceException(HttpStatusCode.InternalServerError, ex);
+            }
+            catch (Exception ex)
+            {
+                throw new ServiceException(
+                    HttpStatusCode.InternalServerError,
+                    ErrorsCode.GET_ORDERS_FAILED,
+                    ErrorMessages.GET_ORDERS_FAILED,
+                    ex);
+            }
         }
 
         public async Task<OrderDetailRead> GetById(int id)

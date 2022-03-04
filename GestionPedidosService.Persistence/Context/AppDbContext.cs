@@ -50,6 +50,7 @@ namespace GestionPedidosService.Persistence.Context
                 eb.HasKey(e => e.Id);
                 eb.Property(e => e.Value).HasColumnType("nvarchar(max)").IsRequired();
                 eb.Property(e => e.TypeFeature).HasColumnType("nvarchar(20)").IsRequired();
+                eb.Property(e => e.CodeFeature).HasColumnType("int").IsRequired();
                 eb.HasOne(e => e.Garment).WithMany(e => e.FeatureGarments);
             });
 
@@ -93,6 +94,17 @@ namespace GestionPedidosService.Persistence.Context
                     );
             });
 
+            builder.Entity<DictionaryType>(eb =>
+            {
+                eb.HasKey(eb => eb.Id);
+                eb.Property(e => e.Value).HasColumnType("nvarchar(50)").IsRequired();
+                eb.Property(e => e.Type).HasColumnType("nvarchar(50)").IsRequired();
+                eb.Property(e => e.Description).HasColumnType("nvarchar(100)").IsRequired();
+                eb.Property(e => e.ParentType).HasColumnType("nvarchar(100)").IsRequired(false);
+                eb.Property(e => e.AtelierId).HasColumnType("int").IsRequired(false);
+                eb.HasIndex(eb => eb.AtelierId);
+            });
+
             //builder.Entity<UserClient>().Metadata.SetIsTableExcludedFromMigrations(true);
             builder.Entity<UserClient>().ToTable(nameof(UserClients), t => t.ExcludeFromMigrations());
             builder.Entity<UserAtelier>().ToTable(nameof(UserAteliers), t => t.ExcludeFromMigrations());
@@ -132,6 +144,7 @@ namespace GestionPedidosService.Persistence.Context
         public DbSet<OrderDetail> OrderDetails { get; set; }
         public DbSet<PatternDimension> PatternDimensions { get; set; }
         public DbSet<PatternGarment> PatternGarments { get; set; }
+        public DbSet<DictionaryType> DictionaryTypes { get; set; }
 
 
         // auxiliares para ignorar tablas de migración

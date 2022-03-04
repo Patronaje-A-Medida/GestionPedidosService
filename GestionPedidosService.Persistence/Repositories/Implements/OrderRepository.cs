@@ -27,6 +27,7 @@ namespace GestionPedidosService.Persistence.Repositories.Implements
                 .FirstOrDefault(v => orderStatus == null || v.ToDescriptionString() == orderStatus);
 
                 var orderDetails = await _context.Orders
+                    .AsNoTracking()
                     .Include(o => o.OrderDetails).ThenInclude(od => od.Garment)
                     .Include(o => o.UserClient).ThenInclude(u => u.User)
                     .Include(o => o.UserAtelier).ThenInclude(u => u.User)
