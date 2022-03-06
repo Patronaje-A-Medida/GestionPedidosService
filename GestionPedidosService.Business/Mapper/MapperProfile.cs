@@ -62,6 +62,10 @@ namespace GestionPedidosService.Business.Mapper
                 .ForMember(dest => dest.Image, opt => opt.MapFrom(src => src.ImagePattern))
                 .ForMember(dest => dest.ScaledStatus, opt => opt.MapFrom(src => src.ScaledStatus))
                 .ForMember(dest => dest.Dimensions, opt => opt.MapFrom(src => src.PatternDimensions));
+
+            CreateMap<Garment, GarmentMin>()
+                .ForMember(dest => dest.Category, opt => opt.MapFrom(src => src.CategoryId.ToDescriptionString()))
+                .ForMember(dest => dest.AveragePrice, opt => opt.MapFrom(src => (src.FirstRangePrice + src.SecondRangePrice) / 2));
         }
     }
 }
