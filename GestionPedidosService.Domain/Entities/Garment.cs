@@ -10,7 +10,7 @@ namespace GestionPedidosService.Domain.Entities
         public string NameGarment { get; set; }
         public double FirstRangePrice { get; set; }
         public double SecondRangePrice { get; set; }
-        public byte Available { get; set; }
+        public bool Available { get; set; }
         
         public ICollection<Order> Orders { get; set; }
         public List<OrderDetail> OrderDetails { get; set; }

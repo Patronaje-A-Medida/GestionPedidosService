@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GestionPedidosService.Persistence.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20211120195531_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20220227060626_InitialGestionDemo")]
+    partial class InitialGestionDemo
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -21,12 +21,90 @@ namespace GestionPedidosService.Persistence.Migrations
                 .HasAnnotation("ProductVersion", "5.0.12")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+            modelBuilder.Entity("GestionPedidosService.Domain.Base.UserBase", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("EmailVerified")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("LastNameUser")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NameUser")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Role")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Status")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("AspNetUsers", t => t.ExcludeFromMigrations());
+                });
+
+            modelBuilder.Entity("GestionPedidosService.Domain.Entities.DictionaryType", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int?>("AtelierId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<DateTimeOffset>("CreatedDate")
+                        .HasColumnType("datetimeoffset(7)");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("ModifiedBy")
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<DateTimeOffset?>("ModifiedDate")
+                        .HasColumnType("datetimeoffset(7)");
+
+                    b.Property<string>("ParentType")
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<bool>("Status")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("Value")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(50)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AtelierId");
+
+                    b.ToTable("DictionaryTypes");
+                });
+
             modelBuilder.Entity("GestionPedidosService.Domain.Entities.FeatureGarment", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("CodeFeature")
+                        .HasColumnType("int");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(100)");
@@ -43,6 +121,9 @@ namespace GestionPedidosService.Persistence.Migrations
                     b.Property<DateTimeOffset?>("ModifiedDate")
                         .HasColumnType("datetimeoffset(7)");
 
+                    b.Property<bool>("Status")
+                        .HasColumnType("bit");
+
                     b.Property<string>("TypeFeature")
                         .IsRequired()
                         .HasColumnType("nvarchar(20)");
@@ -55,7 +136,7 @@ namespace GestionPedidosService.Persistence.Migrations
 
                     b.HasIndex("GarmentId");
 
-                    b.ToTable("FeatureGarment");
+                    b.ToTable("FeatureGarments");
                 });
 
             modelBuilder.Entity("GestionPedidosService.Domain.Entities.Garment", b =>
@@ -68,8 +149,8 @@ namespace GestionPedidosService.Persistence.Migrations
                     b.Property<int>("AtelierId")
                         .HasColumnType("int");
 
-                    b.Property<byte>("Available")
-                        .HasColumnType("tinyint");
+                    b.Property<bool>("Available")
+                        .HasColumnType("bit");
 
                     b.Property<string>("CodeGarment")
                         .IsRequired()
@@ -97,9 +178,12 @@ namespace GestionPedidosService.Persistence.Migrations
                     b.Property<decimal>("SecondRangePrice")
                         .HasColumnType("decimal(10,2)");
 
+                    b.Property<bool>("Status")
+                        .HasColumnType("bit");
+
                     b.HasKey("Id");
 
-                    b.ToTable("Garment");
+                    b.ToTable("Garments");
                 });
 
             modelBuilder.Entity("GestionPedidosService.Domain.Entities.Order", b =>
@@ -129,12 +213,15 @@ namespace GestionPedidosService.Persistence.Migrations
                         .HasColumnType("datetimeoffset(7)");
 
                     b.Property<DateTime>("OrderDate")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime");
 
-                    b.Property<int>("OrderStatus")
-                        .HasColumnType("int");
+                    b.Property<byte>("OrderStatus")
+                        .HasColumnType("tinyint");
 
-                    b.Property<int>("UserAtelierId")
+                    b.Property<bool>("Status")
+                        .HasColumnType("bit");
+
+                    b.Property<int?>("UserAtelierId")
                         .HasColumnType("int");
 
                     b.Property<int>("UserClientId")
@@ -142,7 +229,11 @@ namespace GestionPedidosService.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Order");
+                    b.HasIndex("UserAtelierId");
+
+                    b.HasIndex("UserClientId");
+
+                    b.ToTable("Orders");
                 });
 
             modelBuilder.Entity("GestionPedidosService.Domain.Entities.OrderDetail", b =>
@@ -171,8 +262,17 @@ namespace GestionPedidosService.Persistence.Migrations
                     b.Property<DateTimeOffset?>("ModifiedDate")
                         .HasColumnType("datetimeoffset(7)");
 
+                    b.Property<byte>("OrderDetailStatus")
+                        .HasColumnType("tinyint");
+
                     b.Property<int>("OrderId")
                         .HasColumnType("int");
+
+                    b.Property<byte>("Quantity")
+                        .HasColumnType("tinyint");
+
+                    b.Property<bool>("Status")
+                        .HasColumnType("bit");
 
                     b.HasKey("Id");
 
@@ -180,7 +280,7 @@ namespace GestionPedidosService.Persistence.Migrations
 
                     b.HasIndex("OrderId");
 
-                    b.ToTable("OrderDetail");
+                    b.ToTable("OrderDetails");
                 });
 
             modelBuilder.Entity("GestionPedidosService.Domain.Entities.PatternDimension", b =>
@@ -208,7 +308,7 @@ namespace GestionPedidosService.Persistence.Migrations
 
                     b.HasIndex("PatternGarmentId");
 
-                    b.ToTable("PatternDimension");
+                    b.ToTable("PatternDimensions");
                 });
 
             modelBuilder.Entity("GestionPedidosService.Domain.Entities.PatternGarment", b =>
@@ -237,7 +337,89 @@ namespace GestionPedidosService.Persistence.Migrations
 
                     b.HasIndex("GarmentId");
 
-                    b.ToTable("PatternGarment");
+                    b.ToTable("PatternGarments");
+                });
+
+            modelBuilder.Entity("GestionPedidosService.Domain.Entities.UserAtelier", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("AtelierId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("BossId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<DateTimeOffset>("CreatedDate")
+                        .HasColumnType("datetimeoffset(7)");
+
+                    b.Property<string>("Dni")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ModifiedBy")
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<DateTimeOffset?>("ModifiedDate")
+                        .HasColumnType("datetimeoffset(7)");
+
+                    b.Property<string>("Role")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("Status")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("UserAteliers", t => t.ExcludeFromMigrations());
+                });
+
+            modelBuilder.Entity("GestionPedidosService.Domain.Entities.UserClient", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<DateTimeOffset>("CreatedDate")
+                        .HasColumnType("datetimeoffset(7)");
+
+                    b.Property<decimal>("Height")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("ModifiedBy")
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<DateTimeOffset?>("ModifiedDate")
+                        .HasColumnType("datetimeoffset(7)");
+
+                    b.Property<string>("Phone")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("Status")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("UserClients", t => t.ExcludeFromMigrations());
                 });
 
             modelBuilder.Entity("GestionPedidosService.Domain.Entities.FeatureGarment", b =>
@@ -249,6 +431,23 @@ namespace GestionPedidosService.Persistence.Migrations
                         .IsRequired();
 
                     b.Navigation("Garment");
+                });
+
+            modelBuilder.Entity("GestionPedidosService.Domain.Entities.Order", b =>
+                {
+                    b.HasOne("GestionPedidosService.Domain.Entities.UserAtelier", "UserAtelier")
+                        .WithMany()
+                        .HasForeignKey("UserAtelierId");
+
+                    b.HasOne("GestionPedidosService.Domain.Entities.UserClient", "UserClient")
+                        .WithMany("Orders")
+                        .HasForeignKey("UserClientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("UserAtelier");
+
+                    b.Navigation("UserClient");
                 });
 
             modelBuilder.Entity("GestionPedidosService.Domain.Entities.OrderDetail", b =>
@@ -292,6 +491,24 @@ namespace GestionPedidosService.Persistence.Migrations
                     b.Navigation("Garment");
                 });
 
+            modelBuilder.Entity("GestionPedidosService.Domain.Entities.UserAtelier", b =>
+                {
+                    b.HasOne("GestionPedidosService.Domain.Base.UserBase", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("GestionPedidosService.Domain.Entities.UserClient", b =>
+                {
+                    b.HasOne("GestionPedidosService.Domain.Base.UserBase", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("GestionPedidosService.Domain.Entities.Garment", b =>
                 {
                     b.Navigation("FeatureGarments");
@@ -309,6 +526,11 @@ namespace GestionPedidosService.Persistence.Migrations
             modelBuilder.Entity("GestionPedidosService.Domain.Entities.PatternGarment", b =>
                 {
                     b.Navigation("PatternDimensions");
+                });
+
+            modelBuilder.Entity("GestionPedidosService.Domain.Entities.UserClient", b =>
+                {
+                    b.Navigation("Orders");
                 });
 #pragma warning restore 612, 618
         }

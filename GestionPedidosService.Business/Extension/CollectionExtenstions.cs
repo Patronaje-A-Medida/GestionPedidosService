@@ -14,6 +14,8 @@ namespace GestionPedidosService.Business.Extension
 
             int page = pageNumber == null ? 0 : pageNumber.Value;
             int size = pageSize == null ? count : pageSize.Value;
+            int maxPage = (int) Math.Ceiling(count * 1.0 / size);
+
 
             var items = entities.Skip((page - 1) * size).Take(size).ToList();
 
@@ -21,6 +23,7 @@ namespace GestionPedidosService.Business.Extension
             {
                 Items = items,
                 Total = count,
+                MaxPage = maxPage,
                 PageNumber = page,
                 ItemsPerPage = size,
             };
