@@ -8,6 +8,7 @@ namespace GestionPedidosService.Persistence.UnitOfWork
     {
         IOrderRepository orderRepository { get; }
         IOrderDetailRepository orderDetailRepository { get; }
+        IGarmentRepository garmentRepository { get; }
         Task SaveChangesAsync();
     }
 }

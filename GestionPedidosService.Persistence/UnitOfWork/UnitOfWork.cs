@@ -11,6 +11,7 @@ namespace GestionPedidosService.Persistence.UnitOfWork
 
         public IOrderRepository orderRepository { get; private set; }
         public IOrderDetailRepository orderDetailRepository { get; private set; }
+        public IGarmentRepository garmentRepository { get; private set; }
 
 
         public UnitOfWork(AppDbContext context)
@@ -18,6 +19,7 @@ namespace GestionPedidosService.Persistence.UnitOfWork
             _context = context;
             orderDetailRepository = new OrderDetailRepository(_context);
             orderRepository = new OrderRepository(_context);
+            garmentRepository = new GarmentRepository(_context);
         }
         
         public async Task SaveChangesAsync()
