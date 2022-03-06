@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using GestionPedidosService.Domain.Base;
+using GestionPedidosService.Domain.Utils;
 
 namespace GestionPedidosService.Domain.Entities
 {
@@ -11,7 +12,8 @@ namespace GestionPedidosService.Domain.Entities
         public double FirstRangePrice { get; set; }
         public double SecondRangePrice { get; set; }
         public bool Available { get; set; }
-        
+        public EGarmentCategories CategoryId { get; set; }
+
         public ICollection<Order> Orders { get; set; }
         public List<OrderDetail> OrderDetails { get; set; }
         

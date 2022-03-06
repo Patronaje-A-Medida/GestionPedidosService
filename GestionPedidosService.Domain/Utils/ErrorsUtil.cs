@@ -19,6 +19,7 @@ namespace GestionPedidosService.Domain.Utils
             public static readonly int GET_ORDERS_FAILED = 10020;
             public static readonly int GET_ORDER_FAILED = 10021;
             public static readonly int NOT_FOUND_ORDER = 10022;
+            public static readonly int GET_GARMENTS_FAILED = 10023;
 
         }
 
@@ -33,6 +34,7 @@ namespace GestionPedidosService.Domain.Utils
             public static readonly string GET_ORDERS_FAILED = "No se pudo obtener la información de las órdenes de pedidos del atelier";
             public static readonly string GET_ORDER_FAILED = "No se pudo obtener la información del detalle de la orden requerida";
             public static readonly string NOT_FOUND_ORDER = "El detalle de la orden solicitada no existe";
+            public static readonly string GET_GARMENTS_FAILED = "No se pudo obtener la información del catálogo de prendas del atelier";
         }
     }
 }

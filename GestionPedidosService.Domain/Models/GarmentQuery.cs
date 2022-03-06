@@ -2,17 +2,15 @@
 
 namespace GestionPedidosService.Domain.Models
 {
-    public class OrderQuery
+    public class GarmentQuery
     {
         public int AtelierId { get; set; }
-#nullable enable
-        [DefaultValue(null)]
-        public string? OrderStatus { get; set; }
+
+        #nullable enable
         [DefaultValue(null)]
         public string? FilterString { get; set; }
+
         [DefaultValue(null)]
-        public int? PageNumber { get; set; }
-        [DefaultValue(null)]
-        public int? PageSize { get; set; }
+        public string? Category { get; set; }
     }
 }
