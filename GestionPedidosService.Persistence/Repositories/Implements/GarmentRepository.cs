@@ -19,26 +19,27 @@ namespace GestionPedidosService.Persistence.Repositories.Implements
         public GarmentRepository(AppDbContext context) : base(context) { }
 
         #nullable enable
-        public async Task<IEnumerable<Garment>> GetAllByQuery(int atelierdId, string? filterString, string? category)
+        public async Task<IEnumerable<Garment>> GetAllByQuery(int atelierdId, string? filterString, int? category)
         {
             try
             {
-                var categoryEnum = Enum.GetValues(typeof(EGarmentCategories))
+                /*var categoryEnum = Enum.GetValues(typeof(EGarmentCategories))
                 .Cast<EGarmentCategories>()
-                .FirstOrDefault(v => category == null || v.ToDescriptionString().Equals(category));
+                .FirstOrDefault(v => category == null || v.ToDescriptionString().Equals(category));*/
 
                 var garments = await _context.Garments
                     .AsNoTracking()
+                    .Include(g => g.FeatureGarments.Where(f => f.TypeFeatureValue.Equals(EGarmentFeatures.images)))
                     .Where(g => g.AtelierId == atelierdId)
                     .Where(
                         g => filterString == null ||
                         (
-                            g.CodeGarment.Equals(filterString) ||
+                            g.CodeGarment.ToUpper().Contains(filterString.ToUpper()) ||
                             g.NameGarment.ToUpper().Contains(filterString.ToUpper())
                         )
                     )
-                    .Where(g => category == null || g.CategoryId.Equals(categoryEnum))
-                    .OrderBy(g => g.CategoryId)
+                    .Where(g => category == null || g.Category.Equals((EGarmentCategories)category))
+                    .OrderBy(g => g.Category)
                     .ToListAsync();
 
                 return garments ?? new List<Garment>();
