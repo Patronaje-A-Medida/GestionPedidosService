@@ -50,8 +50,8 @@ namespace GestionPedidosService.Persistence.Context
                 eb.HasKey(e => e.Id);
                 eb.Property(e => e.Value).HasColumnType("nvarchar(max)").IsRequired();
                 eb.Property(e => e.TypeFeature).HasColumnType("nvarchar(20)").IsRequired();
-                eb.Property(e => e.CodeFeature).HasColumnType("int").IsRequired();
-                eb.HasOne(e => e.Garment).WithMany(e => e.FeatureGarments);
+                eb.Property(e => e.TypeFeatureValue).HasColumnType("tinyint").IsRequired();
+                eb.HasOne(e => e.Garment).WithMany(e => e.FeatureGarments).HasForeignKey(e => e.GarmentId).IsRequired();
             });
 
             builder.Entity<Garment>(eb =>
@@ -62,7 +62,7 @@ namespace GestionPedidosService.Persistence.Context
                 eb.Property(e => e.FirstRangePrice).HasColumnType("decimal(10,2)").IsRequired();
                 eb.Property(e => e.SecondRangePrice).HasColumnType("decimal(10,2)").IsRequired();
                 eb.Property(e => e.Available).HasColumnType("bit").IsRequired();
-                eb.Property(e => e.CategoryId).HasColumnType("tinyint").IsRequired();
+                eb.Property(e => e.Category).HasColumnType("tinyint").IsRequired();
                 eb.Property(e => e.AtelierId).HasColumnType("int").IsRequired();
             });
 
@@ -98,12 +98,15 @@ namespace GestionPedidosService.Persistence.Context
             builder.Entity<DictionaryType>(eb =>
             {
                 eb.HasKey(eb => eb.Id);
-                eb.Property(e => e.Value).HasColumnType("nvarchar(50)").IsRequired();
-                eb.Property(e => e.Type).HasColumnType("nvarchar(50)").IsRequired();
+                eb.Property(eb => eb.KeyType).HasColumnType("nvarchar(50)").IsRequired();
+                eb.Property(e => e.ValueType).HasColumnType("tinyint").IsRequired();
+                eb.Property(e => e.GroupType).HasColumnType("nvarchar(50)").IsRequired();
                 eb.Property(e => e.Description).HasColumnType("nvarchar(100)").IsRequired();
-                eb.Property(e => e.ParentType).HasColumnType("nvarchar(100)").IsRequired(false);
+                eb.Property(e => e.ParentTypeId).HasColumnType("nvarchar(100)").IsRequired(false);
                 eb.Property(e => e.AtelierId).HasColumnType("int").IsRequired(false);
                 eb.HasIndex(eb => eb.AtelierId);
+                eb.HasIndex(eb => eb.KeyType);
+                eb.HasIndex(eb => eb.GroupType);
             });
 
             //builder.Entity<UserClient>().Metadata.SetIsTableExcludedFromMigrations(true);
