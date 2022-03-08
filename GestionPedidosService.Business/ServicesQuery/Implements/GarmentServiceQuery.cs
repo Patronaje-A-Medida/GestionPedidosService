@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using GestionPedidosService.Business.Handlers;
 using GestionPedidosService.Business.ServicesQuery.Interfaces;
+using GestionPedidosService.Domain.Entities;
 using GestionPedidosService.Domain.Models;
 using GestionPedidosService.Persistence.Handlers;
 using GestionPedidosService.Persistence.UnitOfWork;
@@ -29,7 +30,14 @@ namespace GestionPedidosService.Business.ServicesQuery.Implements
             try
             {
                 var garments = await _uof.garmentRepository.GetAllByQuery(query.AtelierId, query.FilterString, query.Category);
-                var garmentsMin = _mapper.Map<IEnumerable<GarmentMin>>(garments);
+                var weas = new List<Garment>();
+                weas.AddRange(garments);
+                weas.AddRange(garments);
+                weas.AddRange(garments);
+                weas.AddRange(garments);
+                weas.AddRange(garments);
+                weas.AddRange(garments);
+                var garmentsMin = _mapper.Map<IEnumerable<GarmentMin>>(weas);
                 return garmentsMin;
             }
             catch (RepositoryException ex)
