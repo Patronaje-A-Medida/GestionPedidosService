@@ -11,6 +11,6 @@ namespace GestionPedidosService.Domain.Models
         public string? FilterString { get; set; }
 
         [DefaultValue(null)]
-        public string? Category { get; set; }
+        public int? Category { get; set; }
     }
 }

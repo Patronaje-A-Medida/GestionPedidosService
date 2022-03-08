@@ -12,7 +12,7 @@ namespace GestionPedidosService.Domain.Entities
         public double FirstRangePrice { get; set; }
         public double SecondRangePrice { get; set; }
         public bool Available { get; set; }
-        public EGarmentCategories CategoryId { get; set; }
+        public EGarmentCategories Category { get; set; }
 
         public ICollection<Order> Orders { get; set; }
         public List<OrderDetail> OrderDetails { get; set; }

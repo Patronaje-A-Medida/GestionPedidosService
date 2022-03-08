@@ -4,19 +4,19 @@ namespace GestionPedidosService.Domain.Utils
 {
     public enum EGarmentCategories
     {
-        [Description("blusas")]
-        Blouses = 20,
+        [Description("Blusas")]
+        blouses = 1,
 
-        [Description("sacos")]
-        Coats = 21,
+        [Description("Sacos/Gabardinas")]
+        coats = 2,
 
-        [Description("vestidos")]
-        Dresses = 22,
+        [Description("Vestidos")]
+        dresses = 3,
 
-        [Description("faldas")]
-        Skirts = 23,
+        [Description("Faldas")]
+        skirts = 4,
 
-        [Description("pantalones")]
-        Pants = 24,
+        [Description("Pantalones")]
+        pants = 5,
     }
 }
