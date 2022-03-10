@@ -47,7 +47,6 @@ namespace GestionPedidosService.Api.Controllers.v1
                         message = err
                     });
                 }
-
                 var result = await _garmentServiceQuery.GetAllByQuery(garmentQuery);
                 return Ok(result);
             }

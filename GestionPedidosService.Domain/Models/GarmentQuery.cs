@@ -12,5 +12,12 @@ namespace GestionPedidosService.Domain.Models
 
         [DefaultValue(null)]
         public int? Category { get; set; }
+
+        [DefaultValue(null)]
+        public int? PageNumber { get; set; }
+
+        [DefaultValue(null)]
+        public int? PageSize { get; set; }
+
     }
 }

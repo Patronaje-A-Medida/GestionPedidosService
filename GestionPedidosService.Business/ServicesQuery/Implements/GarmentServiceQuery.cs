@@ -1,14 +1,13 @@
 ﻿using AutoMapper;
+using GestionPedidosService.Business.Extension;
 using GestionPedidosService.Business.Handlers;
 using GestionPedidosService.Business.ServicesQuery.Interfaces;
-using GestionPedidosService.Domain.Entities;
 using GestionPedidosService.Domain.Models;
 using GestionPedidosService.Persistence.Handlers;
 using GestionPedidosService.Persistence.UnitOfWork;
 using System;
 using System.Collections.Generic;
 using System.Net;
-using System.Text;
 using System.Threading.Tasks;
 using static GestionPedidosService.Domain.Utils.ErrorsUtil;
 
@@ -25,20 +24,20 @@ namespace GestionPedidosService.Business.ServicesQuery.Implements
             _mapper = mapper;
         }
 
-        public async Task<IEnumerable<GarmentMin>> GetAllByQuery(GarmentQuery query)
+        public async Task<PagedList<GarmentMin>> GetAllByQuery(GarmentQuery query)
         {
             try
             {
                 var garments = await _uof.garmentRepository.GetAllByQuery(query.AtelierId, query.FilterString, query.Category);
-                var weas = new List<Garment>();
+                /*var weas = new List<Garment>();
                 weas.AddRange(garments);
                 weas.AddRange(garments);
                 weas.AddRange(garments);
                 weas.AddRange(garments);
                 weas.AddRange(garments);
-                weas.AddRange(garments);
-                var garmentsMin = _mapper.Map<IEnumerable<GarmentMin>>(weas);
-                return garmentsMin;
+                weas.AddRange(garments);*/
+                var garmentsMin = _mapper.Map<ICollection<GarmentMin>>(garments);
+                return garmentsMin.ToPagedList(query.PageNumber, query.PageSize);
             }
             catch (RepositoryException ex)
             {

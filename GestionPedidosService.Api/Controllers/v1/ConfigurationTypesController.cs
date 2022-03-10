@@ -19,10 +19,10 @@ namespace GestionPedidosService.Api.Controllers.v1
         }
 
         [HttpGet("{atelierId}")]
-        [ProducesResponseType(typeof(TypeRead), 200)]
+        [ProducesResponseType(typeof(ConfigurationTypeRead), 200)]
         [ProducesResponseType(typeof(ErrorDevDetail), 400)]
         [ProducesResponseType(typeof(ErrorDevDetail), 500)]
-        public async Task<ActionResult<TypeRead>> GetAll(int atelierId)
+        public async Task<ActionResult<ConfigurationTypeRead>> GetAll(int atelierId)
         {
             var result = await _dictionaryTypeServiceQuery.GetAll(atelierId);
             return Ok(result);

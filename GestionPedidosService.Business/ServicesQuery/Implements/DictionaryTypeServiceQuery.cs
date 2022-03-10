@@ -19,14 +19,14 @@ namespace GestionPedidosService.Business.ServicesQuery.Implements
 
         public async Task<ConfigurationTypeRead> GetAll(int atelierId)
         {
-            var dict = await _uof.dictionaryTypeRepository.Get(
+            var types = await _uof.dictionaryTypeRepository.Get(
                 filter: d => 
                     (d.AtelierId == 0 || d.AtelierId == atelierId) &&
                     d.Status
             );
 
-            var dto = _mapper.Map<ConfigurationTypeRead>(dict);
-            return dto;
+            var configTypeRead = _mapper.Map<ConfigurationTypeRead>(types);
+            return configTypeRead;
         }
     }
 }

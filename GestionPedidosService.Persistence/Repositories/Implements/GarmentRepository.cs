@@ -1,5 +1,4 @@
 ﻿using GestionPedidosService.Domain.Entities;
-using GestionPedidosService.Domain.Extensions;
 using GestionPedidosService.Domain.Utils;
 using GestionPedidosService.Persistence.Context;
 using GestionPedidosService.Persistence.Handlers;
