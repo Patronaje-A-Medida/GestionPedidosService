@@ -67,29 +67,36 @@ namespace GestionPedidosService.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(100)");
 
+                    b.Property<string>("GroupType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("KeyType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(50)");
+
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("nvarchar(100)");
 
                     b.Property<DateTimeOffset?>("ModifiedDate")
                         .HasColumnType("datetimeoffset(7)");
 
-                    b.Property<string>("ParentType")
+                    b.Property<string>("ParentTypeId")
                         .HasColumnType("nvarchar(100)");
 
                     b.Property<bool>("Status")
                         .HasColumnType("bit");
 
-                    b.Property<string>("Type")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<string>("Value")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(50)");
+                    b.Property<byte>("ValueType")
+                        .HasColumnType("tinyint");
 
                     b.HasKey("Id");
 
                     b.HasIndex("AtelierId");
+
+                    b.HasIndex("GroupType");
+
+                    b.HasIndex("KeyType");
 
                     b.ToTable("DictionaryTypes");
                 });
@@ -100,9 +107,6 @@ namespace GestionPedidosService.Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("CodeFeature")
-                        .HasColumnType("int");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(100)");
@@ -125,6 +129,9 @@ namespace GestionPedidosService.Persistence.Migrations
                     b.Property<string>("TypeFeature")
                         .IsRequired()
                         .HasColumnType("nvarchar(20)");
+
+                    b.Property<byte>("TypeFeatureValue")
+                        .HasColumnType("tinyint");
 
                     b.Property<string>("Value")
                         .IsRequired()
@@ -149,6 +156,9 @@ namespace GestionPedidosService.Persistence.Migrations
 
                     b.Property<bool>("Available")
                         .HasColumnType("bit");
+
+                    b.Property<byte>("Category")
+                        .HasColumnType("tinyint");
 
                     b.Property<string>("CodeGarment")
                         .IsRequired()

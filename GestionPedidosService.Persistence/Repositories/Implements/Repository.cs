@@ -59,7 +59,7 @@ namespace GestionPedidosService.Persistence.Repositories.Implements
             Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null, 
             string includeProperties = "")
         {
-            IQueryable<TEntity> query = _context.Set<TEntity>();
+            IQueryable<TEntity> query = _context.Set<TEntity>().AsNoTracking();
 
             if (filter != null)
             {
@@ -83,7 +83,7 @@ namespace GestionPedidosService.Persistence.Repositories.Implements
 
         public virtual async Task<IEnumerable<TEntity>> GetAll()
         {
-            var result = await _context.Set<TEntity>().ToListAsync();
+            var result = await _context.Set<TEntity>().AsNoTracking().ToListAsync();
             return result;
         }
 

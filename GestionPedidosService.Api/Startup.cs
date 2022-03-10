@@ -7,6 +7,7 @@ using GestionPedidosService.Business.ServicesQuery.Interfaces;
 using GestionPedidosService.Persistence.Context;
 using GestionPedidosService.Persistence.Interfaces;
 using GestionPedidosService.Persistence.Repositories.Implements;
+using GestionPedidosService.Persistence.Repositories.Interfaces;
 using GestionPedidosService.Persistence.UnitOfWork;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -42,11 +43,14 @@ namespace GestionPedidosService.Api
             services.AddScoped<IOrderDetailRepository, OrderDetailRepository>();
             services.AddScoped<IPatternDimensionRepository, PatternDimensionRepository>();
             services.AddScoped<IPatternGarmentRepository, PatternGarmentRepository>();
+            services.AddScoped<IDictionaryTypeRepository, DictionaryTypeRepository>();
 
             services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             services.AddScoped<IOrderServiceQuery, OrderServiceQuery>();
             services.AddScoped<IPatternGarmentServiceQuery, PatternGarmentServiceQuery>();
+            services.AddScoped<IGarmentServiceQuery, GarmentServiceQuery>();
+            services.AddScoped<IDictionaryTypeServiceQuery, DictionaryTypeServiceQuery>();
 
             var mapperConfig = new MapperConfiguration(
                 mc => mc.AddProfile(new MapperProfile())

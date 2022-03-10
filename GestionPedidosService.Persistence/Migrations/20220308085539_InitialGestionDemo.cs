@@ -13,10 +13,11 @@ namespace GestionPedidosService.Persistence.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Value = table.Column<string>(type: "nvarchar(50)", nullable: false),
+                    KeyType = table.Column<string>(type: "nvarchar(50)", nullable: false),
+                    ValueType = table.Column<byte>(type: "tinyint", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(100)", nullable: false),
-                    Type = table.Column<string>(type: "nvarchar(50)", nullable: false),
-                    ParentType = table.Column<string>(type: "nvarchar(100)", nullable: true),
+                    GroupType = table.Column<string>(type: "nvarchar(50)", nullable: false),
+                    ParentTypeId = table.Column<string>(type: "nvarchar(100)", nullable: true),
                     AtelierId = table.Column<int>(type: "int", nullable: true),
                     CreatedDate = table.Column<DateTimeOffset>(type: "datetimeoffset(7)", nullable: false),
                     CreatedBy = table.Column<string>(type: "nvarchar(100)", nullable: true),
@@ -40,6 +41,7 @@ namespace GestionPedidosService.Persistence.Migrations
                     FirstRangePrice = table.Column<decimal>(type: "decimal(10,2)", nullable: false),
                     SecondRangePrice = table.Column<decimal>(type: "decimal(10,2)", nullable: false),
                     Available = table.Column<bool>(type: "bit", nullable: false),
+                    Category = table.Column<byte>(type: "tinyint", nullable: false),
                     AtelierId = table.Column<int>(type: "int", nullable: false),
                     CreatedDate = table.Column<DateTimeOffset>(type: "datetimeoffset(7)", nullable: false),
                     CreatedBy = table.Column<string>(type: "nvarchar(100)", nullable: true),
@@ -95,7 +97,7 @@ namespace GestionPedidosService.Persistence.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Value = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     TypeFeature = table.Column<string>(type: "nvarchar(20)", nullable: false),
-                    CodeFeature = table.Column<int>(type: "int", nullable: false),
+                    TypeFeatureValue = table.Column<byte>(type: "tinyint", nullable: false),
                     GarmentId = table.Column<int>(type: "int", nullable: false),
                     CreatedDate = table.Column<DateTimeOffset>(type: "datetimeoffset(7)", nullable: false),
                     CreatedBy = table.Column<string>(type: "nvarchar(100)", nullable: true),
@@ -196,6 +198,16 @@ namespace GestionPedidosService.Persistence.Migrations
                 name: "IX_DictionaryTypes_AtelierId",
                 table: "DictionaryTypes",
                 column: "AtelierId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_DictionaryTypes_GroupType",
+                table: "DictionaryTypes",
+                column: "GroupType");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_DictionaryTypes_KeyType",
+                table: "DictionaryTypes",
+                column: "KeyType");
 
             migrationBuilder.CreateIndex(
                 name: "IX_FeatureGarments_GarmentId",
