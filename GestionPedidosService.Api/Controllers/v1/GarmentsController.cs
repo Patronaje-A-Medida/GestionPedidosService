@@ -1,7 +1,8 @@
 ﻿using GestionPedidosService.Api.Utils;
 using GestionPedidosService.Business.Handlers;
+using GestionPedidosService.Business.ServicesCommand.Interfaces;
 using GestionPedidosService.Business.ServicesQuery.Interfaces;
-using GestionPedidosService.Domain.Models;
+using GestionPedidosService.Domain.Models.Garments;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -18,10 +19,12 @@ namespace GestionPedidosService.Api.Controllers.v1
     public class GarmentsController : ControllerBase
     {
         private readonly IGarmentServiceQuery _garmentServiceQuery;
+        private readonly IGarmentServiceCommand _garmentServiceCommand;
 
-        public GarmentsController(IGarmentServiceQuery garmentServiceQuery)
+        public GarmentsController(IGarmentServiceQuery garmentServiceQuery, IGarmentServiceCommand garmentServiceCommand)
         {
             _garmentServiceQuery = garmentServiceQuery;
+            _garmentServiceCommand = garmentServiceCommand;
         }
 
         [HttpPost("by-query")]
@@ -59,5 +62,45 @@ namespace GestionPedidosService.Api.Controllers.v1
                 throw ex;
             }
         }
+
+        [HttpPost("save")]
+        [DisableRequestSizeLimit]
+        public async Task<ActionResult<bool>> Save(GarmentWrite garmentWrite)
+        {
+            var result = await _garmentServiceCommand.Save(garmentWrite);
+            if (result)
+            {
+                return Ok(result);
+            }
+            else
+            {
+                return BadRequest(new ErrorDetail
+                {
+                    statusCode = (int)HttpStatusCode.BadRequest,
+                    errorCode = ErrorsCode.GENERIC_ERROR,
+                    message = "no se guardo :c"
+                });
+            }
+        }
+
+        [HttpPost("upload-images-base64")]
+        public async Task<IActionResult> UploadGarmentImages ([FromBody] GarmentImageString garmentImage)
+        {
+            var result = await _garmentServiceCommand.UploadGarmentImages(garmentImage);
+            return Ok(result);
+        }
+
+        [HttpPost("upload-images-file")]
+        [DisableRequestSizeLimit]
+        public async Task<IActionResult> UploadGarmentImages([FromForm] GarmentImageFile garmentImage)
+        {
+            var result = await _garmentServiceCommand.UploadGarmentImages(garmentImage);
+            return Ok(result);
+        }
+
+        /*private async Task<string> UploadToFirebaseStorege(GarmentImage garmentImage)
+        {
+
+        }*/
     }
 }
