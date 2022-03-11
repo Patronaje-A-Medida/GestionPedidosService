@@ -1,6 +1,7 @@
 ﻿using GestionPedidosService.Domain.Entities;
 using GestionPedidosService.Domain.Extensions;
 using GestionPedidosService.Domain.Models;
+using GestionPedidosService.Domain.Models.Garments;
 using GestionPedidosService.Persistence.Context;
 using GestionPedidosService.Persistence.Handlers;
 using GestionPedidosService.Persistence.Interfaces;

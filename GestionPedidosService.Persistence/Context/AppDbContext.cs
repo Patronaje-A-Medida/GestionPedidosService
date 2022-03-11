@@ -59,6 +59,7 @@ namespace GestionPedidosService.Persistence.Context
                 eb.HasKey(e => e.Id);
                 eb.Property(e => e.CodeGarment).HasColumnType("nvarchar(100)").IsRequired();
                 eb.Property(e => e.NameGarment).HasColumnType("nvarchar(100)").IsRequired();
+                //eb.Property(e => e.Description).HasColumnType("nvarchar(250)").IsRequired(false);
                 eb.Property(e => e.FirstRangePrice).HasColumnType("decimal(10,2)").IsRequired();
                 eb.Property(e => e.SecondRangePrice).HasColumnType("decimal(10,2)").IsRequired();
                 eb.Property(e => e.Available).HasColumnType("bit").IsRequired();
