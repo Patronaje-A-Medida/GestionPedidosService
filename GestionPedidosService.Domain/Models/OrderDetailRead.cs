@@ -1,5 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using GestionPedidosService.Domain.Models.Garments;
+using System;
 
 namespace GestionPedidosService.Domain.Models
 {
