@@ -2,6 +2,8 @@
 using GestionPedidosService.Domain.Entities;
 using GestionPedidosService.Domain.Extensions;
 using GestionPedidosService.Domain.Models;
+using GestionPedidosService.Domain.Models.FeatureGarments;
+using GestionPedidosService.Domain.Models.Garments;
 using GestionPedidosService.Domain.Utils;
 using System.Collections.Generic;
 using System.Linq;
@@ -74,21 +76,12 @@ namespace GestionPedidosService.Business.Mapper
 
             CreateMap<Garment, GarmentMin>()
                 .ForMember(dest => dest.ImageUrl, opt => opt.MapFrom(src => src.FeatureGarments
-                    .Where(f => f.TypeFeature.Equals(EGarmentFeatures.images.ToString()))
+                    //.Where(f => f.TypeFeature.Equals(EGarmentFeatures.images.ToString()))
                     .Select(f => f.Value)
                     .FirstOrDefault())
                 )
-                .ForMember(dest => dest.Category, opt => opt.MapFrom(src => src.Category.ToDescriptionString()))
+                //.ForMember(dest => dest.Category, opt => opt.MapFrom(src => src.Category.ToDescriptionString()))
                 .ForMember(dest => dest.AveragePrice, opt => opt.MapFrom(src => (src.FirstRangePrice + src.SecondRangePrice) / 2));
-
-            /*CreateMap<IEnumerable<DictionaryType>, TypeRead>()
-                .ForMember(dest => dest.Categories, opt => opt.MapFrom(src => src.
-                    Where(d => d.Type.Equals(ETypes.GarmentCategories.ToDescriptionString()))
-                    .Select(d => d.Value)))
-                .ForMember(dest => dest.OrderStatus, opt => opt.MapFrom(src => src
-                    .Where(d => d.Type.Equals(ETypes.OrderStatus.ToDescriptionString()))
-                    .Select(d => d.Value))
-                );*/
 
             CreateMap<IEnumerable<DictionaryType>, ConfigurationTypeRead>()
                 .ForMember(dest => dest.Categories, opt => opt.MapFrom(src => src
@@ -102,6 +95,12 @@ namespace GestionPedidosService.Business.Mapper
                 .ForMember(dest => dest.Key, opt => opt.MapFrom(src => src.KeyType))
                 .ForMember(dest => dest.Value, opt => opt.MapFrom(src => src.ValueType))
                 .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Description));
+
+            CreateMap<GarmentWrite, Garment>()
+                .ForMember(dest => dest.FeatureGarments, opt => opt.MapFrom(src => src.Features));
+
+            CreateMap<FeatureGarmentWrite, FeatureGarment>();
+                
         }
     }
 }

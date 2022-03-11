@@ -3,6 +3,7 @@ using GestionPedidosService.Business.Extension;
 using GestionPedidosService.Business.Handlers;
 using GestionPedidosService.Business.ServicesQuery.Interfaces;
 using GestionPedidosService.Domain.Models;
+using GestionPedidosService.Domain.Models.Garments;
 using GestionPedidosService.Persistence.Handlers;
 using GestionPedidosService.Persistence.UnitOfWork;
 using System;
