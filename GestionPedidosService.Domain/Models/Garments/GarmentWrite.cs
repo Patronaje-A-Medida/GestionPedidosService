@@ -7,7 +7,7 @@ namespace GestionPedidosService.Domain.Models.Garments
     {
         public string CodeGarment { get; set; }
         public string NameGarment { get; set; }
-        //public string Description { get; set; }
+        public string Description { get; set; }
         public int Category { get; set; }
         public double FirstRangePrice { get; set; }
         public double SecondRangePrice { get; set; }
@@ -15,7 +15,8 @@ namespace GestionPedidosService.Domain.Models.Garments
         public int AtelierId { get; set; }
         public ICollection<FeatureGarmentWrite> Features { get; set; }
         public IEnumerable<GarmentImageString> Images { get; set; }
-        public IEnumerable<GarmentImageFile> Patterns { get; set; }
+        //public IEnumerable<GarmentImageFile> Images { get; set; }
+        public IEnumerable<GarmentImageString> Patterns { get; set; }
 
     }
 }

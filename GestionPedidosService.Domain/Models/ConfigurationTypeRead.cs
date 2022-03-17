@@ -6,5 +6,7 @@ namespace GestionPedidosService.Domain.Models
     {
         public IEnumerable<TypeRead> Categories { get; set; }
         public IEnumerable<TypeRead> OrderStatus { get; set; }
+        public IEnumerable<TypeRead> Fabrics { get; set; }
+        public IEnumerable<TypeRead> Occasions { get; set; }
     }
 }
