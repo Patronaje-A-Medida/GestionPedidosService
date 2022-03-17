@@ -65,25 +65,40 @@ namespace GestionPedidosService.Api.Controllers.v1
 
         [HttpPost("save")]
         [DisableRequestSizeLimit]
+        [ProducesResponseType(typeof(bool), 200)]
+        [ProducesResponseType(typeof(ErrorDevDetail), 400)]
+        [ProducesResponseType(typeof(ErrorDevDetail), 500)]
         public async Task<ActionResult<bool>> Save(GarmentWrite garmentWrite)
         {
-            var result = await _garmentServiceCommand.Save(garmentWrite);
-            if (result)
+            try
             {
-                return Ok(result);
-            }
-            else
-            {
-                return BadRequest(new ErrorDetail
+                var result = await _garmentServiceCommand.Save(garmentWrite);
+                if (result)
                 {
-                    statusCode = (int)HttpStatusCode.BadRequest,
-                    errorCode = ErrorsCode.GENERIC_ERROR,
-                    message = "no se guardo :c"
-                });
+                    return Ok(result);
+                }
+                else
+                {
+                    return BadRequest(new ErrorDetail
+                    {
+                        statusCode = (int)HttpStatusCode.BadRequest,
+                        errorCode = ErrorsCode.ADD_GARMENT_FAILED,
+                        message = ErrorMessages.ADD_GARMENT_FAILED
+                    });
+                }
+            }
+            catch (ServiceException ex)
+            {
+                throw ex;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
             }
         }
 
         [HttpPost("upload-images-base64")]
+        [DisableRequestSizeLimit]
         public async Task<IActionResult> UploadGarmentImages ([FromBody] GarmentImageString garmentImage)
         {
             var result = await _garmentServiceCommand.UploadGarmentImages(garmentImage);

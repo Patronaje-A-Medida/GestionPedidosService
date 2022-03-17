@@ -49,6 +49,7 @@ namespace GestionPedidosService.Api
             services.AddScoped<IPatternDimensionRepository, PatternDimensionRepository>();
             services.AddScoped<IPatternGarmentRepository, PatternGarmentRepository>();
             services.AddScoped<IDictionaryTypeRepository, DictionaryTypeRepository>();
+            services.AddScoped<IAtelierRepository, AtelierRepository>();
 
             services.AddScoped<IUnitOfWork, UnitOfWork>();
 
