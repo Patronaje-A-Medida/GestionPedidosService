@@ -71,7 +71,7 @@ namespace GestionPedidosService.Business.Mapper
             CreateMap<PatternGarment, PatternGarmentRead>()
                 .ForMember(dest => dest.Type, opt => opt.MapFrom(src => src.TypePattern))
                 .ForMember(dest => dest.Image, opt => opt.MapFrom(src => src.ImagePattern))
-                .ForMember(dest => dest.ScaledStatus, opt => opt.MapFrom(src => src.ScaledStatus))
+                .ForMember(dest => dest.ScaledStatus, opt => opt.MapFrom(src => src.ResizedStatus))
                 .ForMember(dest => dest.Dimensions, opt => opt.MapFrom(src => src.PatternDimensions));
 
             CreateMap<Garment, GarmentMin>()
@@ -85,11 +85,17 @@ namespace GestionPedidosService.Business.Mapper
 
             CreateMap<IEnumerable<DictionaryType>, ConfigurationTypeRead>()
                 .ForMember(dest => dest.Categories, opt => opt.MapFrom(src => src
-                    .Where(d => d.GroupType.Equals(ETypes.garment_category.ToString())))
+                    .Where(d => d.GroupType.Equals(STypes.GarmentCategory)))
                 )
                 .ForMember(dest => dest.OrderStatus, opt => opt.MapFrom(src => src
-                    .Where(d => d.GroupType.Equals(ETypes.order_status.ToString()))
-                ));
+                    .Where(d => d.GroupType.Equals(STypes.OrderStatus)))
+                )
+                .ForMember(dest => dest.Fabrics, opt => opt.MapFrom(src => src
+                    .Where(d => d.GroupType.Equals(STypes.Fabrics)))
+                )
+                .ForMember(dest => dest.Occasions, opt => opt.MapFrom(src => src
+                    .Where(d => d.GroupType.Equals(STypes.Occasion)))
+                );
 
             CreateMap<DictionaryType, TypeRead>()
                 .ForMember(dest => dest.Key, opt => opt.MapFrom(src => src.KeyType))
