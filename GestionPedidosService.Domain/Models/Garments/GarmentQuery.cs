@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 
-namespace GestionPedidosService.Domain.Models
+namespace GestionPedidosService.Domain.Models.Garments
 {
     public class GarmentQuery
     {

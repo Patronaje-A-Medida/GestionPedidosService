@@ -1,7 +1,8 @@
 ﻿using GestionPedidosService.Api.Utils;
 using GestionPedidosService.Business.Handlers;
+using GestionPedidosService.Business.ServicesCommand.Interfaces;
 using GestionPedidosService.Business.ServicesQuery.Interfaces;
-using GestionPedidosService.Domain.Models;
+using GestionPedidosService.Domain.Models.Garments;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -18,10 +19,12 @@ namespace GestionPedidosService.Api.Controllers.v1
     public class GarmentsController : ControllerBase
     {
         private readonly IGarmentServiceQuery _garmentServiceQuery;
+        private readonly IGarmentServiceCommand _garmentServiceCommand;
 
-        public GarmentsController(IGarmentServiceQuery garmentServiceQuery)
+        public GarmentsController(IGarmentServiceQuery garmentServiceQuery, IGarmentServiceCommand garmentServiceCommand)
         {
             _garmentServiceQuery = garmentServiceQuery;
+            _garmentServiceCommand = garmentServiceCommand;
         }
 
         [HttpPost("by-query")]
@@ -59,5 +62,60 @@ namespace GestionPedidosService.Api.Controllers.v1
                 throw ex;
             }
         }
+
+        [HttpPost("save")]
+        [DisableRequestSizeLimit]
+        [ProducesResponseType(typeof(bool), 200)]
+        [ProducesResponseType(typeof(ErrorDevDetail), 400)]
+        [ProducesResponseType(typeof(ErrorDevDetail), 500)]
+        public async Task<ActionResult<bool>> Save(GarmentWrite garmentWrite)
+        {
+            try
+            {
+                var result = await _garmentServiceCommand.Save(garmentWrite);
+                if (result)
+                {
+                    return Ok(result);
+                }
+                else
+                {
+                    return BadRequest(new ErrorDetail
+                    {
+                        statusCode = (int)HttpStatusCode.BadRequest,
+                        errorCode = ErrorsCode.ADD_GARMENT_FAILED,
+                        message = ErrorMessages.ADD_GARMENT_FAILED
+                    });
+                }
+            }
+            catch (ServiceException ex)
+            {
+                throw ex;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        [HttpPost("upload-images-base64")]
+        [DisableRequestSizeLimit]
+        public async Task<IActionResult> UploadGarmentImages ([FromBody] GarmentImageString garmentImage)
+        {
+            var result = await _garmentServiceCommand.UploadGarmentImages(garmentImage);
+            return Ok(result);
+        }
+
+        [HttpPost("upload-images-file")]
+        [DisableRequestSizeLimit]
+        public async Task<IActionResult> UploadGarmentImages([FromForm] GarmentImageFile garmentImage)
+        {
+            var result = await _garmentServiceCommand.UploadGarmentImages(garmentImage);
+            return Ok(result);
+        }
+
+        /*private async Task<string> UploadToFirebaseStorege(GarmentImage garmentImage)
+        {
+
+        }*/
     }
 }

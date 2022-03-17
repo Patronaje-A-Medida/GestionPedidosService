@@ -1,6 +1,5 @@
 ﻿using GestionPedidosService.Domain.Entities;
 using GestionPedidosService.Domain.Models;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace GestionPedidosService.Persistence.Interfaces

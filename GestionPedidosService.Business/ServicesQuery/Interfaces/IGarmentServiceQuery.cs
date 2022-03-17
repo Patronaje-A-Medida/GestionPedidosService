@@ -1,4 +1,5 @@
 ﻿using GestionPedidosService.Domain.Models;
+using GestionPedidosService.Domain.Models.Garments;
 using System.Threading.Tasks;
 
 namespace GestionPedidosService.Business.ServicesQuery.Interfaces

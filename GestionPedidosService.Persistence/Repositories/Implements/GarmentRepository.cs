@@ -28,7 +28,7 @@ namespace GestionPedidosService.Persistence.Repositories.Implements
 
                 var garments = await _context.Garments
                     .AsNoTracking()
-                    .Include(g => g.FeatureGarments.Where(f => f.TypeFeatureValue.Equals(EGarmentFeatures.images)))
+                    .Include(g => g.FeatureGarments.Where(f => f.TypeFeature.Equals(EGarmentFeatures.images.ToString())))
                     .Where(g => g.AtelierId == atelierdId)
                     .Where(
                         g => filterString == null ||
@@ -37,7 +37,7 @@ namespace GestionPedidosService.Persistence.Repositories.Implements
                             g.NameGarment.ToUpper().Contains(filterString.ToUpper())
                         )
                     )
-                    .Where(g => category == null || g.Category.Equals((EGarmentCategories)category))
+                    .Where(g => category == null || g.Category.Equals(category))
                     .OrderBy(g => g.Category)
                     .ToListAsync();
 
