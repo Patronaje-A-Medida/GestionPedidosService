@@ -38,6 +38,7 @@ namespace GestionPedidosService.Persistence.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     CodeGarment = table.Column<string>(type: "nvarchar(100)", nullable: false),
                     NameGarment = table.Column<string>(type: "nvarchar(100)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(250)", nullable: true),
                     FirstRangePrice = table.Column<decimal>(type: "decimal(10,2)", nullable: false),
                     SecondRangePrice = table.Column<decimal>(type: "decimal(10,2)", nullable: false),
                     Available = table.Column<bool>(type: "bit", nullable: false),
@@ -124,7 +125,7 @@ namespace GestionPedidosService.Persistence.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     TypePattern = table.Column<string>(type: "nvarchar(20)", nullable: false),
                     ImagePattern = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ScaledStatus = table.Column<string>(type: "nvarchar(20)", nullable: false),
+                    ResizedStatus = table.Column<byte>(type: "tinyint", nullable: false),
                     GarmentId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
