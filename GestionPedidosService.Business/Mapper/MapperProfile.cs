@@ -5,6 +5,7 @@ using GestionPedidosService.Domain.Models;
 using GestionPedidosService.Domain.Models.FeatureGarments;
 using GestionPedidosService.Domain.Models.Garments;
 using GestionPedidosService.Domain.Utils;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -106,7 +107,32 @@ namespace GestionPedidosService.Business.Mapper
                 .ForMember(dest => dest.FeatureGarments, opt => opt.MapFrom(src => src.Features));
 
             CreateMap<FeatureGarmentWrite, FeatureGarment>();
-                
+
+            CreateMap<Garment, GarmentRead>()
+                .ForMember(dest => dest.CategoryId, opt => opt.MapFrom(src => src.Category))
+                .ForMember(dest => dest.Category, opt => opt.MapFrom(src => Enum.GetValues(typeof(EGarmentCategories))
+                        .Cast<EGarmentCategories>()
+                        .FirstOrDefault(e => e.Equals((EGarmentCategories)src.Category))
+                        .ToDescriptionString())
+                )
+                .ForMember(dest => dest.Colors, opt => opt.MapFrom(src => src.FeatureGarments
+                    .Where(f => f.TypeFeature.Equals(EGarmentFeatures.color.ToString()))
+                    .Select(f => f.Value))
+                )
+                .ForMember(dest => dest.Fabrics, opt => opt.MapFrom(src => src.FeatureGarments
+                    .Where(f => f.TypeFeature.Equals(EGarmentFeatures.fabric.ToString()))
+                    .Select(f => f.Value))
+                )
+                .ForMember(dest => dest.Occasions, opt => opt.MapFrom(src => src.FeatureGarments
+                    .Where(f => f.TypeFeature.Equals(EGarmentFeatures.occasion.ToString()))
+                    .Select(f => f.Value))
+                )
+                .ForMember(dest => dest.Images, opt => opt.MapFrom(src => src.FeatureGarments
+                    .Where(f => f.TypeFeature.Equals(EGarmentFeatures.images.ToString()))
+                    .Select(f => f.Value))
+                )
+                .ForMember(dest => dest.Patterns, opt => opt.MapFrom(src => src.PatternGarments.Select(p => p.ImagePattern)));
+
         }
     }
 }

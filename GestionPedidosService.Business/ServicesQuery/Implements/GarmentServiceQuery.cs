@@ -52,7 +52,30 @@ namespace GestionPedidosService.Business.ServicesQuery.Implements
                     ErrorsCode.GET_GARMENTS_FAILED,
                     ErrorMessages.GET_GARMENTS_FAILED,
                     ex
-                    );
+                );
+            }
+        }
+
+        public async Task<GarmentRead> GetByCodeGarment_AtelierId(string codeGarment, int atelierId)
+        {
+            try
+            {
+                var garment = await _uof.garmentRepository.GetByCodeGarment_AtelierId(codeGarment, atelierId);
+                var garmentRead = _mapper.Map<GarmentRead>(garment);
+                return garmentRead;
+            }
+            catch (RepositoryException ex)
+            {
+                throw new ServiceException(HttpStatusCode.InternalServerError, ex);
+            }
+            catch (Exception ex)
+            {
+                throw new ServiceException(
+                    HttpStatusCode.InternalServerError,
+                    ErrorsCode.GET_GARMENT_FAILED,
+                    ErrorMessages.GET_GARMENT_FAILED,
+                    ex
+                );
             }
         }
     }
