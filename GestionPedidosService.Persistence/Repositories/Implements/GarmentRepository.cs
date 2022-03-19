@@ -49,8 +49,36 @@ namespace GestionPedidosService.Persistence.Repositories.Implements
                     HttpStatusCode.InternalServerError,
                     ErrorsCode.GET_CONTEXT_ERROR,
                     ErrorMessages.GET_CONTEXT_ERROR,
-                    ex);
+                    ex
+                );
             }
+        }
+
+        public async Task<Garment> GetByCodeGarment_AtelierId(string codeGarment, int atelierId)
+        {
+            try
+            {
+                var garment = await _context.Garments
+                .AsNoTracking()
+                .Include(g => g.FeatureGarments)
+                .Include(g => g.PatternGarments)
+                .FirstOrDefaultAsync(g =>
+                    g.CodeGarment.Equals(codeGarment) &&
+                    g.AtelierId.Equals(atelierId)
+                );
+
+                return garment;
+            }
+            catch (Exception ex)
+            {
+                throw new RepositoryException(
+                    HttpStatusCode.InternalServerError,
+                    ErrorsCode.GET_GARMENT_FAILED,
+                    ErrorMessages.GET_GARMENT_FAILED,
+                    ex
+                );
+            }
+                
         }
     }
 }
