@@ -18,7 +18,13 @@ namespace GestionPedidosService.Persistence.Repositories.Implements
         public GarmentRepository(AppDbContext context) : base(context) { }
 
         #nullable enable
-        public async Task<IEnumerable<Garment>> GetAllByQuery(int atelierdId, string? filterString, int? category)
+        public async Task<IEnumerable<Garment>> GetAllByQuery(
+            int atelierdId, 
+            IEnumerable<int> categories, 
+            IEnumerable<int> occasions,
+            string? filterString, 
+            int? category
+        )
         {
             try
             {
@@ -26,9 +32,16 @@ namespace GestionPedidosService.Persistence.Repositories.Implements
                 .Cast<EGarmentCategories>()
                 .FirstOrDefault(v => category == null || v.ToDescriptionString().Equals(category));*/
 
+                
+
                 var garments = await _context.Garments
                     .AsNoTracking()
-                    .Include(g => g.FeatureGarments.Where(f => f.TypeFeature.Equals(EGarmentFeatures.images.ToString())))
+                    .Include(g => g.FeatureGarments
+                        .Where(f => 
+                            f.TypeFeature.Equals(EGarmentFeatures.images.ToString()) || 
+                            f.TypeFeature.Equals(EGarmentFeatures.occasion.ToString())
+                        )
+                    )
                     .Where(g => g.AtelierId == atelierdId)
                     .Where(
                         g => filterString == null ||
@@ -37,9 +50,23 @@ namespace GestionPedidosService.Persistence.Repositories.Implements
                             g.NameGarment.ToUpper().Contains(filterString.ToUpper())
                         )
                     )
-                    .Where(g => category == null || g.Category.Equals(category))
+                    .Where(g => categories.Count() == 0 || categories.Contains(g.Category))
                     .OrderBy(g => g.Category)
                     .ToListAsync();
+
+                // fuera del context porque no puede traducirlo a sql command
+                // se intento por medio de group by, joins, linq methods, linq sintax pero nada
+                // falto probrar por raw sql y procedures pero quedará pendiente
+                garments = garments.Where(g =>
+                        occasions.Count() == 0 ||
+                        occasions.Intersect(g.FeatureGarments
+                                .Where(f => f.TypeFeature.Equals(EGarmentFeatures.occasion.ToString()))
+                                .Select(f => f.TypeFeatureValue)
+                        )
+                        .Any()
+                    )
+                    .ToList();
+
 
                 return garments ?? new List<Garment>();
             }

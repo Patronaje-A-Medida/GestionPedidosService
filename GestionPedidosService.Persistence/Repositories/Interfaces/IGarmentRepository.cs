@@ -7,7 +7,7 @@ namespace GestionPedidosService.Persistence.Interfaces
     public interface IGarmentRepository : IRepository<Garment>
     {
         #nullable enable
-        Task<IEnumerable<Garment>> GetAllByQuery(int atelierdId, string? filterString, int? category);
+        Task<IEnumerable<Garment>> GetAllByQuery(int atelierdId, IEnumerable<int> categories, IEnumerable<int> occasions, string? filterString, int? category);
         Task<Garment> GetByCodeGarment_AtelierId(string codeGarment, int atelierId);
     }
 }

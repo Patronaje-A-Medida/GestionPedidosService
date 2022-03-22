@@ -1,10 +1,13 @@
-﻿using System.ComponentModel;
+﻿using System.Collections.Generic;
+using System.ComponentModel;
 
 namespace GestionPedidosService.Domain.Models.Garments
 {
     public class GarmentQuery
     {
         public int AtelierId { get; set; }
+        public IEnumerable<int> Categories { get; set; }
+        public IEnumerable<int> Occasions { get; set; }
 
         #nullable enable
         [DefaultValue(null)]

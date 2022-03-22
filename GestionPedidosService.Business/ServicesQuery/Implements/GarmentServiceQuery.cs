@@ -30,15 +30,21 @@ namespace GestionPedidosService.Business.ServicesQuery.Implements
         {
             try
             {
-                var garments = await _uof.garmentRepository.GetAllByQuery(query.AtelierId, query.FilterString, query.Category);
+                var garments = await _uof.garmentRepository.GetAllByQuery(
+                    query.AtelierId, 
+                    query.Categories, 
+                    query.Occasions, 
+                    query.FilterString, 
+                    query.Category
+                );
                 var weas = new List<Garment>();
+                /*weas.AddRange(garments);
                 weas.AddRange(garments);
                 weas.AddRange(garments);
                 weas.AddRange(garments);
                 weas.AddRange(garments);
-                weas.AddRange(garments);
-                weas.AddRange(garments);
-                var garmentsMin = _mapper.Map<ICollection<GarmentMin>>(weas);
+                weas.AddRange(garments);*/
+                var garmentsMin = _mapper.Map<ICollection<GarmentMin>>(garments);
                 return garmentsMin.ToPagedList(query.PageNumber, query.PageSize);
             }
             catch (RepositoryException ex)

@@ -77,7 +77,7 @@ namespace GestionPedidosService.Business.Mapper
 
             CreateMap<Garment, GarmentMin>()
                 .ForMember(dest => dest.ImageUrl, opt => opt.MapFrom(src => src.FeatureGarments
-                    //.Where(f => f.TypeFeature.Equals(EGarmentFeatures.images.ToString()))
+                    .Where(f => f.TypeFeature.Equals(EGarmentFeatures.images.ToString()))
                     .Select(f => f.Value)
                     .FirstOrDefault())
                 )
