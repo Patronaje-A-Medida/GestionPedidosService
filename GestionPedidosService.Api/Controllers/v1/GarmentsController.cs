@@ -113,9 +113,38 @@ namespace GestionPedidosService.Api.Controllers.v1
             return Ok(result);
         }
 
-        /*private async Task<string> UploadToFirebaseStorege(GarmentImage garmentImage)
+        [HttpGet("details")]
+        [ProducesResponseType(typeof(GarmentRead), 200)]
+        [ProducesResponseType(typeof(ErrorDevDetail), 404)]
+        [ProducesResponseType(typeof(ErrorDevDetail), 400)]
+        [ProducesResponseType(typeof(ErrorDevDetail), 500)]
+        public async Task<ActionResult<GarmentRead>> GetByCodeGarment_AtelierId([FromQuery] string codeGarment, int atelierId)
         {
+            try
+            {
+                var result = await _garmentServiceQuery.GetByCodeGarment_AtelierId(codeGarment, atelierId);
 
-        }*/
+                if (result == null)
+                {
+                    return NotFound(new ErrorDetail
+                    {
+                        errorCode = ErrorsCode.NOT_FOUND_ORDER,
+                        message = ErrorMessages.NOT_FOUND_ORDER,
+                        statusCode = (int)HttpStatusCode.NotFound,
+                    });
+                }
+
+                return Ok(result);
+            }
+            catch (ServiceException ex)
+            {
+                throw ex;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
     }
 }
