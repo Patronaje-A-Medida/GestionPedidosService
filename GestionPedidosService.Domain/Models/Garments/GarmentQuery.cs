@@ -8,13 +8,14 @@ namespace GestionPedidosService.Domain.Models.Garments
         public int AtelierId { get; set; }
         public IEnumerable<int> Categories { get; set; }
         public IEnumerable<int> Occasions { get; set; }
+        public IEnumerable<bool> Availabilities { get; set; }
 
         #nullable enable
         [DefaultValue(null)]
         public string? FilterString { get; set; }
 
-        [DefaultValue(null)]
-        public int? Category { get; set; }
+        /*[DefaultValue(null)]
+        public int? Category { get; set; }*/
 
         [DefaultValue(null)]
         public int? PageNumber { get; set; }

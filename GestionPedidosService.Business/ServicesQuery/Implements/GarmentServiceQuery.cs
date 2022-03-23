@@ -33,12 +33,12 @@ namespace GestionPedidosService.Business.ServicesQuery.Implements
                 var garments = await _uof.garmentRepository.GetAllByQuery(
                     query.AtelierId, 
                     query.Categories, 
-                    query.Occasions, 
-                    query.FilterString, 
-                    query.Category
+                    query.Occasions,
+                    query.Availabilities,
+                    query.FilterString
                 );
-                var weas = new List<Garment>();
-                /*weas.AddRange(garments);
+                /*var weas = new List<Garment>();
+                weas.AddRange(garments);
                 weas.AddRange(garments);
                 weas.AddRange(garments);
                 weas.AddRange(garments);

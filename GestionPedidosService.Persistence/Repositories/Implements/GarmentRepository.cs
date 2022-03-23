@@ -22,8 +22,8 @@ namespace GestionPedidosService.Persistence.Repositories.Implements
             int atelierdId, 
             IEnumerable<int> categories, 
             IEnumerable<int> occasions,
-            string? filterString, 
-            int? category
+            IEnumerable<bool> availabilities,
+            string? filterString 
         )
         {
             try
@@ -31,8 +31,6 @@ namespace GestionPedidosService.Persistence.Repositories.Implements
                 /*var categoryEnum = Enum.GetValues(typeof(EGarmentCategories))
                 .Cast<EGarmentCategories>()
                 .FirstOrDefault(v => category == null || v.ToDescriptionString().Equals(category));*/
-
-                
 
                 var garments = await _context.Garments
                     .AsNoTracking()
@@ -51,6 +49,7 @@ namespace GestionPedidosService.Persistence.Repositories.Implements
                         )
                     )
                     .Where(g => categories.Count() == 0 || categories.Contains(g.Category))
+                    .Where(g => availabilities.Count() == 0 || availabilities.Contains(g.Available))
                     .OrderBy(g => g.Category)
                     .ToListAsync();
 
@@ -66,7 +65,6 @@ namespace GestionPedidosService.Persistence.Repositories.Implements
                         .Any()
                     )
                     .ToList();
-
 
                 return garments ?? new List<Garment>();
             }
