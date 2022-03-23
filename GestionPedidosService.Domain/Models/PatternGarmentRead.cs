@@ -6,7 +6,7 @@ namespace GestionPedidosService.Domain.Models
     {
         public string Type { get; set; }
         public string Image { get; set; }
-        public int ScaledStatus { get; set; }
+        public string ScaledStatus { get; set; }
         public List<PatternDimensionRead> Dimensions { get; set; }
     }
 }

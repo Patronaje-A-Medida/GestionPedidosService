@@ -1,14 +1,14 @@
-﻿using System.ComponentModel;
+﻿using GestionPedidosService.Domain.Entities;
+using System.ComponentModel;
 
 namespace GestionPedidosService.Domain.Models
 {
     public class OrderQuery
     {
         public int AtelierId { get; set; }
-
-        #nullable enable
+#nullable enable
         [DefaultValue(null)]
-        public int? OrderStatus { get; set; }
+        public string? OrderStatus { get; set; }
         [DefaultValue(null)]
         public string? FilterString { get; set; }
         [DefaultValue(null)]

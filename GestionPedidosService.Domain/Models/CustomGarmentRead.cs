@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace GestionPedidosService.Domain.Models.Garments
+namespace GestionPedidosService.Domain.Models
 {
     public class CustomGarmentRead
     {

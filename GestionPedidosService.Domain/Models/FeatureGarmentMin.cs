@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace GestionPedidosService.Domain.Models.FeatureGarments
+namespace GestionPedidosService.Domain.Models
 {
     public class FeatureGarmentMin
     {
