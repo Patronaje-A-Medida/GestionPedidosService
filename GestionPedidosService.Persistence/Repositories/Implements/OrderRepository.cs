@@ -18,13 +18,13 @@ namespace GestionPedidosService.Persistence.Repositories.Implements
     {
         public OrderRepository(AppDbContext context) : base(context) { }
 
-        public async Task<IEnumerable<Order>> GetAllByQuery(int atelierId, int? orderStatus, string filterString)
+        public async Task<IEnumerable<Order>> GetAllByQuery(int atelierId, string orderStatus, string filterString)
         {
             try
             {
-                /*var status = Enum.GetValues(typeof(EOrderStatus))
+                var status = Enum.GetValues(typeof(EOrderStatus))
                 .Cast<EOrderStatus>()
-                .FirstOrDefault(v => orderStatus == null || v.ToDescriptionString() == orderStatus);*/
+                .FirstOrDefault(v => orderStatus == null || v.ToDescriptionString() == orderStatus);
 
                 var orderDetails = await _context.Orders
                     .AsNoTracking()
@@ -40,7 +40,7 @@ namespace GestionPedidosService.Persistence.Repositories.Implements
                             (o.UserClient.User.NameUser.ToUpper() + " " + o.UserClient.User.LastNameUser.ToUpper()).Contains(filterString.ToUpper())
                         )
                     )
-                    .Where(o => orderStatus == null || o.OrderStatus.Equals((EOrderStatus)orderStatus))
+                    .Where(o => orderStatus == null || o.OrderStatus.Equals(status))
                     .OrderBy(o => o.OrderDate)
                     .AsSplitQuery()
                     .ToListAsync();

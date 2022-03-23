@@ -47,36 +47,6 @@ namespace GestionPedidosService.Persistence.Migrations
                     b.ToTable("AspNetUsers", t => t.ExcludeFromMigrations());
                 });
 
-            modelBuilder.Entity("GestionPedidosService.Domain.Entities.Atelier", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Address")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("City")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("DescriptionAtelier")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("District")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("NameAtelier")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("RucAtelier")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Ateliers", t => t.ExcludeFromMigrations());
-                });
-
             modelBuilder.Entity("GestionPedidosService.Domain.Entities.DictionaryType", b =>
                 {
                     b.Property<int>("Id")
@@ -97,36 +67,29 @@ namespace GestionPedidosService.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<string>("GroupType")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<string>("KeyType")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(50)");
-
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("nvarchar(100)");
 
                     b.Property<DateTimeOffset?>("ModifiedDate")
                         .HasColumnType("datetimeoffset(7)");
 
-                    b.Property<string>("ParentTypeId")
+                    b.Property<string>("ParentType")
                         .HasColumnType("nvarchar(100)");
 
                     b.Property<bool>("Status")
                         .HasColumnType("bit");
 
-                    b.Property<byte>("ValueType")
-                        .HasColumnType("tinyint");
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("Value")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(50)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("AtelierId");
-
-                    b.HasIndex("GroupType");
-
-                    b.HasIndex("KeyType");
 
                     b.ToTable("DictionaryTypes");
                 });
@@ -137,6 +100,9 @@ namespace GestionPedidosService.Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("CodeFeature")
+                        .HasColumnType("int");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(100)");
@@ -159,9 +125,6 @@ namespace GestionPedidosService.Persistence.Migrations
                     b.Property<string>("TypeFeature")
                         .IsRequired()
                         .HasColumnType("nvarchar(20)");
-
-                    b.Property<byte>("TypeFeatureValue")
-                        .HasColumnType("tinyint");
 
                     b.Property<string>("Value")
                         .IsRequired()
@@ -187,9 +150,6 @@ namespace GestionPedidosService.Persistence.Migrations
                     b.Property<bool>("Available")
                         .HasColumnType("bit");
 
-                    b.Property<byte>("Category")
-                        .HasColumnType("tinyint");
-
                     b.Property<string>("CodeGarment")
                         .IsRequired()
                         .HasColumnType("nvarchar(100)");
@@ -199,9 +159,6 @@ namespace GestionPedidosService.Persistence.Migrations
 
                     b.Property<DateTimeOffset>("CreatedDate")
                         .HasColumnType("datetimeoffset(7)");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(250)");
 
                     b.Property<decimal>("FirstRangePrice")
                         .HasColumnType("decimal(10,2)");
@@ -366,8 +323,9 @@ namespace GestionPedidosService.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<byte>("ResizedStatus")
-                        .HasColumnType("tinyint");
+                    b.Property<string>("ScaledStatus")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(20)");
 
                     b.Property<string>("TypePattern")
                         .IsRequired()
@@ -418,8 +376,6 @@ namespace GestionPedidosService.Persistence.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("AtelierId");
 
                     b.HasIndex("UserId");
 
@@ -535,12 +491,6 @@ namespace GestionPedidosService.Persistence.Migrations
 
             modelBuilder.Entity("GestionPedidosService.Domain.Entities.UserAtelier", b =>
                 {
-                    b.HasOne("GestionPedidosService.Domain.Entities.Atelier", null)
-                        .WithMany("Employees")
-                        .HasForeignKey("AtelierId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("GestionPedidosService.Domain.Base.UserBase", "User")
                         .WithMany()
                         .HasForeignKey("UserId");
@@ -555,11 +505,6 @@ namespace GestionPedidosService.Persistence.Migrations
                         .HasForeignKey("UserId");
 
                     b.Navigation("User");
-                });
-
-            modelBuilder.Entity("GestionPedidosService.Domain.Entities.Atelier", b =>
-                {
-                    b.Navigation("Employees");
                 });
 
             modelBuilder.Entity("GestionPedidosService.Domain.Entities.Garment", b =>
