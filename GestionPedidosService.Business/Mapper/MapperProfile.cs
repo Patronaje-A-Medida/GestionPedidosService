@@ -1,9 +1,12 @@
 ﻿using AutoMapper;
-using GestionPedidosService.Business.Extension;
 using GestionPedidosService.Domain.Entities;
 using GestionPedidosService.Domain.Extensions;
 using GestionPedidosService.Domain.Models;
+using GestionPedidosService.Domain.Models.FeatureGarments;
+using GestionPedidosService.Domain.Models.Garments;
 using GestionPedidosService.Domain.Utils;
+using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace GestionPedidosService.Business.Mapper
@@ -41,9 +44,18 @@ namespace GestionPedidosService.Business.Mapper
 
             CreateMap<Garment, CustomGarmentRead>()
                 .ForMember(dest => dest.EstimatedPrice, opt => opt.MapFrom(src => (src.FirstRangePrice + src.SecondRangePrice) / 2))
-                .ForMember(dest => dest.Fabrics, opt => opt.MapFrom(src => src.FeatureGarments.Where(f => f.TypeFeature.Equals(EFeatureGarments.Fabric.ToDescriptionString())).Select(f => f.Value)))
-                .ForMember(dest => dest.Occasions, opt => opt.MapFrom(src => src.FeatureGarments.Where(f => f.TypeFeature.Equals(EFeatureGarments.Occasion.ToDescriptionString())).Select(f => f.Value)))
-                .ForMember(dest => dest.Images, opt => opt.MapFrom(src => src.FeatureGarments.Where(f => f.TypeFeature.Equals(EFeatureGarments.Images.ToDescriptionString())).Select(f => f.Value)));
+                .ForMember(dest => dest.Fabrics, opt => opt.MapFrom(src => src.FeatureGarments
+                    .Where(f => f.TypeFeature.Equals(EGarmentFeatures.fabric.ToString()))
+                    .Select(f => f.Value))
+                )
+                .ForMember(dest => dest.Occasions, opt => opt.MapFrom(src => src.FeatureGarments
+                    .Where(f => f.TypeFeature.Equals(EGarmentFeatures.occasion.ToString()))
+                    .Select(f => f.Value))
+                )
+                .ForMember(dest => dest.Images, opt => opt.MapFrom(src => src.FeatureGarments
+                    .Where(f => f.TypeFeature.Equals(EGarmentFeatures.images.ToString()))
+                    .Select(f => f.Value))
+                );
 
             CreateMap<UserClient, UserClientMin>()
                 .ForMember(dest => dest.NameClient, opt => opt.MapFrom(src => src.User.NameUser + " " + src.User.LastNameUser))
@@ -60,8 +72,67 @@ namespace GestionPedidosService.Business.Mapper
             CreateMap<PatternGarment, PatternGarmentRead>()
                 .ForMember(dest => dest.Type, opt => opt.MapFrom(src => src.TypePattern))
                 .ForMember(dest => dest.Image, opt => opt.MapFrom(src => src.ImagePattern))
-                .ForMember(dest => dest.ScaledStatus, opt => opt.MapFrom(src => src.ScaledStatus))
+                .ForMember(dest => dest.ScaledStatus, opt => opt.MapFrom(src => src.ResizedStatus))
                 .ForMember(dest => dest.Dimensions, opt => opt.MapFrom(src => src.PatternDimensions));
+
+            CreateMap<Garment, GarmentMin>()
+                .ForMember(dest => dest.ImageUrl, opt => opt.MapFrom(src => src.FeatureGarments
+                    .Where(f => f.TypeFeature.Equals(EGarmentFeatures.images.ToString()))
+                    .Select(f => f.Value)
+                    .FirstOrDefault())
+                )
+                //.ForMember(dest => dest.Category, opt => opt.MapFrom(src => src.Category.ToDescriptionString()))
+                .ForMember(dest => dest.AveragePrice, opt => opt.MapFrom(src => (src.FirstRangePrice + src.SecondRangePrice) / 2));
+
+            CreateMap<IEnumerable<DictionaryType>, ConfigurationTypeRead>()
+                .ForMember(dest => dest.Categories, opt => opt.MapFrom(src => src
+                    .Where(d => d.GroupType.Equals(STypes.GarmentCategory)))
+                )
+                .ForMember(dest => dest.OrderStatus, opt => opt.MapFrom(src => src
+                    .Where(d => d.GroupType.Equals(STypes.OrderStatus)))
+                )
+                .ForMember(dest => dest.Fabrics, opt => opt.MapFrom(src => src
+                    .Where(d => d.GroupType.Equals(STypes.Fabrics)))
+                )
+                .ForMember(dest => dest.Occasions, opt => opt.MapFrom(src => src
+                    .Where(d => d.GroupType.Equals(STypes.Occasion)))
+                );
+
+            CreateMap<DictionaryType, TypeRead>()
+                .ForMember(dest => dest.Key, opt => opt.MapFrom(src => src.KeyType))
+                .ForMember(dest => dest.Value, opt => opt.MapFrom(src => src.ValueType))
+                .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Description));
+
+            CreateMap<GarmentWrite, Garment>()
+                .ForMember(dest => dest.FeatureGarments, opt => opt.MapFrom(src => src.Features));
+
+            CreateMap<FeatureGarmentWrite, FeatureGarment>();
+
+            CreateMap<Garment, GarmentRead>()
+                .ForMember(dest => dest.CategoryId, opt => opt.MapFrom(src => src.Category))
+                .ForMember(dest => dest.Category, opt => opt.MapFrom(src => Enum.GetValues(typeof(EGarmentCategories))
+                        .Cast<EGarmentCategories>()
+                        .FirstOrDefault(e => e.Equals((EGarmentCategories)src.Category))
+                        .ToDescriptionString())
+                )
+                .ForMember(dest => dest.Colors, opt => opt.MapFrom(src => src.FeatureGarments
+                    .Where(f => f.TypeFeature.Equals(EGarmentFeatures.color.ToString()))
+                    .Select(f => f.Value))
+                )
+                .ForMember(dest => dest.Fabrics, opt => opt.MapFrom(src => src.FeatureGarments
+                    .Where(f => f.TypeFeature.Equals(EGarmentFeatures.fabric.ToString()))
+                    .Select(f => f.Value))
+                )
+                .ForMember(dest => dest.Occasions, opt => opt.MapFrom(src => src.FeatureGarments
+                    .Where(f => f.TypeFeature.Equals(EGarmentFeatures.occasion.ToString()))
+                    .Select(f => f.Value))
+                )
+                .ForMember(dest => dest.Images, opt => opt.MapFrom(src => src.FeatureGarments
+                    .Where(f => f.TypeFeature.Equals(EGarmentFeatures.images.ToString()))
+                    .Select(f => f.Value))
+                )
+                .ForMember(dest => dest.Patterns, opt => opt.MapFrom(src => src.PatternGarments.Select(p => p.ImagePattern)));
+
         }
     }
 }

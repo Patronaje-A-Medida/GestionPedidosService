@@ -1,7 +1,4 @@
 ﻿using GestionPedidosService.Domain.Base;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace GestionPedidosService.Domain.Entities
 {

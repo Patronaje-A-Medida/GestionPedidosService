@@ -1,7 +1,7 @@
 ﻿using GestionPedidosService.Domain.Entities;
 using GestionPedidosService.Domain.Extensions;
 using GestionPedidosService.Domain.Models;
-using GestionPedidosService.Domain.Utils;
+using GestionPedidosService.Domain.Models.Garments;
 using GestionPedidosService.Persistence.Context;
 using GestionPedidosService.Persistence.Handlers;
 using GestionPedidosService.Persistence.Interfaces;
@@ -95,6 +95,7 @@ namespace GestionPedidosService.Persistence.Repositories.Implements
         public override async Task<OrderDetail> GetById(int id)
         {
             return await _context.Set<OrderDetail>()
+                .AsNoTracking()
                 .Include(e => e.Garment)
                 .Include(e => e.Order)
                 .Include(e => e.Garment.FeatureGarments)
