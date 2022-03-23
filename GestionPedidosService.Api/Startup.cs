@@ -2,11 +2,15 @@ using System;
 using AutoMapper;
 using GestionPedidosService.Api.ApiConventions;
 using GestionPedidosService.Business.Mapper;
+using GestionPedidosService.Business.ServicesCommand.Implements;
+using GestionPedidosService.Business.ServicesCommand.Interfaces;
 using GestionPedidosService.Business.ServicesQuery.Implements;
 using GestionPedidosService.Business.ServicesQuery.Interfaces;
+using GestionPedidosService.Business.Utils;
 using GestionPedidosService.Persistence.Context;
 using GestionPedidosService.Persistence.Interfaces;
 using GestionPedidosService.Persistence.Repositories.Implements;
+using GestionPedidosService.Persistence.Repositories.Interfaces;
 using GestionPedidosService.Persistence.UnitOfWork;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -35,6 +39,8 @@ namespace GestionPedidosService.Api
                 opts => opts.UseSqlServer(Configuration.GetConnectionString("LocalConnection")).LogTo(Console.WriteLine)
             );
 
+            services.AddSingleton<IConfigurationManager, ConfigurationManager>();
+
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
             services.AddScoped<IFeatureGarmentRepository, FeatureGarmentRepository>();
             services.AddScoped<IGarmentRepository, GarmentRepository>();
@@ -42,11 +48,17 @@ namespace GestionPedidosService.Api
             services.AddScoped<IOrderDetailRepository, OrderDetailRepository>();
             services.AddScoped<IPatternDimensionRepository, PatternDimensionRepository>();
             services.AddScoped<IPatternGarmentRepository, PatternGarmentRepository>();
+            services.AddScoped<IDictionaryTypeRepository, DictionaryTypeRepository>();
+            services.AddScoped<IAtelierRepository, AtelierRepository>();
 
             services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             services.AddScoped<IOrderServiceQuery, OrderServiceQuery>();
             services.AddScoped<IPatternGarmentServiceQuery, PatternGarmentServiceQuery>();
+            services.AddScoped<IGarmentServiceQuery, GarmentServiceQuery>();
+            services.AddScoped<IDictionaryTypeServiceQuery, DictionaryTypeServiceQuery>();
+
+            services.AddScoped<IGarmentServiceCommand, GarmentServiceCommand>();
 
             var mapperConfig = new MapperConfiguration(
                 mc => mc.AddProfile(new MapperProfile())
