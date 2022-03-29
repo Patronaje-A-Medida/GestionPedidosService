@@ -53,6 +53,12 @@ namespace GestionPedidosService.Persistence.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Garments", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Garments_Ateliers_AtelierId",
+                        column: x => x.AtelierId,
+                        principalTable: "Ateliers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -214,6 +220,16 @@ namespace GestionPedidosService.Persistence.Migrations
                 name: "IX_FeatureGarments_GarmentId",
                 table: "FeatureGarments",
                 column: "GarmentId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Garments_AtelierId",
+                table: "Garments",
+                column: "AtelierId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Garments_CodeGarment",
+                table: "Garments",
+                column: "CodeGarment");
 
             migrationBuilder.CreateIndex(
                 name: "IX_OrderDetails_GarmentId",
