@@ -36,7 +36,7 @@ namespace GestionPedidosService.Api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<AppDbContext>(
-                opts => opts.UseSqlServer(Configuration.GetConnectionString("LocalConnection")).LogTo(Console.WriteLine)
+                opts => opts.UseSqlServer(Configuration.GetConnectionString("LocalConnection"))//.LogTo(Console.WriteLine)
             );
 
             services.AddSingleton<IConfigurationManager, ConfigurationManager>();
