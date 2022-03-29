@@ -1,6 +1,6 @@
 ﻿namespace GestionPedidosService.Domain.Models.Garments
 {
-    public class GarmentMin
+    public class GarmentMinWeb
     {
         public string CodeGarment { get; set; }
         public string NameGarment { get; set; }
