@@ -16,5 +16,6 @@ namespace GestionPedidosService.Domain.Entities
 
         // relations
         public IEnumerable<UserAtelier> Employees { get; set; }
+        public IEnumerable<Garment> Garments { get; set; }
     }
 }

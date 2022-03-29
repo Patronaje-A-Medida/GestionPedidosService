@@ -16,8 +16,4 @@
       <ProjectReference Include="..\GestionPedidosService.Domain\GestionPedidosService.Domain.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="Migrations\" />
-    </ItemGroup>
-
 </Project>

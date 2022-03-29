@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GestionPedidosService.Persistence.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20220323215300_InitialGestionDemo")]
+    [Migration("20220329143145_InitialGestionDemo")]
     partial class InitialGestionDemo
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -225,6 +225,10 @@ namespace GestionPedidosService.Persistence.Migrations
                         .HasColumnType("bit");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("AtelierId");
+
+                    b.HasIndex("CodeGarment");
 
                     b.ToTable("Garments");
                 });
@@ -477,6 +481,17 @@ namespace GestionPedidosService.Persistence.Migrations
                     b.Navigation("Garment");
                 });
 
+            modelBuilder.Entity("GestionPedidosService.Domain.Entities.Garment", b =>
+                {
+                    b.HasOne("GestionPedidosService.Domain.Entities.Atelier", "Atelier")
+                        .WithMany("Garments")
+                        .HasForeignKey("AtelierId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Atelier");
+                });
+
             modelBuilder.Entity("GestionPedidosService.Domain.Entities.Order", b =>
                 {
                     b.HasOne("GestionPedidosService.Domain.Entities.UserAtelier", "UserAtelier")
@@ -562,6 +577,8 @@ namespace GestionPedidosService.Persistence.Migrations
             modelBuilder.Entity("GestionPedidosService.Domain.Entities.Atelier", b =>
                 {
                     b.Navigation("Employees");
+
+                    b.Navigation("Garments");
                 });
 
             modelBuilder.Entity("GestionPedidosService.Domain.Entities.Garment", b =>

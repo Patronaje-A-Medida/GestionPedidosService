@@ -75,7 +75,7 @@ namespace GestionPedidosService.Business.Mapper
                 .ForMember(dest => dest.ScaledStatus, opt => opt.MapFrom(src => src.ResizedStatus))
                 .ForMember(dest => dest.Dimensions, opt => opt.MapFrom(src => src.PatternDimensions));
 
-            CreateMap<Garment, GarmentMin>()
+            CreateMap<Garment, GarmentMinWeb>()
                 .ForMember(dest => dest.ImageUrl, opt => opt.MapFrom(src => src.FeatureGarments
                     .Where(f => f.TypeFeature.Equals(EGarmentFeatures.images.ToString()))
                     .Select(f => f.Value)
@@ -133,6 +133,23 @@ namespace GestionPedidosService.Business.Mapper
                 )
                 .ForMember(dest => dest.Patterns, opt => opt.MapFrom(src => src.PatternGarments.Select(p => p.ImagePattern)));
 
+            /*CreateMap<Garment, GarmentMinWeb>()
+                .ForMember(dest => dest.ImageUrl, opt => opt.MapFrom(src => src.FeatureGarments
+                    .Where(f => f.TypeFeature.Equals(EGarmentFeatures.images.ToString()))
+                    .Select(f => f.Value)
+                    .FirstOrDefault())
+                )
+                //.ForMember(dest => dest.Category, opt => opt.MapFrom(src => src.Category.ToDescriptionString()))
+                .ForMember(dest => dest.AveragePrice, opt => opt.MapFrom(src => (src.FirstRangePrice + src.SecondRangePrice) / 2));*/
+
+            CreateMap<Garment, GarmentMinMobile>()
+                .ForMember(dest => dest.ImageUrl, opt => opt.MapFrom(src => src.FeatureGarments
+                    .Where(f => f.TypeFeature.Equals(EGarmentFeatures.images.ToString()))
+                    .Select(f => f.Value)
+                    .FirstOrDefault())
+                )
+                .ForMember(dest => dest.Price, opt => opt.MapFrom(src => src.FirstRangePrice))
+                .ForMember(dest => dest.NameAtelier, opt => opt.MapFrom(src => src.Atelier.NameAtelier));
         }
     }
 }
