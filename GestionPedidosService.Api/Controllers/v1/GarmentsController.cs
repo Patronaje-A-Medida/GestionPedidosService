@@ -2,6 +2,7 @@
 using GestionPedidosService.Business.Handlers;
 using GestionPedidosService.Business.ServicesCommand.Interfaces;
 using GestionPedidosService.Business.ServicesQuery.Interfaces;
+using GestionPedidosService.Domain.Models;
 using GestionPedidosService.Domain.Models.Garments;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -28,11 +29,11 @@ namespace GestionPedidosService.Api.Controllers.v1
             // polly retry
         }
 
-        [HttpPost("by-query")]
-        [ProducesResponseType(typeof(IEnumerable<GarmentMin>), 200)]
+        [HttpPost("by-query/web")]
+        [ProducesResponseType(typeof(PagedList<GarmentMinWeb>), 200)]
         [ProducesResponseType(typeof(ErrorDevDetail), 400)]
         [ProducesResponseType(typeof(ErrorDevDetail), 500)]
-        public async Task<ActionResult<IEnumerable<GarmentMin>>> GetAllByQuery([FromBody] GarmentQuery garmentQuery)
+        public async Task<ActionResult<PagedList<GarmentMinWeb>>> GetAllByQueryToWeb([FromBody] GarmentQuery garmentQuery)
         {
             try
             {
@@ -51,7 +52,7 @@ namespace GestionPedidosService.Api.Controllers.v1
                         message = err
                     });
                 }
-                var result = await _garmentServiceQuery.GetAllByQuery(garmentQuery);
+                var result = await _garmentServiceQuery.GetAllByQueryToWeb(garmentQuery);
                 return Ok(result);
             }
             catch(ServiceException ex)
@@ -59,6 +60,42 @@ namespace GestionPedidosService.Api.Controllers.v1
                 throw ex;
             }
             catch(Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        [HttpPost("by-query/mobile")]
+        [ProducesResponseType(typeof(IEnumerable<GarmentMinMobile>), 200)]
+        [ProducesResponseType(typeof(ErrorDevDetail), 400)]
+        [ProducesResponseType(typeof(ErrorDevDetail), 500)]
+        public async Task<ActionResult<IEnumerable<GarmentMinMobile>>> GetAllByQueryToMobile([FromBody] GarmentQuery garmentQuery)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    string err = string.Join(
+                        "; ",
+                        ModelState.Values
+                            .SelectMany(x => x.Errors)
+                            .Select(x => x.ErrorMessage));
+
+                    return BadRequest(new ErrorDetail
+                    {
+                        statusCode = (int)HttpStatusCode.BadRequest,
+                        errorCode = ErrorsCode.INVALID_MODEL_ERROR,
+                        message = err
+                    });
+                }
+                var result = await _garmentServiceQuery.GetAllByQueryToMobile(garmentQuery);
+                return Ok(result);
+            }
+            catch (ServiceException ex)
+            {
+                throw ex;
+            }
+            catch (Exception ex)
             {
                 throw ex;
             }

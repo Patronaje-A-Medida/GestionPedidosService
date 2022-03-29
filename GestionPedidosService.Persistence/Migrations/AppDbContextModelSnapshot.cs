@@ -224,6 +224,10 @@ namespace GestionPedidosService.Persistence.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("AtelierId");
+
+                    b.HasIndex("CodeGarment");
+
                     b.ToTable("Garments");
                 });
 
@@ -475,6 +479,17 @@ namespace GestionPedidosService.Persistence.Migrations
                     b.Navigation("Garment");
                 });
 
+            modelBuilder.Entity("GestionPedidosService.Domain.Entities.Garment", b =>
+                {
+                    b.HasOne("GestionPedidosService.Domain.Entities.Atelier", "Atelier")
+                        .WithMany("Garments")
+                        .HasForeignKey("AtelierId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Atelier");
+                });
+
             modelBuilder.Entity("GestionPedidosService.Domain.Entities.Order", b =>
                 {
                     b.HasOne("GestionPedidosService.Domain.Entities.UserAtelier", "UserAtelier")
@@ -560,6 +575,8 @@ namespace GestionPedidosService.Persistence.Migrations
             modelBuilder.Entity("GestionPedidosService.Domain.Entities.Atelier", b =>
                 {
                     b.Navigation("Employees");
+
+                    b.Navigation("Garments");
                 });
 
             modelBuilder.Entity("GestionPedidosService.Domain.Entities.Garment", b =>

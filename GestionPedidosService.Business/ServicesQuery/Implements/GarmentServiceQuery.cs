@@ -2,7 +2,6 @@
 using GestionPedidosService.Business.Extension;
 using GestionPedidosService.Business.Handlers;
 using GestionPedidosService.Business.ServicesQuery.Interfaces;
-using GestionPedidosService.Domain.Entities;
 using GestionPedidosService.Domain.Models;
 using GestionPedidosService.Domain.Models.Garments;
 using GestionPedidosService.Persistence.Handlers;
@@ -26,7 +25,36 @@ namespace GestionPedidosService.Business.ServicesQuery.Implements
             _mapper = mapper;
         }
 
-        public async Task<PagedList<GarmentMin>> GetAllByQuery(GarmentQuery query)
+        public async Task<IEnumerable<GarmentMinMobile>> GetAllByQueryToMobile(GarmentQuery query)
+        {
+            try
+            {
+                var garments = await _uof.garmentRepository.GetAllByQuery(
+                    query.AtelierId,
+                    query.Categories,
+                    query.Occasions,
+                    query.Availabilities,
+                    query.FilterString
+                );
+                var garmentsMin = _mapper.Map<IEnumerable<GarmentMinMobile>>(garments);
+                return garmentsMin;
+            }
+            catch (RepositoryException ex)
+            {
+                throw new ServiceException(HttpStatusCode.InternalServerError, ex);
+            }
+            catch (Exception ex)
+            {
+                throw new ServiceException(
+                    HttpStatusCode.InternalServerError,
+                    ErrorsCode.GET_GARMENTS_FAILED,
+                    ErrorMessages.GET_GARMENTS_FAILED,
+                    ex
+                );
+            }
+        }
+
+        public async Task<PagedList<GarmentMinWeb>> GetAllByQueryToWeb(GarmentQuery query)
         {
             try
             {
@@ -44,7 +72,7 @@ namespace GestionPedidosService.Business.ServicesQuery.Implements
                 weas.AddRange(garments);
                 weas.AddRange(garments);
                 weas.AddRange(garments);*/
-                var garmentsMin = _mapper.Map<ICollection<GarmentMin>>(garments);
+                var garmentsMin = _mapper.Map<ICollection<GarmentMinWeb>>(garments);
                 return garmentsMin.ToPagedList(query.PageNumber, query.PageSize);
             }
             catch (RepositoryException ex)

@@ -19,7 +19,7 @@ namespace GestionPedidosService.Persistence.Repositories.Implements
 
         #nullable enable
         public async Task<IEnumerable<Garment>> GetAllByQuery(
-            int atelierdId, 
+            int? atelierdId, 
             IEnumerable<int> categories, 
             IEnumerable<int> occasions,
             IEnumerable<bool> availabilities,
@@ -34,13 +34,14 @@ namespace GestionPedidosService.Persistence.Repositories.Implements
 
                 var garments = await _context.Garments
                     .AsNoTracking()
+                    .Include(g => g.Atelier)
                     .Include(g => g.FeatureGarments
                         .Where(f => 
                             f.TypeFeature.Equals(EGarmentFeatures.images.ToString()) || 
                             f.TypeFeature.Equals(EGarmentFeatures.occasion.ToString())
                         )
                     )
-                    .Where(g => g.AtelierId == atelierdId)
+                    .Where(g => atelierdId == null || g.AtelierId == atelierdId)
                     .Where(
                         g => filterString == null ||
                         (

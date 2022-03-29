@@ -8,13 +8,13 @@ namespace GestionPedidosService.Persistence.Interfaces
     {
         #nullable enable
         Task<IEnumerable<Garment>> GetAllByQuery(
-            int atelierdId, 
+            int? atelierdId, 
             IEnumerable<int> categories, 
             IEnumerable<int> occasions, 
             IEnumerable<bool> availabilities, 
             string? filterString
             );
-
         Task<Garment> GetByCodeGarment_AtelierId(string codeGarment, int atelierId);
+
     }
 }

@@ -20,6 +20,7 @@ namespace GestionPedidosService.Domain.Entities
         
         public List<FeatureGarment> FeatureGarments { get; set; }
         public List<PatternGarment> PatternGarments { get; set; }
+        public Atelier Atelier { get; set; }
         
         public int AtelierId { get; set; }
     }

@@ -64,7 +64,9 @@ namespace GestionPedidosService.Persistence.Context
                 eb.Property(e => e.SecondRangePrice).HasColumnType("decimal(10,2)").IsRequired();
                 eb.Property(e => e.Available).HasColumnType("bit").IsRequired();
                 eb.Property(e => e.Category).HasColumnType("tinyint").IsRequired();
-                eb.Property(e => e.AtelierId).HasColumnType("int").IsRequired();
+                //eb.Property(e => e.AtelierId).HasColumnType("int").IsRequired();
+                eb.HasOne(e => e.Atelier).WithMany(e => e.Garments).HasForeignKey(e => e.AtelierId).IsRequired();
+                eb.HasIndex(e => e.CodeGarment);
             });
 
             builder.Entity<Order>(eb =>
