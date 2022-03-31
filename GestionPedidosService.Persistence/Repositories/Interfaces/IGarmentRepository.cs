@@ -15,6 +15,5 @@ namespace GestionPedidosService.Persistence.Interfaces
             string? filterString
             );
         Task<Garment> GetByCodeGarment_AtelierId(string codeGarment, int atelierId);
-
     }
 }
