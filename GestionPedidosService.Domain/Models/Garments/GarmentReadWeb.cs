@@ -2,7 +2,7 @@
 
 namespace GestionPedidosService.Domain.Models.Garments
 {
-    public class GarmentRead
+    public class GarmentReadWeb
     {
         public string CodeGarment { get; set; }
         public string NameGarment { get; set; }

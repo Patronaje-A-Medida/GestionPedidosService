@@ -68,7 +68,7 @@ namespace GestionPedidosService.Persistence.Repositories.Implements
 
             foreach (var includeProperty in includeProperties.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
             {
-                query = query.Include(includeProperties);
+                query = query.Include(includeProperty);
             }
 
             if (orderBy != null)
