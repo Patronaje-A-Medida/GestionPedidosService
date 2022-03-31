@@ -108,7 +108,7 @@ namespace GestionPedidosService.Business.Mapper
 
             CreateMap<FeatureGarmentWrite, FeatureGarment>();
 
-            CreateMap<Garment, GarmentRead>()
+            CreateMap<Garment, GarmentReadWeb>()
                 .ForMember(dest => dest.CategoryId, opt => opt.MapFrom(src => src.Category))
                 .ForMember(dest => dest.Category, opt => opt.MapFrom(src => Enum.GetValues(typeof(EGarmentCategories))
                         .Cast<EGarmentCategories>()
@@ -133,15 +133,6 @@ namespace GestionPedidosService.Business.Mapper
                 )
                 .ForMember(dest => dest.Patterns, opt => opt.MapFrom(src => src.PatternGarments.Select(p => p.ImagePattern)));
 
-            /*CreateMap<Garment, GarmentMinWeb>()
-                .ForMember(dest => dest.ImageUrl, opt => opt.MapFrom(src => src.FeatureGarments
-                    .Where(f => f.TypeFeature.Equals(EGarmentFeatures.images.ToString()))
-                    .Select(f => f.Value)
-                    .FirstOrDefault())
-                )
-                //.ForMember(dest => dest.Category, opt => opt.MapFrom(src => src.Category.ToDescriptionString()))
-                .ForMember(dest => dest.AveragePrice, opt => opt.MapFrom(src => (src.FirstRangePrice + src.SecondRangePrice) / 2));*/
-
             CreateMap<Garment, GarmentMinMobile>()
                 .ForMember(dest => dest.ImageUrl, opt => opt.MapFrom(src => src.FeatureGarments
                     .Where(f => f.TypeFeature.Equals(EGarmentFeatures.images.ToString()))
@@ -150,6 +141,31 @@ namespace GestionPedidosService.Business.Mapper
                 )
                 .ForMember(dest => dest.Price, opt => opt.MapFrom(src => src.FirstRangePrice))
                 .ForMember(dest => dest.NameAtelier, opt => opt.MapFrom(src => src.Atelier.NameAtelier));
+
+            CreateMap<Garment, GarmentReadMobile>()
+                .ForMember(dest => dest.Category, opt => opt.MapFrom(src => Enum.GetValues(typeof(EGarmentCategories))
+                        .Cast<EGarmentCategories>()
+                        .FirstOrDefault(e => e.Equals((EGarmentCategories)src.Category))
+                        .ToDescriptionString())
+                )
+                .ForMember(dest => dest.Colors, opt => opt.MapFrom(src => src.FeatureGarments
+                    .Where(f => f.TypeFeature.Equals(EGarmentFeatures.color.ToString()))
+                    .Select(f => f.Value))
+                )
+                .ForMember(dest => dest.Fabrics, opt => opt.MapFrom(src => src.FeatureGarments
+                    .Where(f => f.TypeFeature.Equals(EGarmentFeatures.fabric.ToString()))
+                    .Select(f => f.Value))
+                )
+                .ForMember(dest => dest.Occasions, opt => opt.MapFrom(src => src.FeatureGarments
+                    .Where(f => f.TypeFeature.Equals(EGarmentFeatures.occasion.ToString()))
+                    .Select(f => f.Value))
+                )
+                .ForMember(dest => dest.Images, opt => opt.MapFrom(src => src.FeatureGarments
+                    .Where(f => f.TypeFeature.Equals(EGarmentFeatures.images.ToString()))
+                    .Select(f => f.Value))
+                )
+                .ForMember(dest => dest.NameAtelier, opt => opt.MapFrom(src => src.Atelier.NameAtelier))
+                .ForMember(dest => dest.AtelierAddress, opt => opt.MapFrom(src => $"{src.Atelier.Address}, {src.Atelier.District}"));
         }
     }
 }

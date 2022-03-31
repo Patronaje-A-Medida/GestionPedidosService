@@ -151,12 +151,12 @@ namespace GestionPedidosService.Api.Controllers.v1
             return Ok(result);
         }
 
-        [HttpGet("details")]
-        [ProducesResponseType(typeof(GarmentRead), 200)]
+        [HttpGet("details/web")]
+        [ProducesResponseType(typeof(GarmentReadWeb), 200)]
         [ProducesResponseType(typeof(ErrorDevDetail), 404)]
         [ProducesResponseType(typeof(ErrorDevDetail), 400)]
         [ProducesResponseType(typeof(ErrorDevDetail), 500)]
-        public async Task<ActionResult<GarmentRead>> GetByCodeGarment_AtelierId([FromQuery] string codeGarment, int atelierId)
+        public async Task<ActionResult<GarmentReadWeb>> GetByCodeGarment_AtelierId([FromQuery] string codeGarment, int atelierId)
         {
             try
             {
@@ -184,5 +184,37 @@ namespace GestionPedidosService.Api.Controllers.v1
             }
         }
 
+        [HttpGet("details/mobile")]
+        [ProducesResponseType(typeof(GarmentReadMobile), 200)]
+        [ProducesResponseType(typeof(ErrorDevDetail), 404)]
+        [ProducesResponseType(typeof(ErrorDevDetail), 400)]
+        [ProducesResponseType(typeof(ErrorDevDetail), 500)]
+        public async Task<ActionResult<GarmentReadMobile>> GetById([FromQuery] int garmentId)
+        {
+            try
+            {
+                var result = await _garmentServiceQuery.GetById(garmentId);
+
+                if (result == null)
+                {
+                    return NotFound(new ErrorDetail
+                    {
+                        errorCode = ErrorsCode.NOT_FOUND_ORDER,
+                        message = ErrorMessages.NOT_FOUND_ORDER,
+                        statusCode = (int)HttpStatusCode.NotFound,
+                    });
+                }
+
+                return Ok(result);
+            }
+            catch (ServiceException ex)
+            {
+                throw ex;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }

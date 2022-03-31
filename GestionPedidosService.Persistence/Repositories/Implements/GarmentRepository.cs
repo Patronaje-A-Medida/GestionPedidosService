@@ -106,5 +106,15 @@ namespace GestionPedidosService.Persistence.Repositories.Implements
             }
                 
         }
+
+        public override async Task<Garment> GetById(int id)
+        {
+            var garment = (
+                await base.Get(filter: x => x.Id == id, includeProperties: "Atelier,FeatureGarments")
+                )
+                .FirstOrDefault();
+
+            return garment;
+        }
     }
 }

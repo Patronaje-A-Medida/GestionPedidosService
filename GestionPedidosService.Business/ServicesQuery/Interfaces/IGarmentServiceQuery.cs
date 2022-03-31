@@ -9,6 +9,7 @@ namespace GestionPedidosService.Business.ServicesQuery.Interfaces
     {
         Task<PagedList<GarmentMinWeb>> GetAllByQueryToWeb(GarmentQuery query);
         Task<IEnumerable<GarmentMinMobile>> GetAllByQueryToMobile(GarmentQuery query);
-        Task<GarmentRead> GetByCodeGarment_AtelierId(string codeGarment, int atelierId);
+        Task<GarmentReadWeb> GetByCodeGarment_AtelierId(string codeGarment, int atelierId);
+        Task<GarmentReadMobile> GetById(int id);
     }
 }
