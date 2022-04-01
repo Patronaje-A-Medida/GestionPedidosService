@@ -66,10 +66,10 @@ namespace GestionPedidosService.Api.Controllers.v1
         }
 
         [HttpPost("by-query/mobile")]
-        [ProducesResponseType(typeof(IEnumerable<GarmentMinMobile>), 200)]
+        [ProducesResponseType(typeof(IEnumerable<GarmentReadMobile>), 200)]
         [ProducesResponseType(typeof(ErrorDevDetail), 400)]
         [ProducesResponseType(typeof(ErrorDevDetail), 500)]
-        public async Task<ActionResult<IEnumerable<GarmentMinMobile>>> GetAllByQueryToMobile([FromBody] GarmentQuery garmentQuery)
+        public async Task<ActionResult<IEnumerable<GarmentReadMobile>>> GetAllByQueryToMobile([FromBody] GarmentQuery garmentQuery)
         {
             try
             {

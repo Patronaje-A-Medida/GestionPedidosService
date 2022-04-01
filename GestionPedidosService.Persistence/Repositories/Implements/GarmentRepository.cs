@@ -36,10 +36,10 @@ namespace GestionPedidosService.Persistence.Repositories.Implements
                     .AsNoTracking()
                     .Include(g => g.Atelier)
                     .Include(g => g.FeatureGarments
-                        .Where(f => 
+                        /*.Where(f => 
                             f.TypeFeature.Equals(EGarmentFeatures.images.ToString()) || 
                             f.TypeFeature.Equals(EGarmentFeatures.occasion.ToString())
-                        )
+                        )*/
                     )
                     .Where(g => atelierdId == null || g.AtelierId == atelierdId)
                     .Where(
