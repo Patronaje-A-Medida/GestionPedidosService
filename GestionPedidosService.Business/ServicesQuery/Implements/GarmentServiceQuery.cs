@@ -25,7 +25,7 @@ namespace GestionPedidosService.Business.ServicesQuery.Implements
             _mapper = mapper;
         }
 
-        public async Task<IEnumerable<GarmentMinMobile>> GetAllByQueryToMobile(GarmentQuery query)
+        public async Task<IEnumerable<GarmentReadMobile>> GetAllByQueryToMobile(GarmentQuery query)
         {
             try
             {
@@ -36,7 +36,7 @@ namespace GestionPedidosService.Business.ServicesQuery.Implements
                     query.Availabilities,
                     query.FilterString
                 );
-                var garmentsMin = _mapper.Map<IEnumerable<GarmentMinMobile>>(garments);
+                var garmentsMin = _mapper.Map<IEnumerable<GarmentReadMobile>>(garments);
                 return garmentsMin;
             }
             catch (RepositoryException ex)
