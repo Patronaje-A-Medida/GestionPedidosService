@@ -6,6 +6,7 @@ namespace GestionPedidosService.Domain.Models.Garments
 {
     public class GarmentReadMobile
     {
+        public int Id { get; set; }
         public string NameGarment { get; set; }
         public string Description { get; set; }
         public double FirstRangePrice { get; set; }
