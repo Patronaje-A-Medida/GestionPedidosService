@@ -186,6 +186,14 @@ namespace GestionPedidosService.Business.Mapper
                 )
                 .ForMember(dest => dest.NameAtelier, opt => opt.MapFrom(src => src.Atelier.NameAtelier))
                 .ForMember(dest => dest.AtelierAddress, opt => opt.MapFrom(src => $"{src.Atelier.Address}, {src.Atelier.District}"));
+
+            CreateMap<OrderCreate, Order>()
+                .ForMember(dest => dest.OrderStatus, opt => opt.MapFrom(src => EOrderStatus.unattended))
+                .ForMember(dest => dest.OrderDetails, opt => opt.MapFrom(src => src.Details));
+
+            CreateMap<OrderDetailCreate, OrderDetail>()
+                .ForMember(dest => dest.OrderDetailStatus, opt => opt.MapFrom(src => EOrderStatus.unattended));
+
         }
     }
 }
