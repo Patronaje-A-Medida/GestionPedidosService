@@ -10,6 +10,7 @@ namespace GestionPedidosService.Domain.Models.Orders
         public int Id { get; set; }
         public int UserClientId { get; set; }
         public string NameAtelier { get; set; }
+        public string AtelierAddress { get; set; }
         public string CodeOrder { get; set; }
         public double Price { get; set; }
         public DateTime OrderDate { get; set; }

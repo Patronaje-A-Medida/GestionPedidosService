@@ -28,6 +28,7 @@ namespace GestionPedidosService.Business.Mapper
                 .ForMember(dest => dest.OrderStatus, opt => opt.MapFrom(src => src.OrderStatus.ToDescriptionString()))
                 .ForMember(dest => dest.UserClientId, opt => opt.MapFrom(src => src.UserClient.Id))
                 .ForMember(dest => dest.NameAtelier, opt => opt.MapFrom(src => src.Atelier.NameAtelier))
+                .ForMember(dest => dest.AtelierAddress, opt => opt.MapFrom(src => $"{src.Atelier.Address}, {src.Atelier.District}"))
                 .ForMember(dest => dest.Details, opt => opt.MapFrom(src => src.OrderDetails));
             
 
