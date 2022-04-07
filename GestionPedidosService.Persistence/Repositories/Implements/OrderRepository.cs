@@ -81,5 +81,15 @@ namespace GestionPedidosService.Persistence.Repositories.Implements
                     ex);
             }
         }
+
+        public async Task<string> GetLastCodeOrderByAtelier()
+        {
+            var codeOrder = await _context.Orders
+                .OrderByDescending(o => o.CodeOrder)
+                .Select(o => o.CodeOrder)
+                .FirstOrDefaultAsync();
+
+            return codeOrder;
+        }
     }
 }

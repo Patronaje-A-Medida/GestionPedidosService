@@ -59,6 +59,7 @@ namespace GestionPedidosService.Api
             services.AddScoped<IDictionaryTypeServiceQuery, DictionaryTypeServiceQuery>();
 
             services.AddScoped<IGarmentServiceCommand, GarmentServiceCommand>();
+            services.AddScoped<IOrderServiceCommand, OrderServiceCommand>();
 
             var mapperConfig = new MapperConfiguration(
                 mc => mc.AddProfile(new MapperProfile())

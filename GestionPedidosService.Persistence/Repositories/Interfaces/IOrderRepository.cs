@@ -8,5 +8,6 @@ namespace GestionPedidosService.Persistence.Interfaces
     {
         Task<IEnumerable<Order>> GetAllByQuery(int atelierId, int? orderStatus, string filterString);
         Task<IEnumerable<Order>> GetByClientId(int userId);
+        Task<string> GetLastCodeOrderByAtelier();
     }
 }
