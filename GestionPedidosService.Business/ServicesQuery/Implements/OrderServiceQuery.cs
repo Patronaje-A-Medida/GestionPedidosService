@@ -4,6 +4,7 @@ using GestionPedidosService.Business.Handlers;
 using GestionPedidosService.Business.ServicesQuery.Interfaces;
 using GestionPedidosService.Domain.Entities;
 using GestionPedidosService.Domain.Models;
+using GestionPedidosService.Domain.Models.Orders;
 using GestionPedidosService.Domain.Utils;
 using GestionPedidosService.Persistence.Handlers;
 using GestionPedidosService.Persistence.Interfaces;
@@ -77,6 +78,28 @@ namespace GestionPedidosService.Business.ServicesQuery.Implements
         {
             var order = await _uof.orderDetailRepository.GetById(id);
             return _mapper.Map<OrderDetailRead>(order);
+        }
+
+        public async Task<IEnumerable<OrderReadMobile>> GetByClientId(int userId)
+        {
+            try
+            {
+                var orders = await _uof.orderRepository.GetByClientId(userId);
+                var ordersRead = _mapper.Map<IEnumerable<OrderReadMobile>>(orders);
+                return ordersRead;
+            } 
+            catch (RepositoryException ex)
+            {
+                throw new ServiceException(HttpStatusCode.InternalServerError, ex);
+            }
+            catch (Exception ex)
+            {
+                throw new ServiceException(
+                    HttpStatusCode.InternalServerError,
+                    ErrorsCode.GET_ORDERS_CLIENT_FAILED,
+                    ErrorMessages.GET_ORDERS_CLIENT_FAILED,
+                    ex);
+            }
         }
 
         /*private ICollection<OrderDetail> ApplyFilters(ICollection<OrderDetail> orders, OrderQuery query)
