@@ -26,7 +26,7 @@ namespace GestionPedidosService.Persistence.Repositories.Implements
                 .Cast<EOrderStatus>()
                 .FirstOrDefault(v => orderStatus == null || v.ToDescriptionString() == orderStatus);*/
 
-                var orderDetails = await _context.Orders
+                var orders = await _context.Orders
                     .AsNoTracking()
                     .Include(o => o.OrderDetails).ThenInclude(od => od.Garment)
                     .Include(o => o.UserClient).ThenInclude(u => u.User)
@@ -45,7 +45,7 @@ namespace GestionPedidosService.Persistence.Repositories.Implements
                     .AsSplitQuery()
                     .ToListAsync();
 
-                return orderDetails ?? new List<Order>();
+                return orders ?? new List<Order>();
             }
             catch(Exception ex)
             {
@@ -53,6 +53,31 @@ namespace GestionPedidosService.Persistence.Repositories.Implements
                     HttpStatusCode.InternalServerError, 
                     ErrorsCode.GET_CONTEXT_ERROR, 
                     ErrorMessages.GET_CONTEXT_ERROR, 
+                    ex);
+            }
+        }
+
+        public async Task<IEnumerable<Order>> GetByClientId(int userId)
+        {
+            try
+            {
+                var orders = await _context.Orders
+                    .AsNoTracking()
+                    .Include(o => o.OrderDetails).ThenInclude(od => od.Garment).ThenInclude(g => g.FeatureGarments)
+                    .Include(o => o.UserClient).ThenInclude(u => u.User)
+                    .Include(o => o.Atelier)
+                    .Where(o => o.UserClientId == userId)
+                    .OrderByDescending(o => o.OrderDate)
+                    .AsSingleQuery()
+                    .ToListAsync();
+
+                return orders ?? new List<Order>();
+            } catch (Exception ex)
+            {
+                throw new RepositoryException(
+                    HttpStatusCode.InternalServerError,
+                    ErrorsCode.GET_ORDERS_CLIENT_FAILED,
+                    ErrorMessages.GET_ORDERS_CLIENT_FAILED,
                     ex);
             }
         }
