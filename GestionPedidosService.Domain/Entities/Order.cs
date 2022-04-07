@@ -16,6 +16,7 @@ namespace GestionPedidosService.Domain.Entities
         public IEnumerable<OrderDetail> OrderDetails { get; set; }
         
         public int AtelierId { get; set; }
+        public Atelier Atelier { get; set; }
         public int UserClientId { get; set; }
         public UserClient UserClient { get; set; }
         public int? UserAtelierId { get; set; }

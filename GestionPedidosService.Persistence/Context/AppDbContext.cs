@@ -77,6 +77,7 @@ namespace GestionPedidosService.Persistence.Context
                 eb.Property(e => e.OrderDate).HasColumnType("datetime").IsRequired();
                 eb.Property(e => e.AtelierId).HasColumnType("int").IsRequired();
                 eb.Property(e => e.UserAtelierId).HasColumnType("int").IsRequired(false);
+                //eb.HasOne(e => e.Atelier).WithMany().HasForeignKey(e => e.AtelierId).IsRequired(false);
                 //eb.HasOne(e => e.UserAtelier).WithMany().HasForeignKey(e => e.UserAtelierId).IsRequired(false);
                 eb.HasOne(e => e.UserClient).WithMany(e => e.Orders).HasForeignKey(e => e.UserClientId).IsRequired();
                 eb.HasMany(e => e.Garments)

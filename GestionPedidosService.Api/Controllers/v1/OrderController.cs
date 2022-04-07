@@ -3,6 +3,7 @@ using GestionPedidosService.Api.Utils;
 using GestionPedidosService.Business.Handlers;
 using GestionPedidosService.Business.ServicesQuery.Interfaces;
 using GestionPedidosService.Domain.Models;
+using GestionPedidosService.Domain.Models.Orders;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -100,6 +101,28 @@ namespace GestionPedidosService.Api.Controllers.v1
                         statusCode = (int)HttpStatusCode.NotFound,
                     });
                 }
+                return Ok(result);
+            }
+            catch (ServiceException ex)
+            {
+                throw ex;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        [HttpGet("by-client")]
+        [ProducesResponseType(typeof(IEnumerable<OrderReadMobile>), 200)]
+        [ProducesResponseType(typeof(ErrorDevDetail), 404)]
+        [ProducesResponseType(typeof(ErrorDevDetail), 400)]
+        [ProducesResponseType(typeof(ErrorDevDetail), 500)]
+        public async Task<ActionResult<IEnumerable<OrderReadMobile>>> GetByClientId([FromQuery] int clientId)
+        {
+            try
+            {
+                var result = await _orderServiceQuery.GetByClientId(clientId);
                 return Ok(result);
             }
             catch (ServiceException ex)

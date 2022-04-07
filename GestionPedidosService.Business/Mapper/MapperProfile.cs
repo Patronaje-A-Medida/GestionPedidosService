@@ -4,6 +4,7 @@ using GestionPedidosService.Domain.Extensions;
 using GestionPedidosService.Domain.Models;
 using GestionPedidosService.Domain.Models.FeatureGarments;
 using GestionPedidosService.Domain.Models.Garments;
+using GestionPedidosService.Domain.Models.Orders;
 using GestionPedidosService.Domain.Utils;
 using System;
 using System.Collections.Generic;
@@ -22,10 +23,28 @@ namespace GestionPedidosService.Business.Mapper
                 .ForMember(dest => dest.Details, opt => opt.MapFrom(src => src.OrderDetails))
                 .ForMember(dest => dest.Client, opt => opt.MapFrom(src => src.UserClient));
 
+            CreateMap<Order, OrderReadMobile>()
+                .ForMember(dest => dest.Price, opt => opt.MapFrom(src => src.OrderDetails.Aggregate(0.0, (sum, current) => sum + ((current.Garment.FirstRangePrice + current.Garment.SecondRangePrice) / 2))))
+                .ForMember(dest => dest.OrderStatus, opt => opt.MapFrom(src => src.OrderStatus.ToDescriptionString()))
+                .ForMember(dest => dest.UserClientId, opt => opt.MapFrom(src => src.UserClient.Id))
+                .ForMember(dest => dest.NameAtelier, opt => opt.MapFrom(src => src.Atelier.NameAtelier))
+                .ForMember(dest => dest.Details, opt => opt.MapFrom(src => src.OrderDetails));
+            
+
             CreateMap<OrderDetail, OrderDetailMin>()
                 .ForMember(dest => dest.CodeGarment, opt => opt.MapFrom(src => src.Garment.CodeGarment))
                 .ForMember(dest => dest.OrderDetailStatus, opt => opt.MapFrom(src => src.OrderDetailStatus.ToDescriptionString()))
                 .ForMember(dest => dest.Price, opt => opt.MapFrom(src => (src.Garment.FirstRangePrice + src.Garment.SecondRangePrice) / 2));
+
+            CreateMap<OrderDetail, OrderDetailReadMobile>()
+                .ForMember(dest => dest.NameGarment, opt => opt.MapFrom(src => src.Garment.NameGarment))
+                .ForMember(dest => dest.Price, opt => opt.MapFrom(src => (src.Garment.FirstRangePrice + src.Garment.SecondRangePrice) / 2))
+                .ForMember(dest => dest.OrderDetailStatus, opt => opt.MapFrom(src => src.OrderDetailStatus.ToDescriptionString()))
+                .ForMember(dest => dest.ImageUrl, opt => opt.MapFrom(src => src.Garment.FeatureGarments
+                    .Where(f => f.TypeFeature.Equals(EGarmentFeatures.images.ToString()))
+                    .Select(f => f.Value)
+                    .FirstOrDefault())
+                );
 
             CreateMap<UserClient, UserClientMin>()
                 .ForMember(dest => dest.NameClient, opt => opt.MapFrom(src => src.User.NameUser + " " + src.User.LastNameUser))
