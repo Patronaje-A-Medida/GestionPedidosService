@@ -19,7 +19,9 @@ namespace GestionPedidosService.Domain.Utils
             public static readonly int GET_ORDERS_FAILED = 10020;
             public static readonly int GET_ORDER_FAILED = 10021;
             public static readonly int NOT_FOUND_ORDER = 10022;
-            
+            public static readonly int GET_ORDERS_CLIENT_FAILED = 10023;
+            public static readonly int NOT_FOUND_CLIENT_ORDERS = 10024;
+
             public static readonly int GET_GARMENTS_FAILED = 10030;
             public static readonly int ADD_GARMENT_FAILED = 10031;
             public static readonly int GET_GARMENT_FAILED = 10032;
@@ -46,7 +48,8 @@ namespace GestionPedidosService.Domain.Utils
             public static readonly string ADD_IMAGE_PATTERN_FILES = "No se pudo guardar los archivos de imágenes/patrones de la prenda";
             public static readonly string GET_GARMENT_FAILED = "No se pudo obtener la información del detalle de la prenda requerida";
             public static readonly string NOT_FOUND_GARMENT = "La prenda solicitada no existe";
-
+            public static readonly string GET_ORDERS_CLIENT_FAILED = "No se pudo obtener las de las órdenes del cliente";
+            public static readonly string NOT_FOUND_CLIENT_ORDERS = "Las ordenes de dicho cliente no existen";
         }
     }
 }
