@@ -1,6 +1,7 @@
 ﻿using GestionPedidosService.Api.Extensions;
 using GestionPedidosService.Api.Utils;
 using GestionPedidosService.Business.Handlers;
+using GestionPedidosService.Business.ServicesCommand.Interfaces;
 using GestionPedidosService.Business.ServicesQuery.Interfaces;
 using GestionPedidosService.Domain.Models;
 using GestionPedidosService.Domain.Models.Orders;
@@ -21,10 +22,12 @@ namespace GestionPedidosService.Api.Controllers.v1
     public class OrderController : ControllerBase
     {
         private readonly IOrderServiceQuery _orderServiceQuery;
+        private readonly IOrderServiceCommand _orderServiceCommand;
 
-        public OrderController(IOrderServiceQuery orderServiceQuery)
+        public OrderController(IOrderServiceQuery orderServiceQuery, IOrderServiceCommand orderServiceCommand)
         {
             _orderServiceQuery = orderServiceQuery;
+            _orderServiceCommand = orderServiceCommand;
         }
 
         [HttpPost("by-query")]
@@ -123,6 +126,27 @@ namespace GestionPedidosService.Api.Controllers.v1
             try
             {
                 var result = await _orderServiceQuery.GetByClientId(clientId);
+                return Ok(result);
+            }
+            catch (ServiceException ex)
+            {
+                throw ex;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        [HttpPost("create")]
+        [ProducesResponseType(typeof(bool), 200)]
+        [ProducesResponseType(typeof(ErrorDevDetail), 400)]
+        [ProducesResponseType(typeof(ErrorDevDetail), 500)]
+        public async Task<ActionResult<bool>> Create([FromBody] OrderCreate orderCreate)
+        {
+            try
+            {
+                var result = await _orderServiceCommand.Create(orderCreate);
                 return Ok(result);
             }
             catch (ServiceException ex)
