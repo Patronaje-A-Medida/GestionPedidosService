@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace GestionPedidosService.Business.Utils
+namespace GestionPedidosService.Persistence.Managers
 {
     public class ConfigurationManager : IConfigurationManager
     {
@@ -27,5 +27,9 @@ namespace GestionPedidosService.Business.Utils
         public string FirebaseAuthEmail => _configuration["FirebaseSettings:AuthEmail"];
 
         public string FirebaseAuthPwd => _configuration["FirebaseSettings:AuthPwd"];
+
+        public string MongoDbConnectionString => _configuration["MongoDBSettings:ServerConnection"];
+
+        public string MongoDbName => _configuration["MongoDBSettings:DatabaseName"];
     }
 }

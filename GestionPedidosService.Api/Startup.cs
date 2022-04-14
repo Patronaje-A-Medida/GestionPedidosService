@@ -6,9 +6,9 @@ using GestionPedidosService.Business.ServicesCommand.Implements;
 using GestionPedidosService.Business.ServicesCommand.Interfaces;
 using GestionPedidosService.Business.ServicesQuery.Implements;
 using GestionPedidosService.Business.ServicesQuery.Interfaces;
-using GestionPedidosService.Business.Utils;
 using GestionPedidosService.Persistence.Context;
 using GestionPedidosService.Persistence.Interfaces;
+using GestionPedidosService.Persistence.Managers;
 using GestionPedidosService.Persistence.Repositories.Implements;
 using GestionPedidosService.Persistence.Repositories.Interfaces;
 using GestionPedidosService.Persistence.UnitOfWork;
@@ -38,6 +38,7 @@ namespace GestionPedidosService.Api
             services.AddDbContext<AppDbContext>(
                 opts => opts.UseSqlServer(Configuration.GetConnectionString("LocalConnection"))//.LogTo(Console.WriteLine)
             );
+            services.AddScoped<MongoDbContext>();
 
             services.AddSingleton<IConfigurationManager, ConfigurationManager>();
 
@@ -50,6 +51,7 @@ namespace GestionPedidosService.Api
             services.AddScoped<IPatternGarmentRepository, PatternGarmentRepository>();
             services.AddScoped<IDictionaryTypeRepository, DictionaryTypeRepository>();
             services.AddScoped<IAtelierRepository, AtelierRepository>();
+            services.AddScoped<IPatternGarmentBaseCollectionRepository, PatternGarmentBaseCollectionRepository>();
 
             services.AddScoped<IUnitOfWork, UnitOfWork>();
 
@@ -60,6 +62,7 @@ namespace GestionPedidosService.Api
 
             services.AddScoped<IGarmentServiceCommand, GarmentServiceCommand>();
             services.AddScoped<IOrderServiceCommand, OrderServiceCommand>();
+            services.AddScoped<IPatternGarmentBaseCollectionServiceCommand, PatternGarmentBaseCollectionServiceCommand>();
 
             var mapperConfig = new MapperConfiguration(
                 mc => mc.AddProfile(new MapperProfile())

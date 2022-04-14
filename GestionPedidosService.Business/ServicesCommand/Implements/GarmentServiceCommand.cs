@@ -3,13 +3,12 @@ using Firebase.Auth;
 using Firebase.Storage;
 using GestionPedidosService.Business.Handlers;
 using GestionPedidosService.Business.ServicesCommand.Interfaces;
-using GestionPedidosService.Business.Utils;
+using GestionPedidosService.Domain.Collections;
 using GestionPedidosService.Domain.Entities;
-using GestionPedidosService.Domain.Models;
-using GestionPedidosService.Domain.Models.FeatureGarments;
 using GestionPedidosService.Domain.Models.Garments;
 using GestionPedidosService.Domain.Utils;
 using GestionPedidosService.Persistence.Handlers;
+using GestionPedidosService.Persistence.Managers;
 using GestionPedidosService.Persistence.UnitOfWork;
 using System;
 using System.Collections.Generic;
@@ -27,12 +26,18 @@ namespace GestionPedidosService.Business.ServicesCommand.Implements
         private readonly IUnitOfWork _uof;
         private readonly IMapper _mapper;
         private readonly IConfigurationManager _configManager;
+        private readonly IPatternGarmentBaseCollectionServiceCommand _patternGarmentBaseServiceCommand;
 
-        public GarmentServiceCommand(IUnitOfWork uof, IMapper mapper, IConfigurationManager configManager)
+        public GarmentServiceCommand(
+            IUnitOfWork uof, 
+            IMapper mapper, 
+            IConfigurationManager configManager, 
+            IPatternGarmentBaseCollectionServiceCommand patternGarmentBaseServiceCommand)
         {
             _uof = uof;
             _mapper = mapper;
             _configManager = configManager;
+            _patternGarmentBaseServiceCommand = patternGarmentBaseServiceCommand;
         }
 
         public async Task<bool> Save(GarmentWrite garmentWrite)
@@ -58,6 +63,18 @@ namespace GestionPedidosService.Business.ServicesCommand.Implements
                 var createdGarment = await _uof.garmentRepository.Add(garment);
                 await _uof.SaveChangesAsync();
 
+                List<PatternGarmentBase> patternBases = new List<PatternGarmentBase>();
+
+                foreach(var pattern in createdGarment.PatternGarments)
+                {
+                    patternBases.Add(new PatternGarmentBase 
+                    { 
+                        garment_id = createdGarment.Id, 
+                        image_pattern = pattern.ImagePattern 
+                    });
+                }
+
+                await _patternGarmentBaseServiceCommand.Add(patternBases);
                 return createdGarment != null;
             }
             catch (RepositoryException ex)
