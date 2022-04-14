@@ -26,7 +26,6 @@ namespace GestionPedidosService.Api.Controllers.v1
         {
             _garmentServiceQuery = garmentServiceQuery;
             _garmentServiceCommand = garmentServiceCommand;
-            // polly retry
         }
 
         [HttpPost("by-query/web")]
