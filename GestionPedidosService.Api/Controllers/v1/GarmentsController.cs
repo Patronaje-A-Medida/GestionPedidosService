@@ -134,6 +134,40 @@ namespace GestionPedidosService.Api.Controllers.v1
             }
         }
 
+        [HttpPut("update")]
+        [DisableRequestSizeLimit]
+        [ProducesResponseType(typeof(bool), 200)]
+        [ProducesResponseType(typeof(ErrorDevDetail), 400)]
+        [ProducesResponseType(typeof(ErrorDevDetail), 500)]
+        public async Task<ActionResult<bool>> Update(GarmentWrite garmentWrite)
+        {
+            try
+            {
+                var result = await _garmentServiceCommand.Update(garmentWrite);
+                if (result)
+                {
+                    return Ok(result);
+                }
+                else
+                {
+                    return BadRequest(new ErrorDetail
+                    {
+                        statusCode = (int)HttpStatusCode.BadRequest,
+                        errorCode = ErrorsCode.ADD_GARMENT_FAILED,
+                        message = ErrorMessages.ADD_GARMENT_FAILED
+                    });
+                }
+            }
+            catch (ServiceException ex)
+            {
+                throw ex;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
         [HttpPost("upload-images-base64")]
         [DisableRequestSizeLimit]
         public async Task<IActionResult> UploadGarmentImages ([FromBody] GarmentImageString garmentImage)

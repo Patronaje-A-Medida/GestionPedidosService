@@ -10,6 +10,8 @@ namespace GestionPedidosService.Business.ServicesCommand.Interfaces
     public interface IGarmentServiceCommand
     {
         Task<bool> Save(GarmentWrite garmentWrite);
+
+        Task<bool> Update(GarmentWrite garmentWrite);
         Task<string> UploadGarmentImages(GarmentImageString garmentImage);
         Task<string> UploadGarmentImages(GarmentImageFile garmentImage);
     }

@@ -44,6 +44,7 @@ namespace GestionPedidosService.Business.ServicesCommand.Implements
         {
             try
             {
+
                 string nameAtelier = (await _uof.atelierRepository.GetById(garmentWrite.AtelierId)).NameAtelier;
                 var garment = _mapper.Map<Garment>(garmentWrite);
 
@@ -75,6 +76,47 @@ namespace GestionPedidosService.Business.ServicesCommand.Implements
                 }
 
                 await _patternGarmentBaseServiceCommand.Add(patternBases);
+                return createdGarment != null;
+            }
+            catch (RepositoryException ex)
+            {
+                throw new ServiceException(
+                    HttpStatusCode.InternalServerError,
+                    ErrorsCode.ADD_GARMENT_FAILED,
+                    ErrorMessages.ADD_GARMENT_FAILED,
+                    ex
+                    );
+            }
+            catch (ServiceException ex)
+            {
+                throw ex;
+            }
+            catch (Exception ex)
+            {
+                throw new ServiceException(
+                    HttpStatusCode.InternalServerError,
+                    ErrorsCode.ADD_GARMENT_FAILED,
+                    ErrorMessages.ADD_GARMENT_FAILED,
+                    ex
+                    );
+            }
+        }
+
+        public async Task<bool> Update(GarmentWrite garmentWrite)
+        {
+            try
+            {
+                string nameAtelier = (await _uof.atelierRepository.GetById(garmentWrite.AtelierId)).NameAtelier;
+                var garment = _mapper.Map<Garment>(garmentWrite);
+                var ss = await _uof.garmentRepository.GetByCodeGarment_AtelierId(garmentWrite.CodeGarment, garmentWrite.AtelierId);
+                garment.Id = ss.Id;
+                garment.FeatureGarments = ss.FeatureGarments;
+                garment.PatternGarments = ss.PatternGarments;
+
+                var createdGarment = _uof.garmentRepository.Update(garment);
+                await _uof.SaveChangesAsync();
+
+                List<PatternGarmentBase> patternBases = new List<PatternGarmentBase>();
                 return createdGarment != null;
             }
             catch (RepositoryException ex)
@@ -336,5 +378,7 @@ namespace GestionPedidosService.Business.ServicesCommand.Implements
             var url = await storageTask;
             return url;
         }
+
+
     }
 }
