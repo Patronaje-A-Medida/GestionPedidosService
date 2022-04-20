@@ -3,6 +3,7 @@ using Firebase.Auth;
 using Firebase.Storage;
 using GestionPedidosService.Business.Handlers;
 using GestionPedidosService.Business.ServicesCommand.Interfaces;
+using GestionPedidosService.Business.ServicesQuery.Implements;
 using GestionPedidosService.Domain.Collections;
 using GestionPedidosService.Domain.Entities;
 using GestionPedidosService.Domain.Models.Garments;
@@ -27,6 +28,7 @@ namespace GestionPedidosService.Business.ServicesCommand.Implements
         private readonly IMapper _mapper;
         private readonly IConfigurationManager _configManager;
         private readonly IPatternGarmentBaseCollectionServiceCommand _patternGarmentBaseServiceCommand;
+
 
         public GarmentServiceCommand(
             IUnitOfWork uof, 
@@ -110,14 +112,32 @@ namespace GestionPedidosService.Business.ServicesCommand.Implements
                 var garment = _mapper.Map<Garment>(garmentWrite);
                 var ss = await _uof.garmentRepository.GetByCodeGarment_AtelierId(garmentWrite.CodeGarment, garmentWrite.AtelierId);
                 garment.Id = ss.Id;
+                var auxGarment = garment.FeatureGarments;
                 garment.FeatureGarments = ss.FeatureGarments;
-                garment.PatternGarments = ss.PatternGarments;
+                bool exist = false;
 
-                var createdGarment = _uof.garmentRepository.Update(garment);
+                foreach (var i in auxGarment )
+                {
+                    foreach (var aux in garment.FeatureGarments)
+                    {
+                        if(i.Value == aux.Value)
+                        {
+                            exist = true;
+                            break;
+                        }
+                        exist = false;
+                    }
+                    if (!exist)
+                    {
+                        garment.FeatureGarments.Add(i);
+                    }
+                }
+
+                garment.FeatureGarments = ss.FeatureGarments;
+
+                var updateGarment = _uof.garmentRepository.Update(garment);
                 await _uof.SaveChangesAsync();
-
-                List<PatternGarmentBase> patternBases = new List<PatternGarmentBase>();
-                return createdGarment != null;
+                return updateGarment != null;
             }
             catch (RepositoryException ex)
             {
@@ -141,6 +161,73 @@ namespace GestionPedidosService.Business.ServicesCommand.Implements
                     ex
                     );
             }
+        }
+
+        public async Task<bool> UpdateBatchGarmentImages(GarmentWrite garmentWrite)
+        {
+            try
+            {
+
+                string nameAtelier = (await _uof.atelierRepository.GetById(garmentWrite.AtelierId)).NameAtelier;
+                var garment = _mapper.Map<Garment>(garmentWrite);
+                var ss = await _uof.garmentRepository.GetByCodeGarment_AtelierId(garmentWrite.CodeGarment, garmentWrite.AtelierId);
+                garment.Id = ss.Id;
+                var auxGarment = garment.FeatureGarments;
+                garment.FeatureGarments = ss.FeatureGarments;
+                bool exist = false;
+
+                if (garmentWrite.Images != null)
+                {
+                    var imageFeatures = await UploadBatchGarmentImages(garmentWrite.Images, nameAtelier);
+                    garment.FeatureGarments.AddRange(imageFeatures);
+                }
+
+                foreach (var i in auxGarment)
+                {
+                    foreach (var aux in garment.FeatureGarments)
+                    {
+                        if (i.Value == aux.Value)
+                        {
+                            exist = true;
+                            break;
+                        }
+                        exist = false;
+                    }
+                    if (!exist)
+                    {
+                        garment.FeatureGarments.Add(i);
+                    }
+                }
+
+                garment.FeatureGarments = ss.FeatureGarments;
+
+                var updateGarment = _uof.garmentRepository.Update(garment);
+                await _uof.SaveChangesAsync();
+                return updateGarment != null;
+            }
+            catch (RepositoryException ex)
+            {
+                throw new ServiceException(
+                    HttpStatusCode.InternalServerError,
+                    ErrorsCode.ADD_GARMENT_FAILED,
+                    ErrorMessages.ADD_GARMENT_FAILED,
+                    ex
+                    );
+            }
+            catch (ServiceException ex)
+            {
+                throw ex;
+            }
+            catch (Exception ex)
+            {
+                throw new ServiceException(
+                    HttpStatusCode.InternalServerError,
+                    ErrorsCode.ADD_GARMENT_FAILED,
+                    ErrorMessages.ADD_GARMENT_FAILED,
+                    ex
+                    );
+            }
+
         }
 
         private async Task<List<FeatureGarment>> UploadBatchGarmentImages(IEnumerable<GarmentImageString> garmentImageFiles, string atelier)
