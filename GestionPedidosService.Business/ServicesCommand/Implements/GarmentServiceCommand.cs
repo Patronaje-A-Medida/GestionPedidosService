@@ -14,6 +14,7 @@ using GestionPedidosService.Persistence.UnitOfWork;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Text;
@@ -228,6 +229,58 @@ namespace GestionPedidosService.Business.ServicesCommand.Implements
                     );
             }
 
+        }
+
+        public async Task<bool> Update2(GarmentWrite garmentWrite)
+        {
+            try
+            {
+                string nameAtelier = (await _uof.atelierRepository.GetById(garmentWrite.AtelierId)).NameAtelier;
+                var updateGarment = _mapper.Map<Garment>(garmentWrite);
+                var garment = await _uof.garmentRepository.GetByCodeGarment_AtelierId(garmentWrite.CodeGarment, garmentWrite.AtelierId);
+                //garment.Id = ss.Id;
+                updateGarment.Id = garment.Id;
+
+                //var oldFeatures = new List<FeatureGarment>();
+                //var newFeatures = new List<FeatureGarment>();
+                var updateFeatures = new List<FeatureGarment>();
+                bool exist = false;
+                foreach (var newf in updateGarment.FeatureGarments)
+                {
+                    exist = false;
+                    foreach (var f in garment.FeatureGarments)
+                    {
+                        if (newf.Value == f.Value)
+                        {
+                            exist = true;
+                            updateFeatures.Add(f);
+                            break;
+                        }
+                        //else newFeatures.Add(newf);
+                    }
+                    if (!exist) updateFeatures.Add(newf);
+                }
+
+                /*var oldFeatures = garment.FeatureGarments
+                        .Select(x => x.Value)
+                        .AsParallel()
+                        .Intersect(updateGarment.FeatureGarments.Select(x=>x.Value).AsParallel())
+                        .ToList();
+
+                var newFeatures = updateGarment.FeatureGarments.Except(garment.FeatureGarments).ToList();
+                var allFeatures = oldFeatures.Union(newFeatures).ToList();*/
+                updateGarment.FeatureGarments = updateFeatures;
+                return true;
+            }
+            catch(Exception ex)
+            {
+                throw new ServiceException(
+                    HttpStatusCode.InternalServerError,
+                    ErrorsCode.ADD_GARMENT_FAILED,
+                    ErrorMessages.ADD_GARMENT_FAILED,
+                    ex
+                    );
+            }
         }
 
         private async Task<List<FeatureGarment>> UploadBatchGarmentImages(IEnumerable<GarmentImageString> garmentImageFiles, string atelier)
@@ -466,6 +519,6 @@ namespace GestionPedidosService.Business.ServicesCommand.Implements
             return url;
         }
 
-
+        
     }
 }

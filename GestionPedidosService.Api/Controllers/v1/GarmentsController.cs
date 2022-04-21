@@ -139,11 +139,11 @@ namespace GestionPedidosService.Api.Controllers.v1
         [ProducesResponseType(typeof(bool), 200)]
         [ProducesResponseType(typeof(ErrorDevDetail), 400)]
         [ProducesResponseType(typeof(ErrorDevDetail), 500)]
-        public async Task<ActionResult<bool>> Update(GarmentWrite garmentWrite)
+        public async Task<ActionResult<bool>> Update([FromBody] GarmentWrite garmentWrite)
         {
             try
             {
-                var result = await _garmentServiceCommand.Update(garmentWrite);
+                var result = await _garmentServiceCommand.Update2(garmentWrite);
                 if (result)
                 {
                     return Ok(result);
