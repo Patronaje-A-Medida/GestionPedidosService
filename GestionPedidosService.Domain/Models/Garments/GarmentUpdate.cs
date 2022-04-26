@@ -3,9 +3,8 @@ using System.Collections.Generic;
 
 namespace GestionPedidosService.Domain.Models.Garments
 {
-    public class GarmentWrite
+    public class GarmentUpdate
     {
-        public int Id { get; set; }
         public string CodeGarment { get; set; }
         public string NameGarment { get; set; }
         public string Description { get; set; }
