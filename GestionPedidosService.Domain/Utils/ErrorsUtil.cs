@@ -29,6 +29,7 @@ namespace GestionPedidosService.Domain.Utils
             public static readonly int UPDATE_GARMENT_FAILED = 10034;
 
             public static readonly int ADD_IMAGE_PATTERN_FILES = 10090;
+            public static readonly int UPDATE_IMAGE_PATTERN_FILES = 10091;
             
 
         }
@@ -52,6 +53,7 @@ namespace GestionPedidosService.Domain.Utils
             public static readonly string GET_ORDERS_CLIENT_FAILED = "No se pudo obtener las de las órdenes del cliente";
             public static readonly string NOT_FOUND_CLIENT_ORDERS = "Las ordenes de dicho cliente no existen";
             public static readonly string UPDATE_GARMENT_FAILED = "No se pudo actualizar la información de la prenda";
+            public static readonly string UPDATE_IMAGE_PATTERN_FILES = "No se pudo actualizar los archivos de imágenes/patrones de la prenda";
         }
     }
 }

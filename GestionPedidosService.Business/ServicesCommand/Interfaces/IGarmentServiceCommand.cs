@@ -12,7 +12,8 @@ namespace GestionPedidosService.Business.ServicesCommand.Interfaces
         Task<bool> Save(GarmentWrite garmentWrite);
 
         Task<bool> Update(GarmentWrite garmentWrite);
-        Task<bool> UpdateBatchGarmentImages(GarmentWrite garmentWrite);
+        Task<bool> UpdateImages(GarmentUpdateImages garmentUpdateImages);
+        Task<bool> UpdatePatterns(GarmentUpdateImages garmentUpdateImages);
         Task<string> UploadGarmentImages(GarmentImageString garmentImage);
         Task<string> UploadGarmentImages(GarmentImageFile garmentImage);
     }

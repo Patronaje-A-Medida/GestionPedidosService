@@ -135,7 +135,6 @@ namespace GestionPedidosService.Api.Controllers.v1
         }
 
         [HttpPut("update")]
-        [DisableRequestSizeLimit]
         [ProducesResponseType(typeof(bool), 200)]
         [ProducesResponseType(typeof(ErrorDevDetail), 400)]
         [ProducesResponseType(typeof(ErrorDevDetail), 500)]
@@ -168,16 +167,16 @@ namespace GestionPedidosService.Api.Controllers.v1
             }
         }
 
-        [HttpPut("update-batch-garment-images")]
+        [HttpPut("update-images")]
         [DisableRequestSizeLimit]
         [ProducesResponseType(typeof(bool), 200)]
         [ProducesResponseType(typeof(ErrorDevDetail), 400)]
         [ProducesResponseType(typeof(ErrorDevDetail), 500)]
-        public async Task<ActionResult<bool>> UpdateBatchGarmentImages(GarmentWrite garmentWrite)
+        public async Task<ActionResult<bool>> UpdateImages([FromBody] GarmentUpdateImages garmentUpdateImages)
         {
             try
             {
-                var result = await _garmentServiceCommand.UpdateBatchGarmentImages(garmentWrite);
+                var result = await _garmentServiceCommand.UpdateImages(garmentUpdateImages);
                 if (result)
                 {
                     return Ok(result);
@@ -187,8 +186,42 @@ namespace GestionPedidosService.Api.Controllers.v1
                     return BadRequest(new ErrorDetail
                     {
                         statusCode = (int)HttpStatusCode.BadRequest,
-                        errorCode = ErrorsCode.ADD_GARMENT_FAILED,
-                        message = ErrorMessages.ADD_GARMENT_FAILED
+                        errorCode = ErrorsCode.UPDATE_IMAGE_PATTERN_FILES,
+                        message = ErrorMessages.UPDATE_IMAGE_PATTERN_FILES
+                    });
+                }
+            }
+            catch (ServiceException ex)
+            {
+                throw ex;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        [HttpPut("update-patterns")]
+        [DisableRequestSizeLimit]
+        [ProducesResponseType(typeof(bool), 200)]
+        [ProducesResponseType(typeof(ErrorDevDetail), 400)]
+        [ProducesResponseType(typeof(ErrorDevDetail), 500)]
+        public async Task<ActionResult<bool>> UpdatePatterns([FromBody] GarmentUpdateImages garmentUpdateImages)
+        {
+            try
+            {
+                var result = await _garmentServiceCommand.UpdatePatterns(garmentUpdateImages);
+                if (result)
+                {
+                    return Ok(result);
+                }
+                else
+                {
+                    return BadRequest(new ErrorDetail
+                    {
+                        statusCode = (int)HttpStatusCode.BadRequest,
+                        errorCode = ErrorsCode.UPDATE_IMAGE_PATTERN_FILES,
+                        message = ErrorMessages.UPDATE_IMAGE_PATTERN_FILES
                     });
                 }
             }

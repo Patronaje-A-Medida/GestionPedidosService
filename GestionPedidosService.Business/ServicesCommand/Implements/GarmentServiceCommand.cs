@@ -105,73 +105,6 @@ namespace GestionPedidosService.Business.ServicesCommand.Implements
             }
         }
 
-        public async Task<bool> UpdateBatchGarmentImages(GarmentWrite garmentWrite)
-        {
-            try
-            {
-
-                string nameAtelier = (await _uof.atelierRepository.GetById(garmentWrite.AtelierId)).NameAtelier;
-                var garment = _mapper.Map<Garment>(garmentWrite);
-                var ss = await _uof.garmentRepository.GetByCodeGarment_AtelierId(garmentWrite.CodeGarment, garmentWrite.AtelierId);
-                garment.Id = ss.Id;
-                var auxGarment = garment.FeatureGarments;
-                garment.FeatureGarments = ss.FeatureGarments;
-                bool exist = false;
-
-                if (garmentWrite.Images != null)
-                {
-                    var imageFeatures = await UploadBatchGarmentImages(garmentWrite.Images, nameAtelier);
-                    garment.FeatureGarments.AddRange(imageFeatures);
-                }
-
-                foreach (var i in auxGarment)
-                {
-                    foreach (var aux in garment.FeatureGarments)
-                    {
-                        if (i.Value == aux.Value)
-                        {
-                            exist = true;
-                            break;
-                        }
-                        exist = false;
-                    }
-                    if (!exist)
-                    {
-                        garment.FeatureGarments.Add(i);
-                    }
-                }
-
-                garment.FeatureGarments = ss.FeatureGarments;
-
-                var updateGarment = _uof.garmentRepository.Update(garment);
-                await _uof.SaveChangesAsync();
-                return updateGarment != null;
-            }
-            catch (RepositoryException ex)
-            {
-                throw new ServiceException(
-                    HttpStatusCode.InternalServerError,
-                    ErrorsCode.ADD_GARMENT_FAILED,
-                    ErrorMessages.ADD_GARMENT_FAILED,
-                    ex
-                    );
-            }
-            catch (ServiceException ex)
-            {
-                throw ex;
-            }
-            catch (Exception ex)
-            {
-                throw new ServiceException(
-                    HttpStatusCode.InternalServerError,
-                    ErrorsCode.ADD_GARMENT_FAILED,
-                    ErrorMessages.ADD_GARMENT_FAILED,
-                    ex
-                    );
-            }
-
-        }
-
         public async Task<bool> Update(GarmentWrite garmentWrite)
         {
             try
@@ -238,6 +171,110 @@ namespace GestionPedidosService.Business.ServicesCommand.Implements
                     );
             }
         }
+
+        public async Task<bool> UpdateImages(GarmentUpdateImages garmentUpdateImages)
+        {
+            try
+            {
+                var garment = await _uof.garmentRepository.GetByCodeGarment_AtelierId(garmentUpdateImages.CodeGarment, garmentUpdateImages.AtelierId);
+                var nameAtelier = (await _uof.atelierRepository.GetById(garmentUpdateImages.AtelierId)).NameAtelier;
+
+                if (garmentUpdateImages.Images == null) return false;
+
+                var newImages = garmentUpdateImages.Images.Where(x => x.Id == 0);
+
+                var deleteImages = garment.FeatureGarments
+                    .Where(x => x.TypeFeature.Equals("images"))
+                    .Where(x => !garmentUpdateImages.Images.Select(y => y.Id).Contains(x.Id));
+
+                var newImageFeatures = new List<FeatureGarment>();
+                var imageFeatures = await UploadBatchGarmentImages(
+                    _mapper.Map<IEnumerable<GarmentImageString>>(newImages),
+                    nameAtelier);
+                newImageFeatures.AddRange(imageFeatures);
+
+                _uof.featureGarmentRepository.Delete(deleteImages);
+                garment.FeatureGarments.AddRange(newImageFeatures);
+
+                var garmentUpdated = _uof.garmentRepository.Update(garment);
+                await _uof.SaveChangesAsync();
+                return garmentUpdated != null;
+            }
+            catch (RepositoryException ex)
+            {
+                throw new ServiceException(
+                    HttpStatusCode.InternalServerError,
+                    ErrorsCode.UPDATE_IMAGE_PATTERN_FILES,
+                    ErrorMessages.UPDATE_IMAGE_PATTERN_FILES,
+                    ex
+                    );
+            }
+            catch (ServiceException ex)
+            {
+                throw ex;
+            }
+            catch (Exception ex)
+            {
+                throw new ServiceException(
+                    HttpStatusCode.InternalServerError,
+                    ErrorsCode.UPDATE_IMAGE_PATTERN_FILES,
+                    ErrorMessages.UPDATE_IMAGE_PATTERN_FILES,
+                    ex
+                    );
+            }
+        }
+
+        public async Task<bool> UpdatePatterns(GarmentUpdateImages garmentUpdateImages)
+        {
+            try
+            {
+                var garment = await _uof.garmentRepository.GetByCodeGarment_AtelierId(garmentUpdateImages.CodeGarment, garmentUpdateImages.AtelierId);
+                var nameAtelier = (await _uof.atelierRepository.GetById(garmentUpdateImages.AtelierId)).NameAtelier;
+
+                if (garmentUpdateImages.Images == null) return false;
+
+                var newPatterns = garmentUpdateImages.Images.Where(x => x.Id == 0);
+
+                var deletePatterns = garment.PatternGarments
+                    .Where(x => !garmentUpdateImages.Images.Select(y => y.Id).Contains(x.Id));
+
+                var newPatternImages = new List<PatternGarment>();
+                var patternFeatures = await UploadBatchGarmentPatterns(
+                    _mapper.Map<IEnumerable<GarmentImageString>>(newPatterns),
+                    nameAtelier);
+                newPatternImages.AddRange(patternFeatures);
+
+                _uof.patternGarmentRepository.Delete(deletePatterns);
+                garment.PatternGarments.AddRange(newPatternImages);
+
+                var garmentUpdated = _uof.garmentRepository.Update(garment);
+                await _uof.SaveChangesAsync();
+                return garmentUpdated != null;
+            }
+            catch (RepositoryException ex)
+            {
+                throw new ServiceException(
+                    HttpStatusCode.InternalServerError,
+                    ErrorsCode.UPDATE_IMAGE_PATTERN_FILES,
+                    ErrorMessages.UPDATE_IMAGE_PATTERN_FILES,
+                    ex
+                    );
+            }
+            catch (ServiceException ex)
+            {
+                throw ex;
+            }
+            catch (Exception ex)
+            {
+                throw new ServiceException(
+                    HttpStatusCode.InternalServerError,
+                    ErrorsCode.UPDATE_IMAGE_PATTERN_FILES,
+                    ErrorMessages.UPDATE_IMAGE_PATTERN_FILES,
+                    ex
+                    );
+            }
+        }
+
 
         private async Task<List<FeatureGarment>> UploadBatchGarmentImages(IEnumerable<GarmentImageString> garmentImageFiles, string atelier)
         {
@@ -475,6 +512,6 @@ namespace GestionPedidosService.Business.ServicesCommand.Implements
             return url;
         }
 
-        
+
     }
 }

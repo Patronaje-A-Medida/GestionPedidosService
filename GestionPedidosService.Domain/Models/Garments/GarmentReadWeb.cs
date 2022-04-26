@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using GestionPedidosService.Domain.Models.FeatureGarments;
+using GestionPedidosService.Domain.Models.Patterns;
+using System.Collections.Generic;
 
 namespace GestionPedidosService.Domain.Models.Garments
 {
@@ -16,7 +18,8 @@ namespace GestionPedidosService.Domain.Models.Garments
         public IEnumerable<string> Colors { get; set; }
         public IEnumerable<string> Fabrics { get; set; }
         public IEnumerable<string> Occasions { get; set; }
-        public IEnumerable<string> Images { get; set; }
-        public IEnumerable<string> Patterns { get; set; }
+        //public IEnumerable<string> Images { get; set; }
+        public IEnumerable<FeatureGarmentMin> Images { get; set; }
+        public IEnumerable<PatternGarmentMin> Patterns { get; set; }
     }
 }

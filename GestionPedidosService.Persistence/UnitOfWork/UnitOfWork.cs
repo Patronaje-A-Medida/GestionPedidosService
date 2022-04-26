@@ -17,6 +17,8 @@ namespace GestionPedidosService.Persistence.UnitOfWork
         public IAtelierRepository atelierRepository { get; private set; }
         public IFeatureGarmentRepository featureGarmentRepository { get; private set; }
 
+        public IPatternGarmentRepository patternGarmentRepository { get; private set; }
+
         public UnitOfWork(AppDbContext context)
         {
             _context = context;
@@ -26,6 +28,7 @@ namespace GestionPedidosService.Persistence.UnitOfWork
             dictionaryTypeRepository = new DictionaryTypeRepository(_context);
             atelierRepository = new AtelierRepository(_context);
             featureGarmentRepository = new FeatureGarmentRepository(_context);
+            patternGarmentRepository = new PatternGarmentRepository(_context);
         }
         
         public async Task SaveChangesAsync()

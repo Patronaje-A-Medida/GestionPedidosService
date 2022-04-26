@@ -5,6 +5,7 @@ using GestionPedidosService.Domain.Models;
 using GestionPedidosService.Domain.Models.FeatureGarments;
 using GestionPedidosService.Domain.Models.Garments;
 using GestionPedidosService.Domain.Models.Orders;
+using GestionPedidosService.Domain.Models.Patterns;
 using GestionPedidosService.Domain.Utils;
 using System;
 using System.Collections.Generic;
@@ -150,9 +151,10 @@ namespace GestionPedidosService.Business.Mapper
                 )
                 .ForMember(dest => dest.Images, opt => opt.MapFrom(src => src.FeatureGarments
                     .Where(f => f.TypeFeature.Equals(EGarmentFeatures.images.ToString()))
-                    .Select(f => f.Value))
+                    //.Select(f => f.Value)
+                    )
                 )
-                .ForMember(dest => dest.Patterns, opt => opt.MapFrom(src => src.PatternGarments.Select(p => p.ImagePattern)));
+                .ForMember(dest => dest.Patterns, opt => opt.MapFrom(src => src.PatternGarments));
 
             CreateMap<Garment, GarmentMinMobile>()
                 .ForMember(dest => dest.ImageUrl, opt => opt.MapFrom(src => src.FeatureGarments
@@ -195,6 +197,9 @@ namespace GestionPedidosService.Business.Mapper
             CreateMap<OrderDetailCreate, OrderDetail>()
                 .ForMember(dest => dest.OrderDetailStatus, opt => opt.MapFrom(src => EOrderStatus.unattended));
 
+            CreateMap<GarmentUpdateFile, GarmentImageString>();
+
+            CreateMap<PatternGarment, PatternGarmentMin>();
         }
     }
 }
