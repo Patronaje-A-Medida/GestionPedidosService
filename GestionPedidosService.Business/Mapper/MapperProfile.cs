@@ -125,6 +125,7 @@ namespace GestionPedidosService.Business.Mapper
 
             CreateMap<GarmentWrite, Garment>()
                 .ForMember(dest => dest.FeatureGarments, opt => opt.MapFrom(src => src.Features));
+                
 
             CreateMap<FeatureGarmentWrite, FeatureGarment>();
 

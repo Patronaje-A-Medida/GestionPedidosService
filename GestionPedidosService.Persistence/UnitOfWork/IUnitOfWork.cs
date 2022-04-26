@@ -12,6 +12,7 @@ namespace GestionPedidosService.Persistence.UnitOfWork
         IGarmentRepository garmentRepository { get; }
         IDictionaryTypeRepository dictionaryTypeRepository { get; }
         IAtelierRepository atelierRepository { get; }
+        IFeatureGarmentRepository featureGarmentRepository { get; }
 
         Task SaveChangesAsync();
     }

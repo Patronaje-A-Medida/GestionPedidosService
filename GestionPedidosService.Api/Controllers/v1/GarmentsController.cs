@@ -143,7 +143,7 @@ namespace GestionPedidosService.Api.Controllers.v1
         {
             try
             {
-                var result = await _garmentServiceCommand.Update2(garmentWrite);
+                var result = await _garmentServiceCommand.Update(garmentWrite);
                 if (result)
                 {
                     return Ok(result);
@@ -153,8 +153,8 @@ namespace GestionPedidosService.Api.Controllers.v1
                     return BadRequest(new ErrorDetail
                     {
                         statusCode = (int)HttpStatusCode.BadRequest,
-                        errorCode = ErrorsCode.ADD_GARMENT_FAILED,
-                        message = ErrorMessages.ADD_GARMENT_FAILED
+                        errorCode = ErrorsCode.UPDATE_GARMENT_FAILED,
+                        message = ErrorMessages.UPDATE_GARMENT_FAILED
                     });
                 }
             }

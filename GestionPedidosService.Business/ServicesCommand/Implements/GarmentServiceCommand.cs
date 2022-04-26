@@ -105,65 +105,6 @@ namespace GestionPedidosService.Business.ServicesCommand.Implements
             }
         }
 
-        public async Task<bool> Update(GarmentWrite garmentWrite)
-        {
-            try
-            {
-                string nameAtelier = (await _uof.atelierRepository.GetById(garmentWrite.AtelierId)).NameAtelier;
-                var garment = _mapper.Map<Garment>(garmentWrite);
-                var ss = await _uof.garmentRepository.GetByCodeGarment_AtelierId(garmentWrite.CodeGarment, garmentWrite.AtelierId);
-                garment.Id = ss.Id;
-                var auxGarment = garment.FeatureGarments;
-                garment.FeatureGarments = ss.FeatureGarments;
-                bool exist = false;
-
-                foreach (var i in auxGarment )
-                {
-                    foreach (var aux in garment.FeatureGarments)
-                    {
-                        if(i.Value == aux.Value)
-                        {
-                            exist = true;
-                            break;
-                        }
-                        exist = false;
-                    }
-                    if (!exist)
-                    {
-                        garment.FeatureGarments.Add(i);
-                    }
-                }
-
-                garment.FeatureGarments = ss.FeatureGarments;
-
-                var updateGarment = _uof.garmentRepository.Update(garment);
-                await _uof.SaveChangesAsync();
-                return updateGarment != null;
-            }
-            catch (RepositoryException ex)
-            {
-                throw new ServiceException(
-                    HttpStatusCode.InternalServerError,
-                    ErrorsCode.ADD_GARMENT_FAILED,
-                    ErrorMessages.ADD_GARMENT_FAILED,
-                    ex
-                    );
-            }
-            catch (ServiceException ex)
-            {
-                throw ex;
-            }
-            catch (Exception ex)
-            {
-                throw new ServiceException(
-                    HttpStatusCode.InternalServerError,
-                    ErrorsCode.ADD_GARMENT_FAILED,
-                    ErrorMessages.ADD_GARMENT_FAILED,
-                    ex
-                    );
-            }
-        }
-
         public async Task<bool> UpdateBatchGarmentImages(GarmentWrite garmentWrite)
         {
             try
@@ -231,53 +172,68 @@ namespace GestionPedidosService.Business.ServicesCommand.Implements
 
         }
 
-        public async Task<bool> Update2(GarmentWrite garmentWrite)
+        public async Task<bool> Update(GarmentWrite garmentWrite)
         {
             try
             {
-                string nameAtelier = (await _uof.atelierRepository.GetById(garmentWrite.AtelierId)).NameAtelier;
-                var updateGarment = _mapper.Map<Garment>(garmentWrite);
+                
                 var garment = await _uof.garmentRepository.GetByCodeGarment_AtelierId(garmentWrite.CodeGarment, garmentWrite.AtelierId);
-                //garment.Id = ss.Id;
-                updateGarment.Id = garment.Id;
+                
+                //garment.CodeGarment = garmentWrite.CodeGarment;
+                garment.NameGarment = garmentWrite.NameGarment;
+                garment.FirstRangePrice = garmentWrite.FirstRangePrice;
+                garment.SecondRangePrice = garmentWrite.SecondRangePrice;
+                garment.Description = garmentWrite.Description;
+                garment.Category = garmentWrite.Category;
+                garment.Available = garmentWrite.Available;
 
-                //var oldFeatures = new List<FeatureGarment>();
-                //var newFeatures = new List<FeatureGarment>();
+                var imagesTemp = garment.FeatureGarments.Where(x => x.TypeFeature.Equals("images"));
+                var oldFeatures = garment.FeatureGarments;
+                var newFeatures = _mapper.Map<Garment>(garmentWrite).FeatureGarments;
                 var updateFeatures = new List<FeatureGarment>();
                 bool exist = false;
-                foreach (var newf in updateGarment.FeatureGarments)
+                foreach (var newf in newFeatures)
                 {
                     exist = false;
-                    foreach (var f in garment.FeatureGarments)
+                    foreach (var oldf in oldFeatures)
                     {
-                        if (newf.Value == f.Value)
+                        if (newf.Value == oldf.Value)
                         {
                             exist = true;
-                            updateFeatures.Add(f);
+                            updateFeatures.Add(oldf);
                             break;
                         }
-                        //else newFeatures.Add(newf);
                     }
                     if (!exist) updateFeatures.Add(newf);
                 }
 
-                /*var oldFeatures = garment.FeatureGarments
-                        .Select(x => x.Value)
-                        .AsParallel()
-                        .Intersect(updateGarment.FeatureGarments.Select(x=>x.Value).AsParallel())
-                        .ToList();
+                updateFeatures.AddRange(imagesTemp);
 
-                var newFeatures = updateGarment.FeatureGarments.Except(garment.FeatureGarments).ToList();
-                var allFeatures = oldFeatures.Union(newFeatures).ToList();*/
-                updateGarment.FeatureGarments = updateFeatures;
-                return true;
+                var deleteFeatrues = oldFeatures
+                    .Where(x => !updateFeatures.Exists(y => y.Id == x.Id) && !x.TypeFeature.Equals("images"))
+                    .ToList();
+                _uof.featureGarmentRepository.Delete(deleteFeatrues);
+
+                garment.FeatureGarments = updateFeatures;
+                var garmentUpdated = _uof.garmentRepository.Update(garment);
+                await _uof.SaveChangesAsync();
+                return garmentUpdated != null;
+            }
+            catch (RepositoryException ex)
+            {
+                throw new ServiceException(
+                    HttpStatusCode.InternalServerError,
+                    ErrorsCode.UPDATE_GARMENT_FAILED,
+                    ErrorMessages.UPDATE_GARMENT_FAILED,
+                    ex
+                    );
             }
             catch(Exception ex)
             {
                 throw new ServiceException(
                     HttpStatusCode.InternalServerError,
-                    ErrorsCode.ADD_GARMENT_FAILED,
-                    ErrorMessages.ADD_GARMENT_FAILED,
+                    ErrorsCode.UPDATE_GARMENT_FAILED,
+                    ErrorMessages.UPDATE_GARMENT_FAILED,
                     ex
                     );
             }
