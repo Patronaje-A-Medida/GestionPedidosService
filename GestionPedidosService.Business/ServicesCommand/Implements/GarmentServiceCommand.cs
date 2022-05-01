@@ -3,7 +3,6 @@ using Firebase.Auth;
 using Firebase.Storage;
 using GestionPedidosService.Business.Handlers;
 using GestionPedidosService.Business.ServicesCommand.Interfaces;
-using GestionPedidosService.Business.ServicesQuery.Implements;
 using GestionPedidosService.Domain.Collections;
 using GestionPedidosService.Domain.Entities;
 using GestionPedidosService.Domain.Models.Garments;
@@ -17,7 +16,6 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
 using static GestionPedidosService.Domain.Utils.ErrorsUtil;
 
@@ -67,6 +65,7 @@ namespace GestionPedidosService.Business.ServicesCommand.Implements
                 var createdGarment = await _uof.garmentRepository.Add(garment);
                 await _uof.SaveChangesAsync();
 
+                // logica para guardar los patrones en otra DB
                 List<PatternGarmentBase> patternBases = new List<PatternGarmentBase>();
 
                 foreach(var pattern in createdGarment.PatternGarments)
@@ -77,6 +76,7 @@ namespace GestionPedidosService.Business.ServicesCommand.Implements
                         image_pattern = pattern.ImagePattern 
                     });
                 }
+                //
 
                 await _patternGarmentBaseServiceCommand.Add(patternBases);
                 return createdGarment != null;
@@ -355,52 +355,7 @@ namespace GestionPedidosService.Business.ServicesCommand.Implements
                     );
             }
         }
-
-        private async Task<List<FeatureGarment>> UploadBatchGarmentImages(IEnumerable<GarmentImageFile> garmentImageFiles, string atelier)
-        {
-            try
-            {
-                var storageOptions = await LogInFirebase();
-                var imageFeatures = new List<FeatureGarment>();
-
-                foreach (var garmentImage in garmentImageFiles)
-                {
-                    using (var memoryStream = new MemoryStream())
-                    {
-                        garmentImage.ImageFile.CopyTo(memoryStream);
-                        var imageByteArrayToStream = ConvertByteArrayToStream(memoryStream.ToArray());
-                        var imageStream = await imageByteArrayToStream.ReadAsStreamAsync();
-                        var imgUrl = await UploadToFirebase(
-                            storageOptions, 
-                            imageStream, 
-                            garmentImage.FileName, 
-                            garmentImage.FolderPath, 
-                            atelier
-                        );
-
-                        imageFeatures.Add(new FeatureGarment
-                        {
-                            Value = imgUrl,
-                            TypeFeature = EGarmentFeatures.images.ToString(),
-                            TypeFeatureValue = (int)EGarmentFeatures.images,
-                        });
-                    }
-                }
-
-                return imageFeatures;
-            }
-            catch (Exception ex)
-            {
-                throw new ServiceException(
-                    HttpStatusCode.InternalServerError,
-                    ErrorsCode.ADD_IMAGE_PATTERN_FILES,
-                    ErrorMessages.ADD_IMAGE_PATTERN_FILES,
-                    ex
-                    );
-            }
-            
-        }
-
+                
         private async Task<string> UploadToFirebase(
             FirebaseStorageOptions storageOptions, 
             Stream imageStream, 
@@ -452,6 +407,10 @@ namespace GestionPedidosService.Business.ServicesCommand.Implements
             StreamContent streamContent = new StreamContent(new MemoryStream(imageByteArray));
             return streamContent;
         }
+
+
+
+
 
         /*--------------------PRUEBAS--------------------------*/
         public async Task<string> UploadGarmentImages(GarmentImageString garmentImage)
@@ -511,7 +470,6 @@ namespace GestionPedidosService.Business.ServicesCommand.Implements
             var url = await storageTask;
             return url;
         }
-
 
     }
 }
