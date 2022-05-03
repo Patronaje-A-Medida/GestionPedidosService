@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GestionPedidosService.Persistence.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20220329143145_InitialGestionDemo")]
-    partial class InitialGestionDemo
+    [Migration("20220503050600_InitialDemoGestion")]
+    partial class InitialDemoGestion
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -276,6 +276,8 @@ namespace GestionPedidosService.Persistence.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("AtelierId");
+
                     b.HasIndex("UserAtelierId");
 
                     b.HasIndex("UserClientId");
@@ -370,6 +372,9 @@ namespace GestionPedidosService.Persistence.Migrations
 
                     b.Property<string>("ImagePattern")
                         .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NamePattern")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<byte>("ResizedStatus")
@@ -494,6 +499,12 @@ namespace GestionPedidosService.Persistence.Migrations
 
             modelBuilder.Entity("GestionPedidosService.Domain.Entities.Order", b =>
                 {
+                    b.HasOne("GestionPedidosService.Domain.Entities.Atelier", "Atelier")
+                        .WithMany()
+                        .HasForeignKey("AtelierId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("GestionPedidosService.Domain.Entities.UserAtelier", "UserAtelier")
                         .WithMany()
                         .HasForeignKey("UserAtelierId");
@@ -503,6 +514,8 @@ namespace GestionPedidosService.Persistence.Migrations
                         .HasForeignKey("UserClientId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Atelier");
 
                     b.Navigation("UserAtelier");
 
@@ -520,7 +533,7 @@ namespace GestionPedidosService.Persistence.Migrations
                     b.HasOne("GestionPedidosService.Domain.Entities.Order", "Order")
                         .WithMany("OrderDetails")
                         .HasForeignKey("OrderId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Garment");

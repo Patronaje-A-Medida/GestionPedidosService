@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace GestionPedidosService.Persistence.Migrations
 {
-    public partial class InitialGestionDemo : Migration
+    public partial class InitialDemoGestion : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -83,6 +83,12 @@ namespace GestionPedidosService.Persistence.Migrations
                 {
                     table.PrimaryKey("PK_Orders", x => x.Id);
                     table.ForeignKey(
+                        name: "FK_Orders_Ateliers_AtelierId",
+                        column: x => x.AtelierId,
+                        principalTable: "Ateliers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
                         name: "FK_Orders_UserAteliers_UserAtelierId",
                         column: x => x.UserAtelierId,
                         principalTable: "UserAteliers",
@@ -132,6 +138,7 @@ namespace GestionPedidosService.Persistence.Migrations
                     TypePattern = table.Column<string>(type: "nvarchar(20)", nullable: false),
                     ImagePattern = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ResizedStatus = table.Column<byte>(type: "tinyint", nullable: false),
+                    NamePattern = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     GarmentId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -175,8 +182,7 @@ namespace GestionPedidosService.Persistence.Migrations
                         name: "FK_OrderDetails_Orders_OrderId",
                         column: x => x.OrderId,
                         principalTable: "Orders",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -240,6 +246,11 @@ namespace GestionPedidosService.Persistence.Migrations
                 name: "IX_OrderDetails_OrderId",
                 table: "OrderDetails",
                 column: "OrderId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Orders_AtelierId",
+                table: "Orders",
+                column: "AtelierId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Orders_UserAtelierId",

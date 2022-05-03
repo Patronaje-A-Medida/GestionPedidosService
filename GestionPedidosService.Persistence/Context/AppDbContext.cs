@@ -42,6 +42,7 @@ namespace GestionPedidosService.Persistence.Context
                 eb.Property(e => e.TypePattern).HasColumnType("nvarchar(20)").IsRequired();
                 eb.Property(e => e.ImagePattern).HasColumnType("nvarchar(max)").IsRequired();
                 eb.Property(e => e.ResizedStatus).HasColumnType("tinyint").IsRequired();
+                eb.Property(e => e.NamePattern).HasColumnType("nvarchar(max)").IsRequired(false);
                 eb.HasOne(e => e.Garment).WithMany(e => e.PatternGarments);
             });
 
@@ -88,7 +89,7 @@ namespace GestionPedidosService.Persistence.Context
                             .HasForeignKey(e => e.GarmentId),
                         j => j.HasOne(e => e.Order)
                             .WithMany(e => e.OrderDetails)
-                            .HasForeignKey(e => e.OrderId),
+                            .HasForeignKey(e => e.OrderId).OnDelete(DeleteBehavior.NoAction),
                         j =>
                         {
                             j.HasKey(e => e.Id);
