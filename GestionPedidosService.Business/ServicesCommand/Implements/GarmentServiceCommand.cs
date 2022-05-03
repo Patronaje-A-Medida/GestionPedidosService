@@ -71,7 +71,8 @@ namespace GestionPedidosService.Business.ServicesCommand.Implements
                 foreach(var pattern in createdGarment.PatternGarments)
                 {
                     patternBases.Add(new PatternGarmentBase 
-                    { 
+                    {
+                        name_pattern = pattern.NamePattern,
                         garment_id = createdGarment.Id, 
                         image_pattern = pattern.ImagePattern 
                     });
@@ -337,6 +338,7 @@ namespace GestionPedidosService.Business.ServicesCommand.Implements
 
                     patterns.Add(new PatternGarment
                     {
+                        NamePattern = garmentImage.FileName,
                         ImagePattern = imgUrl,
                         ResizedStatus = 0,
                         TypePattern = "base",

@@ -11,6 +11,8 @@ namespace GestionPedidosService.Domain.Collections
         [BsonId]
         public ObjectId id { get; set; }
         public int garment_id { get; set; }
+        public string name_pattern { get; set; }
+
         public string image_pattern { get; set; }
     }
 }

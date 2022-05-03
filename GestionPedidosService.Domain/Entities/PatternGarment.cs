@@ -10,6 +10,7 @@ namespace GestionPedidosService.Domain.Entities
         public int ResizedStatus { get; set; }
         
         public int GarmentId { get; set; }
+        public string NamePattern { get; set; }
         public Garment Garment { get; set; }
         
         public List<PatternDimension> PatternDimensions { get; set; }
