@@ -31,12 +31,12 @@ namespace GestionPedidosService.Persistence.Repositories.Implements
 
         public async Task<IEnumerable<PatternGarmentBase>> GetAll()
         {
-            var collection = await _context.patternGarmentBaseCollection
+            var collections = await _context.patternGarmentBaseCollection
                 .FindAsync(new BsonDocument())
                 .Result
                 .ToListAsync();
 
-            return collection;
+            return collections;
         }
     }
 }
