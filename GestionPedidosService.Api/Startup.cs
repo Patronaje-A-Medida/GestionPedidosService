@@ -52,6 +52,7 @@ namespace GestionPedidosService.Api
             services.AddScoped<IDictionaryTypeRepository, DictionaryTypeRepository>();
             services.AddScoped<IAtelierRepository, AtelierRepository>();
             services.AddScoped<IPatternGarmentBaseCollectionRepository, PatternGarmentBaseCollectionRepository>();
+            services.AddScoped<IBodyMeasurementsCollectionRepository, BodyMeasurementsCollectionRepository>();
 
             services.AddScoped<IUnitOfWork, UnitOfWork>();
 
@@ -59,6 +60,7 @@ namespace GestionPedidosService.Api
             services.AddScoped<IPatternGarmentServiceQuery, PatternGarmentServiceQuery>();
             services.AddScoped<IGarmentServiceQuery, GarmentServiceQuery>();
             services.AddScoped<IDictionaryTypeServiceQuery, DictionaryTypeServiceQuery>();
+            services.AddScoped<IBodyMeasurementsCollectionServiceQuery, BodyMeasurementsCollectionServiceQuery>();
 
             services.AddScoped<IGarmentServiceCommand, GarmentServiceCommand>();
             services.AddScoped<IOrderServiceCommand, OrderServiceCommand>();

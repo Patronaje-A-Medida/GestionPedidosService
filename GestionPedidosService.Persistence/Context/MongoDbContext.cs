@@ -19,8 +19,10 @@ namespace GestionPedidosService.Persistence.Context
             _client = new MongoClient(_config.MongoDbConnectionString);
             _db = _client.GetDatabase(_config.MongoDbName);
             patternGarmentBaseCollection = _db.GetCollection<PatternGarmentBase>("PatternGarmentBase");
+            bodyMeasurementsCollection = _db.GetCollection<BodyMeasurements>("BodyMeasurements");
         }
 
         public IMongoCollection<PatternGarmentBase> patternGarmentBaseCollection;
+        public IMongoCollection<BodyMeasurements> bodyMeasurementsCollection;
     }
 }
