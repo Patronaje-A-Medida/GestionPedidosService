@@ -1,6 +1,7 @@
 ﻿using GestionPedidosService.Business.ServicesQuery.Interfaces;
 using GestionPedidosService.Domain.Collections;
 using GestionPedidosService.Domain.Models;
+using GestionPedidosService.Domain.Models.Measurements;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -24,6 +25,13 @@ namespace GestionPedidosService.Api.Controllers.v1
         public async Task<BodyMeasurements> GetByClientId(int clientId)
         {
             return await _serviceQuery.GetByClientId(clientId);
+        }
+
+        [HttpGet("all-records/{clientId}")]
+        [ProducesResponseType(typeof(IEnumerable<BodyMeasurementsMin>), 200)]
+        public async Task<IEnumerable<BodyMeasurementsMin>> GetAllRecords(int clientId)
+        {
+            return await _serviceQuery.GetAllByClientId(clientId);
         }
     }
 }

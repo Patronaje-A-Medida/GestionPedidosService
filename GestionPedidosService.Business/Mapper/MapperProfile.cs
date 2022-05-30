@@ -1,9 +1,11 @@
 ﻿using AutoMapper;
+using GestionPedidosService.Domain.Collections;
 using GestionPedidosService.Domain.Entities;
 using GestionPedidosService.Domain.Extensions;
 using GestionPedidosService.Domain.Models;
 using GestionPedidosService.Domain.Models.FeatureGarments;
 using GestionPedidosService.Domain.Models.Garments;
+using GestionPedidosService.Domain.Models.Measurements;
 using GestionPedidosService.Domain.Models.Orders;
 using GestionPedidosService.Domain.Models.Patterns;
 using GestionPedidosService.Domain.Utils;
@@ -200,6 +202,30 @@ namespace GestionPedidosService.Business.Mapper
             CreateMap<GarmentUpdateFile, GarmentImageString>();
 
             CreateMap<PatternGarment, PatternGarmentMin>();
+
+            /*MongoDB*/
+            CreateMap<BodyMeasurements, BodyMeasurementsMin>()
+                .ForMember(dest => dest.id, opt => opt.MapFrom(src => src.id.ToString()))
+                .ForMember(dest => dest.height, opt => opt.MapFrom(
+                    src => src.measurements
+                        .FirstOrDefault(x => x.name_measurement.Equals("altura"))
+                        .value)
+                )
+                .ForMember(dest => dest.bust, opt => opt.MapFrom(
+                    src => src.measurements
+                        .FirstOrDefault(x => x.name_measurement.Equals("contorno de pecho"))
+                        .value)
+                )
+                .ForMember(dest => dest.waist, opt => opt.MapFrom(
+                    src => src.measurements
+                        .FirstOrDefault(x => x.name_measurement.Equals("contorno de cintura"))
+                        .value)
+                )
+                .ForMember(dest => dest.hip, opt => opt.MapFrom(
+                    src => src.measurements
+                        .FirstOrDefault(x => x.name_measurement.Equals("contorno de cadera alta"))
+                        .value)
+                );
         }
     }
 }

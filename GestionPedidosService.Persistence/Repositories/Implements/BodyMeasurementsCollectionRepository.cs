@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using System.Linq;
 
 namespace GestionPedidosService.Persistence.Repositories.Implements
 {
@@ -19,12 +20,26 @@ namespace GestionPedidosService.Persistence.Repositories.Implements
             _context = context;
         }
 
-        public async Task<BodyMeasurements> GetByClientId(int clientId)
+        public async Task<IEnumerable<BodyMeasurements>> GetAllByClientId(int clientId)
         {
-            var collection = await _context.bodyMeasurementsCollection
+            var collections = await _context.bodyMeasurementsCollection
                 .FindAsync(Builders<BodyMeasurements>.Filter.Eq("client_id", clientId))
                 .Result
-                .FirstOrDefaultAsync();
+                .ToListAsync();
+
+            collections = collections.OrderByDescending(x => x.measurement_date).ToList();
+            return collections;
+        }
+
+        public async Task<BodyMeasurements> GetByClientId(int clientId)
+        {
+            var collections = await _context.bodyMeasurementsCollection
+                .FindAsync(Builders<BodyMeasurements>.Filter.Eq("client_id", clientId))
+                .Result
+                .ToListAsync();
+
+            //.OrderByDescending(x => x.measurement_date);
+            var collection = collections.OrderByDescending(x => x.measurement_date).First();
 
             return collection;
         }
