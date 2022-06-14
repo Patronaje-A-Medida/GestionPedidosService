@@ -51,7 +51,7 @@ namespace GestionPedidosService.Persistence.Repositories.Implements
                     )
                     .Where(g => categories.Count() == 0 || categories.Contains(g.Category))
                     .Where(g => availabilities.Count() == 0 || availabilities.Contains(g.Available))
-                    .OrderBy(g => g.Category)
+                    .OrderByDescending(g => g.Category)
                     .ToListAsync();
 
                 // fuera del context porque no puede traducirlo a sql command

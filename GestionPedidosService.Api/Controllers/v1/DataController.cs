@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 namespace GestionPedidosService.Api.Controllers.v1
 {
     [ApiController]
-    [Route("api/v2/data-files")]
+    [Route("api/v1/data-files")]
     [ApiExplorerSettings(IgnoreApi = true)]
     [Produces("application/json")]
     public class DataController : ControllerBase
