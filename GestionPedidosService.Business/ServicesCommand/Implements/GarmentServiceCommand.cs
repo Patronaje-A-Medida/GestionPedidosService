@@ -10,6 +10,7 @@ using GestionPedidosService.Domain.Utils;
 using GestionPedidosService.Persistence.Handlers;
 using GestionPedidosService.Persistence.Managers;
 using GestionPedidosService.Persistence.UnitOfWork;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -449,7 +450,32 @@ namespace GestionPedidosService.Business.ServicesCommand.Implements
             }
         }
 
-        
+        public async Task<bool> UploadTemporal(IFormFile frontal, IFormFile lateral)
+        {
+            try
+            {
+                using (var memoryStream = new MemoryStream())
+                {
+                    frontal.CopyTo(memoryStream);
+                    var streamContent = ConvertByteArrayToStream(memoryStream.ToArray());
+                    var imageStream = await streamContent.ReadAsStreamAsync();
+                    var imgUrl = await UploadToFirebase(imageStream, frontal.FileName, "data");
+
+                    lateral.CopyTo(memoryStream);
+                    streamContent = ConvertByteArrayToStream(memoryStream.ToArray());
+                    imageStream = await streamContent.ReadAsStreamAsync();
+                    var imgUrl2 = await UploadToFirebase(imageStream, lateral.FileName, "data");
+
+                    return (imgUrl != null && imgUrl2 != null);
+                }   
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
+
+
 
         private async Task<string> UploadToFirebase(Stream imageStream, string fileName, string folderPath)
         {

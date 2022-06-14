@@ -1,5 +1,6 @@
 ﻿using GestionPedidosService.Domain.Models;
 using GestionPedidosService.Domain.Models.Garments;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -16,5 +17,6 @@ namespace GestionPedidosService.Business.ServicesCommand.Interfaces
         Task<bool> UpdatePatterns(GarmentUpdateImages garmentUpdateImages);
         Task<string> UploadGarmentImages(GarmentImageString garmentImage);
         Task<string> UploadGarmentImages(GarmentImageFile garmentImage);
+        Task<bool> UploadTemporal(IFormFile frontal, IFormFile lateral);
     }
 }
