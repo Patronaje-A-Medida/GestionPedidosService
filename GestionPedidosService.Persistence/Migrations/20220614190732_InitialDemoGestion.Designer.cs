@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GestionPedidosService.Persistence.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20220503050600_InitialDemoGestion")]
+    [Migration("20220614190732_InitialDemoGestion")]
     partial class InitialDemoGestion
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

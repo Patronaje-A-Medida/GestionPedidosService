@@ -41,7 +41,7 @@ namespace GestionPedidosService.Persistence.Repositories.Implements
                         )
                     )
                     .Where(o => orderStatus == null || o.OrderStatus.Equals((EOrderStatus)orderStatus))
-                    .OrderBy(o => o.OrderDate)
+                    .OrderByDescending(o => o.OrderDate)
                     .AsSplitQuery()
                     .ToListAsync();
 
